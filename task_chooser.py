@@ -136,3 +136,9 @@ class Task_Chooser:
         data = data_parser.task_27_list_of_dicts
         chosen_task = random.choice(data)
         return chosen_task
+
+    def choose_task(task_num):
+        func_name = 'choose_task_' + str(task_num)
+        func = Task_Chooser.__dict__[func_name]
+        result = func()
+        return result

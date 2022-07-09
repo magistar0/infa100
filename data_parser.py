@@ -105,3 +105,10 @@ with open('data/tasks_data/26/26_data.txt', 'r', encoding='utf-8') as data_26_fi
 with open('data/tasks_data/27/27_data.txt', 'r', encoding='utf-8') as data_27_file:
     task_27_dict = eval(data_27_file.read())
     task_27_list_of_dicts = task_27_dict['tasks']
+
+with open('data/config/Localization.txt', 'r', encoding='utf-8') as loc_file:
+    loc_dict = eval(loc_file.read())
+
+class Localization(object):
+    for name in loc_dict:
+        locals()[name] = loc_dict[name]
