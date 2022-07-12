@@ -1,3 +1,4 @@
+from functools import total_ordering
 import sys
 import os
 import shutil
@@ -6,7 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 
 from task_chooser import Task_Chooser
-from data_parser import Localization
+from data_parser import Localization, Config
 
 
 class UI_VarWindow(object):
@@ -1158,6 +1159,15 @@ class UI_VarWindow(object):
         
 
     def finish(self):
+        for task in range(1, 28):
+            self.finish_btn.setText(Localization.SHOW_RESULTS)
+            button_name_1 = 'task_' + str(task) + '_save_button'
+            button_name_2 = 'task_' + str(task) + '_edit_button'
+            blank_name = 'task_' + str(task) + '_blank'
+            self.__dict__[button_name_1].setParent(None)
+            self.__dict__[button_name_2].setParent(None)
+            self.__dict__[blank_name].setEnabled(False)
+
         self.results_contents = QWidget()
         self.widgets_list[28] = self.results_contents
         self.contents_tasks.addWidget(self.widgets_list[28])
@@ -1176,17 +1186,32 @@ class UI_VarWindow(object):
                     row = row - 9
                 elif row >= 19:
                     row = row - 18
-                self.results_grid_clicked.addWidget(lbl, row - 1, column)
+                row = row - 1
+                self.results_grid_clicked.addWidget(lbl, row, column)
             task_num = task_num + 9
 
-        self.number_of_completed_tasks = 0
+        self.user_results = [None]
         for task in range(1, 28):
             if self.user_answers[task] == self.tasks_data[task]['answer']:
-                self.number_of_completed_tasks = self.number_of_completed_tasks + 1
+                self.user_results.append(True)
+            else:
+                self.user_results.append(False)
+        self.number_of_completed_tasks = self.user_results.count(True)
         self.result_text = Localization.RESULT % self.number_of_completed_tasks
+
+        self.first_points = 0
+        for ind in range(1, 28):
+            if self.user_results[ind] and ind < 26:
+                self.first_points = self.first_points + 1
+            elif self.user_results[ind] and 26 <= ind <= 27:
+                self.first_points = self.first_points + 2
+        self.total_points = int(Config.POINTS[str(self.first_points)])
+        self.result_points_text = Localization.RESULT_IN_POINTS % (self.first_points, self.total_points)
+        self.result_text = self.result_text + '\n' + self.result_points_text
+
         self.res_lbl = QLabel(self.result_text)
         self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, alignment=Qt.AlignCenter)
-
+        
         self.results_contents.setLayout(self.results_grid_clicked)
         self.contents_tasks.setCurrentIndex(28)
 

@@ -109,6 +109,13 @@ with open('data/tasks_data/27/27_data.txt', 'r', encoding='utf-8') as data_27_fi
 with open('data/config/Localization.txt', 'r', encoding='utf-8') as loc_file:
     loc_dict = eval(loc_file.read())
 
+with open('data/config/config.txt', 'r', encoding='utf-8') as config_file:
+    config_dict = eval(config_file.read())
+
 class Localization(object):
     for name in loc_dict:
         locals()[name] = loc_dict[name]
+
+class Config(object):
+    for name in config_dict:
+        locals()[name] = config_dict[name]
