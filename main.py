@@ -22,6 +22,31 @@ class UI_VarWindow(object):
             self.tasks_data[number] = Task_Chooser.choose_task(number)
         self.user_answers = [None for _ in range(28)]
 
+    def timerSetup(self):
+        self.start = False
+        self.count = Config.TIMER_TIME_IN_SECONDS
+        self.start = True
+
+    def timerAction(self):
+        if self.start:
+            self.count -= 1
+            if self.count == 0:
+                self.start = False
+                self.timer_has_ended = True
+                self.timer_text_lbl.setText(Localization.TIMER_TEXT_TIME_EXPIRED)
+                self.finish()
+        if self.start:
+            hours = str(self.count // 3600)
+            hours = '0' + hours if len(hours) == 1 else hours
+            minutes = str((self.count % 3600) // 60)
+            minutes = '0' + minutes if len(minutes) == 1 else minutes
+            seconds = str((self.count % 3600) % 60)
+            seconds = '0' + seconds if len(seconds) == 1 else seconds
+            remaining_text = Config.TIMER_FORMAT % (hours, minutes, seconds) 
+            text = Localization.TIMER_TEXT % remaining_text
+            self.timer_text_lbl.setText(text)
+
+
     def setupUi(self, BaseWindow):
         BaseWindow.resize(1000, 600)
         BaseWindow.move(300, 300)
@@ -56,6 +81,15 @@ class UI_VarWindow(object):
         self.default_text = QLabel(Localization.VAR_DEFAULT_TEXT)
         self.tasks_widget_layout_default.addWidget(self.default_text)
         self.contents_default.setLayout(self.tasks_widget_layout_default)
+
+        self.timer = QTimer()
+        self.start = False
+        self.count = 0
+        self.timer.timeout.connect(self.timerAction)
+        self.timer.start(1000)
+        self.timer_text_lbl = QLabel('Таймер запустится, когда вы откроете любое задание.')
+        self.timer_isnt_started = True
+        self.timer_has_ended = False
 
 
         # 111111111
@@ -1130,6 +1164,8 @@ class UI_VarWindow(object):
 
         def btn_clicked(button_num):
             try:
+                if self.timer_isnt_started and not self.timer_has_ended:
+                    self.timerSetup()
                 self.contents_tasks.setCurrentIndex(button_num)
             except KeyError:
                 pass
@@ -1153,12 +1189,18 @@ class UI_VarWindow(object):
 
         self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 1)
         self.centralLayout.addWidget(self.scrollArea_nums, 0, 2, 1, 12)
-        self.centralLayout.addWidget(self.finish_btn, 1, 0, 2, 12)
+        self.centralLayout.addWidget(self.timer_text_lbl, 1, 0, 2, 12)
+        self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 12)
         self.centralWidget.setLayout(self.centralLayout)
         self.setCentralWidget(self.centralWidget)
         
 
     def finish(self):
+        self.start = False
+        self.timer_has_ended = True
+        if self.timer_text_lbl.text() != Localization.TIMER_TEXT_TIME_EXPIRED:
+            self.timer_text_lbl.setText(Localization.TIMER_TEXT_USER_FINISH)
+
         for task in range(1, 28):
             self.finish_btn.setText(Localization.SHOW_RESULTS)
             button_name_1 = 'task_' + str(task) + '_save_button'
@@ -1210,7 +1252,7 @@ class UI_VarWindow(object):
         self.result_text = self.result_text + '\n' + self.result_points_text
 
         self.res_lbl = QLabel(self.result_text)
-        self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, alignment=Qt.AlignCenter)
+        self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, 10, 3, alignment=Qt.AlignCenter)
         
         self.results_contents.setLayout(self.results_grid_clicked)
         self.contents_tasks.setCurrentIndex(28)
