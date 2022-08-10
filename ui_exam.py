@@ -5,19 +5,31 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
 
 from task_manager import Task_Chooser
-from data_manager import Localization, Config, Email
+from data_manager import Localization, Config, Email, ID_Vars
 import save_manager
 
 
 class UI_VarWindow(object):
     def __init__(self):
-        self.getTasksData()
+        self.getTasksData(self.by_id)
 
-    def getTasksData(self):
+    def getTasksData(self, var_by_id=False):
         self.tasks_data = dict()
-        for number in range(1, 28):
-            self.tasks_data[number] = Task_Chooser.choose_task(number)
-            save_manager.add_id_to_save(number, self.tasks_data[number]['id'])
+        if var_by_id:
+            self.var_data = ID_Vars.get_data_by_id(self.var_id)
+            for task in range(1, 28):
+                self.task_id_in_base = self.var_data[str(task)]
+                self.task_list = Task_Chooser.get_task_list(task)
+                for elem in self.task_list:
+                    if elem['id'] == self.task_id_in_base:
+                        self.tasks_data[task] = elem
+                        if not save_manager.check_id_in_save(task, self.task_id_in_base):
+                            save_manager.add_id_to_save(task, self.task_id_in_base)
+                        break
+        else:
+            for number in range(1, 28):
+                self.tasks_data[number] = Task_Chooser.choose_task(number)
+                save_manager.add_id_to_save(number, self.tasks_data[number]['id'])
         self.user_answers = [None for _ in range(28)]
 
     def timerSetup(self):
@@ -88,6 +100,7 @@ class UI_VarWindow(object):
         self.timer_text_lbl = QLabel('Таймер запустится, когда вы откроете любое задание.')
         self.timer_isnt_started = True
         self.timer_has_ended = False
+        self.var_saved = False
 
 
         # 111111111
@@ -1171,7 +1184,7 @@ class UI_VarWindow(object):
                     else:
                         self.finish_btn = QPushButton(Localization.SHOW_RESULTS)
                     self.finish_btn.clicked.connect(self.finish)
-                    self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 12)
+                    self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 3)
                 except:
                     pass
                 self.contents_tasks.setCurrentIndex(button_num)
@@ -1194,14 +1207,26 @@ class UI_VarWindow(object):
 
         self.finish_btn = QPushButton(Localization.FINISH)
         self.finish_btn.clicked.connect(self.finish)
+        self.save_var_btn = QPushButton(Localization.SAVE_VAR)
+        self.save_var_btn.clicked.connect(self.save_var_clicked)
 
         self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 1)
         self.centralLayout.addWidget(self.scrollArea_nums, 0, 2, 1, 12)
         self.centralLayout.addWidget(self.timer_text_lbl, 1, 0, 2, 12)
-        self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 12)
+        self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 3)
+        self.centralLayout.addWidget(self.save_var_btn, 3, 4, 4, 12)
         self.centralWidget.setLayout(self.centralLayout)
         self.setCentralWidget(self.centralWidget)
-        
+
+    def save_var_clicked(self):
+        if not self.var_saved and not self.by_id:
+            self.var_saved = True
+            self.saved_var_id = ID_Vars.save_var(self.tasks_data)
+            QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.BYID_SUCCESS_TEXT % self.saved_var_id, QMessageBox.Ok)
+        elif self.by_id:
+            QMessageBox.information(self, Localization.BYID_INFO_HEADER, Localization.BYID_SUCCESS_TEXT_LOADED % self.var_id, QMessageBox.Ok)
+        else:
+            QMessageBox.information(self, Localization.BYID_INFO_HEADER, Localization.BYID_SUCCESS_TEXT_ALREADY_SAVED % self.saved_var_id, QMessageBox.Ok)
 
     def finish(self):
         self.user_finished = True
@@ -1214,7 +1239,7 @@ class UI_VarWindow(object):
         self.finish_btn.setParent(None)
         self.email_btn = QPushButton(Localization.EMAIL_BUTTON)
         self.email_btn.clicked.connect(self.emailAction)
-        self.centralLayout.addWidget(self.email_btn, 3, 0, 4, 12)
+        self.centralLayout.addWidget(self.email_btn, 3, 0, 4, 3)
 
         for task in range(1, 28):
             self.finish_btn.setText(Localization.SHOW_RESULTS)

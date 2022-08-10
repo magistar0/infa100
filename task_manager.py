@@ -13,5 +13,9 @@ class Task_Chooser:
             chosen_task = random.choice(data)
         else:
             chosen_task = random.choice(filtered_data)
-
         return chosen_task
+
+    def get_task_list(num) -> list:
+        list_name = 'task_%s_list_of_dicts' % str(num)
+        data = data_manager.__dict__[list_name]
+        return data

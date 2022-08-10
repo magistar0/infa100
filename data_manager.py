@@ -4,6 +4,7 @@ import ssl
 import datetime
 import os
 import socket
+from github import Github
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
@@ -86,3 +87,62 @@ class Email(object):
         else:
             server.quit()
             return True
+
+
+class ID_Vars(object):
+
+    def get_last_id() -> int:
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        contents = repo.get_contents("last_id.json")
+        pre_decode = contents.decoded_content
+        data = json.loads(pre_decode)
+        return data['last_id']
+
+    def rewrite_last_id(num) -> None:
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        writeable = {"last_id": num}
+        contents = repo.get_contents("last_id.json")
+        repo.update_file(contents.path, "обновление last id", str(writeable).replace("'", '"'), contents.sha, branch='main')
+
+    def save_var(tasks_data) -> int:
+        var_dict = {}
+        for key in tasks_data:
+            var_dict[key] = tasks_data[key]['id']
+        
+        var_id = ID_Vars.get_last_id() + 1
+        ID_Vars.rewrite_last_id(var_id)
+
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        filename = "%d.json" % var_id
+        repo.create_file(filename, "new var (%d)" % var_id, json.dumps(var_dict), branch="main")
+        return var_id
+
+    def check_if_id_is_valid(id) -> bool:
+        id = str(id)
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        contents = repo.get_contents("")
+        filename = "%s.json" % id
+        for elem in contents:
+            str_elem = str(elem)
+            if "ContentFile(path=\"%s\")" % filename in str_elem:
+                return True
+        return False
+
+    def get_data_by_id(id) -> dict:
+        id = str(id)
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        filename = "%s.json" % id
+        contents = repo.get_contents(filename)
+        pre_decode = contents.decoded_content
+        tasks_data = json.loads(pre_decode)
+        return tasks_data
