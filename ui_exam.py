@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
 
 from task_manager import Task_Chooser
-from data_manager import Localization, Config
+from data_manager import Localization, Config, Email
 import save_manager
 
 
@@ -1164,6 +1164,16 @@ class UI_VarWindow(object):
             try:
                 if self.timer_isnt_started and not self.timer_has_ended:
                     self.timerSetup()
+                try:
+                    self.email_btn.setParent(None)
+                    if not self.user_finished:
+                        self.finish_btn = QPushButton(Localization.FINISH)
+                    else:
+                        self.finish_btn = QPushButton(Localization.SHOW_RESULTS)
+                    self.finish_btn.clicked.connect(self.finish)
+                    self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 12)
+                except:
+                    pass
                 self.contents_tasks.setCurrentIndex(button_num)
             except KeyError:
                 pass
@@ -1194,10 +1204,17 @@ class UI_VarWindow(object):
         
 
     def finish(self):
+        self.user_finished = True
+        self.finish_time = Config.getCurrentTimeAsStr()
         self.start = False
         self.timer_has_ended = True
         if self.timer_text_lbl.text() != Localization.TIMER_TEXT_TIME_EXPIRED:
             self.timer_text_lbl.setText(Localization.TIMER_TEXT_USER_FINISH)
+
+        self.finish_btn.setParent(None)
+        self.email_btn = QPushButton(Localization.EMAIL_BUTTON)
+        self.email_btn.clicked.connect(self.emailAction)
+        self.centralLayout.addWidget(self.email_btn, 3, 0, 4, 12)
 
         for task in range(1, 28):
             self.finish_btn.setText(Localization.SHOW_RESULTS)
@@ -1254,3 +1271,44 @@ class UI_VarWindow(object):
         
         self.results_contents.setLayout(self.results_grid_clicked)
         self.contents_tasks.setCurrentIndex(28)
+    
+    def emailAction(self):
+        self.email_text, self.ok = QInputDialog.getText(self, Localization.EMAIL_ASK_HEADER,
+            Localization.EMAIL_ASK_TEXT, flags=Qt.WindowCloseButtonHint)
+        if Config.checkInternetConnection():
+            if self.ok:
+                self.result_file_content_writeable = self.generateResultFileContent()
+                self.generateResultFile(self.result_file_content_writeable)
+                self.email = self.email_text
+                self.email_sent = Email.send_message(self.email)
+                if not self.email_sent:
+                    QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_0, QMessageBox.Ok)
+                else:
+                    QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EMAIL_SUCCESS_TEXT, QMessageBox.Ok)
+                self.deleteResultFile()
+            else:
+                QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_1, QMessageBox.Ok)
+        else:
+            QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_2, QMessageBox.Ok)
+
+    def generateResultFileContent(self):
+        self.result_datetime_line = Localization.EMAIL_DATETIME_LINE + self.finish_time + '.\n'
+        self.result_res_line = self.result_text + '\n'
+        self.result_tasks_line = '\n'
+        textltask = 1
+        for elem in self.user_results[1:]:
+            textlcorrect = Localization.EMAIL_CORRECT if elem else Localization.EMAIL_INCORRECT
+            textl = Localization.EMAIL_TASK_TEXT % textltask + textlcorrect + '.'
+            textltask += 1
+            self.result_tasks_line = self.result_tasks_line + textl + '\n'
+        self.result_file_content = self.result_datetime_line + self.result_res_line + self.result_tasks_line
+        return self.result_file_content
+    
+    def generateResultFile(self, content):
+        self.result_file_path = '%s/INFA100/result.txt' %  os.environ['APPDATA']
+        with open(self.result_file_path, 'w', encoding='utf-8') as email_file:
+            email_file.write(content)
+
+    def deleteResultFile(self):
+        if os.path.exists(self.result_file_path):
+            os.remove(self.result_file_path)

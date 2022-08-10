@@ -40,7 +40,9 @@ class Main(QMainWindow, UI_MainWindow):
 
 
 if __name__ == "__main__":
-    if not os.path.exists('data/config/user_save.save'):
+    if not os.path.exists(save_manager.dir_path):
+        os.makedirs(save_manager.dir_path)
+    if not os.path.exists(save_manager.dir_path + 'user_save.save'):
         save_manager.generate_empty_save()
     app = QApplication(sys.argv)
     win = Main()

@@ -1,16 +1,18 @@
 {
 	"VAR_WIN_TITLE": "Решение варианта",
+	"BASE_WIN_TITLE": "База заданий",
+
 	"EXIT": "Выход",
 	"EXIT_SHORTCUT": "Alt+F4",
 	"EXIT_STATUS_TIP": "Выйти из программы",
 	"FILE": "Файл",
+
 	"VAR_DEFAULT_TEXT": "Вы начинаете решение варианта.\nВыберите задание справа, чтобы открыть условие.",
 	"BLANK_PLACEHOLDER": "Введите ответ",
 	"SAVE": "Сохранить ответ",
 	"EDIT": "Редактировать ответ",
 	"GET_FILE": "Получить файл",
 	"FILE_DIALOG_SAVE": "Сохранить",
-	"BASE_WIN_TITLE": "База заданий",
 	"CHOOSE_TASK": "Выберите задание.",
 	"SHOW": "Показать",
 	"TASK": "Задание ",
@@ -21,12 +23,14 @@
 	"SHOW_DESCRIPTION": "Показать решение",
 	"GET_FILE_A": "Получить файл А",
 	"GET_FILE_B": "Получить файл В",
+	"FINISH": "Завершить выполнение варианта",
+
 	"MAIN_WIN_TITLE": "ИНФА100",
 	"MAIN_HEADER": "Главное меню",
 	"BASE_BUTTON": "База заданий",
 	"VAR_BUTTON": "Решение варианта",
 	"EXIT_BUTTON": "Выйти",
-	"FINISH": "Завершить выполнение варианта",
+
 	"RESULTS_HEADER_TEXT": "Задание %s: %s ответ.",
 	"CORRECT": "верный",
 	"INCORRECT": "неверный",
@@ -38,5 +42,21 @@
 	"SHOW_RESULTS": "Перейти к результатам",
 	"TIMER_TEXT_USER_FINISH": "Вы завершили выполнение варианта.",
 	"TIMER_TEXT_TIME_EXPIRED": "Время вышло!",
-	"TIMER_TEXT": "Оставшееся время: %s."
+	"TIMER_TEXT": "Оставшееся время: %s.",
+
+	"EMAIL_BUTTON": "Отправить результат на e-mail",
+	"EMAIL_SUBJECT": "ИНФА100: результат решения варианта",
+	"EMAIL_TEXT": "Ваш результат варианта ЕГЭ по информатике в программе ИНФА100 доступен в этом письме, а также в приложенном к письму файле.",
+	"EMAIL_ASK_HEADER": "Отправка результата",
+	"EMAIL_ASK_TEXT": "Введите ваш Email:",
+	"EMAIL_ERROR_HEADER": "Ошибка",
+	"EMAIL_ERROR_0": "Ошибка отправки Email: некорректный адрес.",
+	"EMAIL_ERROR_1": "Вы не ввели Email.",
+	"EMAIL_ERROR_2": "Нет подключения к Интернету.",
+	"EMAIL_SUCCESS_HEADER": "Успешно",
+	"EMAIL_SUCCESS_TEXT": "Ваш результат отправлен на Email.",
+	"EMAIL_DATETIME_LINE": "Дата и время завершения варианта: ",
+	"EMAIL_CORRECT": "верно",
+	"EMAIL_INCORRECT": "неверно",
+	"EMAIL_TASK_TEXT": "Задание %d: решено "
 }
