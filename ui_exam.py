@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
 
 from task_manager import Task_Chooser
-from data_manager import Localization, Config, Email, ID_Vars
+from data_manager import Localization, Config, Email, ID_Vars, Logger
 import save_manager
 
 
@@ -1306,7 +1306,8 @@ class UI_VarWindow(object):
                 self.generateResultFile(self.result_file_content_writeable)
                 self.email = self.email_text
                 self.email_sent = Email.send_message(self.email)
-                if not self.email_sent:
+                if not self.email_sent[0]:
+                    Logger.add_line_to_log("Error sending Email. Code: 0. Cause: %s." % self.email_sent[1])
                     QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_0, QMessageBox.Ok)
                 else:
                     QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EMAIL_SUCCESS_TEXT, QMessageBox.Ok)
@@ -1314,6 +1315,7 @@ class UI_VarWindow(object):
             else:
                 QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_1, QMessageBox.Ok)
         else:
+            Logger.add_line_to_log("Error initializing Email module. Code: 2. Cause: no Internet access.")
             QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_2, QMessageBox.Ok)
 
     def generateResultFileContent(self):

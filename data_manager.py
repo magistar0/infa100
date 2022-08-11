@@ -48,7 +48,7 @@ class Config(object):
 
 
 class Email(object):
-    def send_message(receiver_email):
+    def send_message(receiver_email) -> tuple:
 
         smtp_server = "smtp.gmail.com"
         port = 587
@@ -83,10 +83,10 @@ class Email(object):
             server.sendmail(sender_email, receiver_email, msg.as_string())
         except Exception as e:
             server.quit()
-            return False
+            return (False, e)
         else:
             server.quit()
-            return True
+            return (True, "")
 
 
 class ID_Vars(object):
@@ -146,3 +146,19 @@ class ID_Vars(object):
         pre_decode = contents.decoded_content
         tasks_data = json.loads(pre_decode)
         return tasks_data
+
+
+class Logger(object):
+    log_path = '%s/INFA100/log.txt' %  os.environ['APPDATA']
+
+    def generate_empty_log() -> None:
+        with open(Logger.log_path, 'w', encoding='utf-8') as logf:
+            logf.write("This is the log file. Please do not modify any of the lines.\n\n")
+
+    def add_line_to_log(line) -> None:
+        with open(Logger.log_path, 'r', encoding='utf-8') as logf:
+            file_content = logf.read()
+        new_line = '\n' + Config.getCurrentTimeAsStr() + ' - ' + line
+        file_content = file_content + new_line
+        with open(Logger.log_path, 'w', encoding='utf-8') as logf:
+            logf.write(file_content)

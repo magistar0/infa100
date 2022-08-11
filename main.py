@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
-from data_manager import Localization, Config, ID_Vars
+from data_manager import Localization, Config, ID_Vars, Logger
 from ui_base import UI_BaseWindow
 from ui_exam import UI_VarWindow
 from ui_main import UI_MainWindow
@@ -85,6 +85,8 @@ if __name__ == "__main__":
         os.makedirs(save_manager.dir_path)
     if not os.path.exists(save_manager.dir_path + 'user_save.save'):
         save_manager.generate_empty_save()
+    if not os.path.exists(Logger.log_path):
+        Logger.generate_empty_log()
     app = QApplication(sys.argv)
     win = Main()
     win.show()
