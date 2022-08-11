@@ -46,6 +46,27 @@ class Config(object):
             return False
         return True
 
+    def getLatestBuild() -> str:
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        contents = repo.get_contents("current_build.json")
+        pre_decode = contents.decoded_content
+        data = json.loads(pre_decode)
+        return data['current_build']
+
+    def rewriteLatestBuild(build) -> None:
+        g = Github("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")
+        user = g.get_user()
+        repo = user.get_repos()[0]
+        writeable = {"current_build": str(build)}
+        contents = repo.get_contents("current_build.json")
+        repo.update_file(contents.path, "обновление current build", str(writeable).replace("'", '"'), contents.sha, branch='main')
+
+    def checkIfBuildIsLatest() -> bool:
+        latest_build = Config.getLatestBuild()
+        return latest_build == Config.build
+
 
 class Email(object):
     def send_message(receiver_email) -> tuple:
