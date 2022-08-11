@@ -1,6 +1,5 @@
 import os
 import shutil
-import webbrowser
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
@@ -12,23 +11,7 @@ import save_manager
 
 class UI_VarWindow(object):
     def __init__(self):
-        self.setByIdSelf()
-        self.setVarIdSelf()
         self.getTasksData(self.by_id)
-
-    def infoAction(self):
-        self.box = QMessageBox()
-        self.box.setIcon(QMessageBox.Question)
-        self.box.setWindowIcon(QIcon('icons/icon.png'))
-        self.box.setWindowTitle(Localization.HELP)
-        self.box.setText(Localization.HELP_TEXT % Config.build)
-        self.box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-        self.buttonY = self.box.button(QMessageBox.Yes)
-        self.buttonY.setText(Localization.HELP_BUTTON)
-        self.buttonY.clicked.connect(lambda: webbrowser.open('https://forms.gle/GZUVBykDbkdH5gXp9'))
-        self.buttonN = self.box.button(QMessageBox.No)
-        self.buttonN.setVisible(False)
-        self.box.exec_()
 
     def getTasksData(self, var_by_id=False):
         self.tasks_data = dict()
@@ -43,7 +26,6 @@ class UI_VarWindow(object):
                         if not save_manager.check_id_in_save(task, self.task_id_in_base):
                             save_manager.add_id_to_save(task, self.task_id_in_base)
                         break
-            Logger.add_line_to_log("Succesfully loaded ID %s." % self.var_id)
         else:
             for number in range(1, 28):
                 self.tasks_data[number] = Task_Chooser.choose_task(number)
@@ -85,15 +67,10 @@ class UI_VarWindow(object):
         self.exitAction_var.setShortcut(Localization.EXIT_SHORTCUT)
         self.exitAction_var.setStatusTip(Localization.EXIT_STATUS_TIP)
         self.exitAction_var.triggered.connect(qApp.quit)
-
-        self.infoAction_var = QAction(QIcon('icons/info.png'), '&' + Localization.HELP, self)
-        self.infoAction_var.setStatusTip(Localization.HELP_STATUS_TIP)
-        self.infoAction_var.triggered.connect(self.infoAction)
         self.statusBar()
 
         self.menubar_var = self.menuBar()
         self.fileMenu_var = self.menubar_var.addMenu('&' + Localization.FILE)
-        self.fileMenu_var.addAction(self.infoAction_var)
         self.fileMenu_var.addAction(self.exitAction_var)
 
         self.centralWidget = QWidget()
@@ -1333,7 +1310,6 @@ class UI_VarWindow(object):
                     Logger.add_line_to_log("Error sending Email. Code: 0. Cause: %s." % self.email_sent[1])
                     QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_0, QMessageBox.Ok)
                 else:
-                    Logger.add_line_to_log("Succesfully sent Email to %s." % self.email)
                     QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EMAIL_SUCCESS_TEXT, QMessageBox.Ok)
                 self.deleteResultFile()
             else:
