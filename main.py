@@ -2,6 +2,7 @@ import sys
 import os
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 
 from data_manager import Localization, Config, ID_Vars
 from ui_base import UI_BaseWindow
@@ -40,9 +41,13 @@ class Main(QMainWindow, UI_MainWindow):
         self.w3 = VarWindow()
         self.w3.show()
 
+    def dialogAction_no_clicked(self):
+        self.no_clicked = True
+
     def window_3_dialogAction(self):
         box = QMessageBox()
         box.setIcon(QMessageBox.Question)
+        box.setWindowIcon(QIcon('icons/icon.png'))
         box.setWindowTitle(Localization.VAR_WIN_TITLE)
         box.setText(Localization.BYID_DIALOG_QUESTION)
         box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
@@ -50,12 +55,14 @@ class Main(QMainWindow, UI_MainWindow):
         buttonY.setText(Localization.BYID_DIALOG_OPTION_0)
         buttonN = box.button(QMessageBox.No)
         buttonN.setText(Localization.BYID_DIALOG_OPTION_1)
+        self.no_clicked = False
+        buttonN.clicked.connect(self.dialogAction_no_clicked)
         box.exec_()
 
         if box.clickedButton() == buttonY:
             VarWindow.by_id = False
             self.show_window_3()
-        elif box.clickedButton() == buttonN:
+        elif box.clickedButton() == buttonN and self.no_clicked:
             if not Config.checkInternetConnection():
                 QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.BYID_ERROR_1, QMessageBox.Ok)
             else:
