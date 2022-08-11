@@ -1,15 +1,30 @@
 import os
 import shutil
+import webbrowser
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
 
 from task_manager import Task_Chooser
-from data_manager import Localization
+from data_manager import Localization, Config
 import save_manager
 
 
 class UI_BaseWindow(object):
+    def infoAction(self):
+        self.box = QMessageBox()
+        self.box.setIcon(QMessageBox.Question)
+        self.box.setWindowIcon(QIcon('icons/icon.png'))
+        self.box.setWindowTitle(Localization.HELP)
+        self.box.setText(Localization.HELP_TEXT % Config.build)
+        self.box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        self.buttonY = self.box.button(QMessageBox.Yes)
+        self.buttonY.setText(Localization.HELP_BUTTON)
+        self.buttonY.clicked.connect(lambda: webbrowser.open('https://forms.gle/GZUVBykDbkdH5gXp9'))
+        self.buttonN = self.box.button(QMessageBox.No)
+        self.buttonN.setVisible(False)
+        self.box.exec_()
+
     def back_btn_clicked(self):
         self.menubar_var.clear()
         self.setupUi_continue()
@@ -22,10 +37,15 @@ class UI_BaseWindow(object):
         self.exitAction_var.setShortcut(Localization.EXIT_SHORTCUT)
         self.exitAction_var.setStatusTip(Localization.EXIT_STATUS_TIP)
         self.exitAction_var.triggered.connect(qApp.quit)
+
+        self.infoAction_var = QAction(QIcon('icons/info.png'), '&' + Localization.HELP, self)
+        self.infoAction_var.setStatusTip(Localization.HELP_STATUS_TIP)
+        self.infoAction_var.triggered.connect(self.infoAction)
         self.statusBar()
 
         self.menubar_var = self.menuBar()
         self.fileMenu_var = self.menubar_var.addMenu('&' + Localization.FILE)
+        self.fileMenu_var.addAction(self.infoAction_var)
         self.fileMenu_var.addAction(self.exitAction_var)
 
         self.lbl = QLabel(Localization.CHOOSE_TASK, self)
