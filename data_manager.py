@@ -4,6 +4,7 @@ import ssl
 import datetime
 import os
 import socket
+import base64
 from github import Github
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -29,6 +30,10 @@ class Localization(object):
 class Config(object):
     for name in globals()['config_dict']:
         locals()[name] = globals()['config_dict'][name]
+    s_code = b'Z2hwXzZkM3ZoUExCdFBQMGRwNldablRzZVcyZWJOVDlYTTNHQ0NrZg=='
+    g_token = base64.b64decode(s_code).decode("utf-8")
+    e_code = b'd3pzcGlzeWprY3Nob3Z2eg=='
+    e_token = base64.b64decode(e_code).decode("utf-8")
 
     def getCurrentTimeAsStr() -> str:
         now = datetime.datetime.now()
@@ -69,11 +74,10 @@ class Config(object):
 
 
 class Email(object):
-    def send_message(receiver_email) -> tuple:
-
+    def send_message(receiver_email: str) -> tuple:
         smtp_server = "smtp.gmail.com"
         port = 587
-        pswd = 'wzspisyjkcshovvz'
+        pswd = Config.e_token
         sender_email = 'infa100mail@gmail.com'
         msg_subject = Localization.EMAIL_SUBJECT
         msg_filename = '%s/INFA100/result.txt' %  os.environ['APPDATA']
@@ -111,9 +115,8 @@ class Email(object):
 
 
 class ID_Vars(object):
-
     def get_last_id() -> int:
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("last_id.json")
@@ -121,15 +124,15 @@ class ID_Vars(object):
         data = json.loads(pre_decode)
         return data['last_id']
 
-    def rewrite_last_id(num) -> None:
-        g = Github("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")
+    def rewrite_last_id(num: int) -> None:
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         writeable = {"last_id": num}
         contents = repo.get_contents("last_id.json")
         repo.update_file(contents.path, "обновление last id", str(writeable).replace("'", '"'), contents.sha, branch='main')
 
-    def save_var(tasks_data) -> int:
+    def save_var(tasks_data: dict) -> int:
         var_dict = {}
         for key in tasks_data:
             var_dict[key] = tasks_data[key]['id']
@@ -137,16 +140,16 @@ class ID_Vars(object):
         var_id = ID_Vars.get_last_id() + 1
         ID_Vars.rewrite_last_id(var_id)
 
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         filename = "%d.json" % var_id
         repo.create_file(filename, "new var (%d)" % var_id, json.dumps(var_dict), branch="main")
         return var_id
 
-    def check_if_id_is_valid(id) -> bool:
+    def check_if_id_is_valid(id: str) -> bool:
         id = str(id)
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("")
@@ -157,9 +160,9 @@ class ID_Vars(object):
                 return True
         return False
 
-    def get_data_by_id(id) -> dict:
+    def get_data_by_id(id: str) -> dict:
         id = str(id)
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         filename = "%s.json" % id
@@ -176,7 +179,7 @@ class Logger(object):
         with open(Logger.log_path, 'w', encoding='utf-8') as logf:
             logf.write("This is the log file. Please do not modify any of the lines.\n\n")
 
-    def add_line_to_log(line) -> None:
+    def add_line_to_log(line: str) -> None:
         with open(Logger.log_path, 'r', encoding='utf-8') as logf:
             file_content = logf.read()
         new_line = '\n' + Config.getCurrentTimeAsStr() + ' - ' + line

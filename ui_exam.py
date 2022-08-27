@@ -30,7 +30,9 @@ class UI_VarWindow(object):
         self.buttonN.setVisible(False)
         self.box.exec_()
 
-    def getTasksData(self, var_by_id=False):
+    def getTasksData(self, var_by_id=None):
+        if var_by_id is None:
+            var_by_id = False
         self.tasks_data = dict()
         if var_by_id:
             self.var_data = ID_Vars.get_data_by_id(self.var_id)

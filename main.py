@@ -25,13 +25,13 @@ class VarWindow(QMainWindow, UI_VarWindow):
         self.setupUi(self)
         self.setWindowTitle(Localization.VAR_WIN_TITLE)
 
-    def setByIdClass(by_id):
+    def setByIdClass(by_id: bool):
         VarWindow.by_id = by_id
 
     def setByIdSelf(self):
         self.by_id = VarWindow.by_id
 
-    def setVarIdClass(id):
+    def setVarIdClass(id: str):
         VarWindow.var_id = id
 
     def setVarIdSelf(self):

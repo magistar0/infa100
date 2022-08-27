@@ -1,9 +1,11 @@
 import random
 import data_manager
 import save_manager
+from typing import Union
+
 
 class Task_Chooser:
-    def choose_task(num) -> dict:
+    def choose_task(num: Union[int, str]) -> dict:
         list_name = 'task_%s_list_of_dicts' % str(num)
         data = data_manager.__dict__[list_name]
 
@@ -15,7 +17,7 @@ class Task_Chooser:
             chosen_task = random.choice(filtered_data)
         return chosen_task
 
-    def get_task_list(num) -> list:
+    def get_task_list(num: Union[int, str]) -> list:
         list_name = 'task_%s_list_of_dicts' % str(num)
         data = data_manager.__dict__[list_name]
         return data
