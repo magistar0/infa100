@@ -52,7 +52,7 @@ class Config(object):
         return True
 
     def getLatestBuild() -> str:
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("current_build.json")
@@ -61,7 +61,7 @@ class Config(object):
         return data['current_build']
 
     def rewriteLatestBuild(build) -> None:
-        g = Github("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")
+        g = Github(Config.g_token)
         user = g.get_user()
         repo = user.get_repos()[0]
         writeable = {"current_build": str(build)}
