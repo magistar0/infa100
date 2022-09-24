@@ -10,7 +10,6 @@ from ui_exam import UI_VarWindow
 from ui_main import UI_MainWindow
 import save_manager
 
-# тестовое изменение
 
 class BaseWindow(QMainWindow, UI_BaseWindow):
     def __init__(self, parent=None):
