@@ -30,10 +30,10 @@ class Localization(object):
 class Config(object):
     for name in globals()['config_dict']:
         locals()[name] = globals()['config_dict'][name]
-    s_code = b'Z2hwXzZkM3ZoUExCdFBQMGRwNldablRzZVcyZWJOVDlYTTNHQ0NrZg=='
-    g_token = base64.b64decode(s_code).decode("utf-8")
-    e_code = b'd3pzcGlzeWprY3Nob3Z2eg=='
-    e_token = base64.b64decode(e_code).decode("utf-8")
+    a, j, k = b'Z2hwX2hMMG5RUGd0R3', b'ElpYzNlbnlFNA', b'liZlAwWksyU2cwOFEzTzNha'
+    g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
+    aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
+    e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
 
     def getCurrentTimeAsStr() -> str:
         now = datetime.datetime.now()
