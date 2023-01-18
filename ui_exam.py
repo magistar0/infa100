@@ -1324,13 +1324,19 @@ class UI_VarWindow(object):
         self.contents_tasks.setCurrentIndex(28)
     
     def emailAction(self):
-        self.email_text, self.ok = QInputDialog.getText(self, Localization.EMAIL_ASK_HEADER,
-            Localization.EMAIL_ASK_TEXT, flags=Qt.WindowCloseButtonHint)
+        self.ok = False
+        dialog = EmailInputDialog()
+        dialog.setWindowFlag(Qt.WindowTitleHint, False)
+        dialog.setWindowIcon(QIcon('icons/icon.png'))
+        dialog.setWindowTitle(Localization.EMAIL_ASK_HEADER)
+        if dialog.exec():
+            self.ok = True
+            self.email_address, self.email_name = dialog.getInputs()
         if Config.checkInternetConnection():
             if self.ok:
                 self.result_file_content_writeable = self.generateResultFileContent()
                 self.generateResultFile(self.result_file_content_writeable)
-                self.email = self.email_text
+                self.email = self.email_address
                 self.email_sent = Email.send_message(self.email)
                 if not self.email_sent[0]:
                     Logger.add_line_to_log("Error sending Email. Code: 0. Cause: %s." % self.email_sent[1])
@@ -1347,6 +1353,7 @@ class UI_VarWindow(object):
 
     def generateResultFileContent(self):
         self.result_datetime_line = Localization.EMAIL_DATETIME_LINE + self.finish_time + '.\n'
+        self.result_name_line = Localization.RESULT_EMAIL_NAME_PREFIX + self.email_name + ".\n"
         self.result_res_line = self.result_text + '\n'
         self.result_tasks_line = '\n'
         textltask = 1
@@ -1355,7 +1362,7 @@ class UI_VarWindow(object):
             textl = Localization.EMAIL_TASK_TEXT % textltask + textlcorrect + '.'
             textltask += 1
             self.result_tasks_line = self.result_tasks_line + textl + '\n'
-        self.result_file_content = self.result_datetime_line + self.result_res_line + self.result_tasks_line
+        self.result_file_content = self.result_datetime_line + self.result_name_line + self.result_res_line + self.result_tasks_line
         return self.result_file_content
     
     def generateResultFile(self, content):
@@ -1366,3 +1373,30 @@ class UI_VarWindow(object):
     def deleteResultFile(self):
         if os.path.exists(self.result_file_path):
             os.remove(self.result_file_path)
+
+
+
+class EmailInputDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.first = QLineEdit(self)
+        self.second = QLineEdit(self)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self);
+
+        layout = QFormLayout(self)
+        layout.addRow(Localization.EMAIL_ASK_TEXT, self.first)
+        layout.addRow(Localization.EMAIL_NAME_ASK_TEXT, self.second)
+        layout.addWidget(buttonBox)
+
+        buttonBox.accepted.connect(self.acceptAction)
+        buttonBox.rejected.connect(self.reject)
+
+    def acceptAction(self):
+        if self.first.text() and self.second.text():
+            self.accept()
+        else:
+            QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_3, QMessageBox.Ok)
+
+    def getInputs(self):
+        return (self.first.text(), self.second.text())
