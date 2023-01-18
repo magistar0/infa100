@@ -72,6 +72,22 @@ class Config(object):
         latest_build = Config.getLatestBuild()
         return latest_build == Config.build
 
+    def getPointsForm(num: int) -> str:
+        forms = {
+            "1": Localization.POINTS_SINGULAR,
+            "2_4": Localization.POINTS_PLURAL_0,
+            "5": Localization.POINTS_PLURAL_1
+        }
+        if 11 <= num % 100 <= 14:
+            form = "5"
+        elif 2 <= num % 10 <= 4:
+            form = "2_4"
+        elif num % 10 == 1:
+            form = "1"
+        else:
+            form = "5"
+        return forms[form]
+        
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:
