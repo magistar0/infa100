@@ -37,3 +37,6 @@ def clear_task_data_in_save(task: str) -> None:
 def get_save_data_for_task(task: str) -> list:
     save_data = read_save()
     return save_data['save_data'][str(task)]
+
+def generate_res_dict():
+    pass
