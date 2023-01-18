@@ -38,5 +38,9 @@ def get_save_data_for_task(task: str) -> list:
     save_data = read_save()
     return save_data['save_data'][str(task)]
 
-def generate_res_dict():
-    pass
+def generate_result_dict(answers: list, results: list, tasks_data: dict) -> dict:
+    user_result = {}
+    for t in range(1, 28):
+        dct = {"id": tasks_data[t]["id"], "answer": answers[t], "correct": results[t]}
+        user_result[t] = dct
+    return user_result
