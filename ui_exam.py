@@ -1317,6 +1317,8 @@ class UI_VarWindow(object):
         self.result_points_text = Localization.RESULT_IN_POINTS % (self.first_points, self.points_form, self.total_points)
         self.result_text = self.result_text + '\n' + self.result_points_text
 
+        save_manager.write_var_completed_to_save(self.user_answers, self.user_results, self.tasks_data, self.first_points)
+
         self.res_lbl = QLabel(self.result_text)
         self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, 10, 3, alignment=Qt.AlignCenter)
         
