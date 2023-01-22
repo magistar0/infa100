@@ -37,14 +37,17 @@ class Config(object):
     aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
     e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
 
-    def getCurrentTimeAsStr() -> str:
-        now = datetime.datetime.now()
-        date = str(now.date())
+    def getTimeAsStr(datetime: datetime.datetime) -> str:
+        date = str(datetime.date())
         year = date[:4]
         month = date[5:7]
         day = date[8:]
-        time = str(now.time())[:5]
+        time = str(datetime.time())[:5]
         return '.'.join([day, month, year]) + ', ' + time
+
+    def getCurrentTimeAsStr() -> str:
+        now = datetime.datetime.now()
+        return Config.getTimeAsStr(now)
 
     def checkInternetConnection() -> bool:
         try:
@@ -111,6 +114,17 @@ class Config(object):
         most_incorrect = list(cc.most_common(1)[0])
         most_incorrect[1] = tasks_correct[most_incorrect[0]]
         return most_correct, tuple(most_incorrect)
+
+    def getExamHistory() -> list:
+        exam_history = save_manager.read_save()["exam_history"]
+        res = []
+        for dct in exam_history:
+            time_as_str = dct["time"]
+            time = datetime.datetime.strptime(time_as_str, '%Y-%m-%d %H:%M:%S.%f')
+            time_formatted = Config.getTimeAsStr(time)
+            result = dct["result"]
+            res.append((time_formatted, result))
+        return res
 
 
 class Email(object):

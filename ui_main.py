@@ -73,6 +73,7 @@ class UI_StatsWindow(object):
         self.setMinimumHeight(300)
         StatsWindow.resize(1000, 600)
         StatsWindow.move(150, 150)
+        self.stats_already_generated = False
 
         self.stacked_widget = QStackedWidget()
         self.widget_1 = QWidget()
@@ -116,7 +117,7 @@ class UI_StatsWindow(object):
         self.stats_lbl.setWordWrap(True)
         self.stats_lbl.setAlignment(Qt.AlignCenter)
 
-        self.more_btn = QPushButton("История решения вариантов", self)
+        self.more_btn = QPushButton(Localization.HISTORY_BUTTON, self)
         self.more_btn.clicked.connect(self.more_clicked)
 
         self.grid.addWidget(self.stats_lbl, 1, 0, 2, 0)
@@ -142,4 +143,30 @@ class UI_StatsWindow(object):
         self.box.exec_()
 
     def more_clicked(self):
-        pass
+        if not self.stats_already_generated:
+            self.history = Config.getExamHistory()
+            self.history_text = ""
+            k = 1
+            for exam in self.history:
+                self.points_form = Config.getCountEnding(exam[1])
+                self.points_form_text = Localization.__dict__["POINTS_" + self.points_form.upper()]
+                self.history_text += Localization.HISTORY_DATE_AND_TIME % (k, exam[0]) + "\n" + Localization.HISTORY_RESULT % (exam[1], self.points_form_text)
+                self.history_text += "\n\n"
+                k += 1
+
+            self.stats_already_generated = True
+            self.widget_2 = QWidget()
+            self.grid_2 = QGridLayout()
+
+            self.history_lbl = QLabel(self.history_text)
+            self.history_lbl.setWordWrap(True)
+            self.history_lbl.setAlignment(Qt.AlignCenter)
+            self.history_btn = QPushButton(Localization.BACK, self)
+            self.history_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
+
+            self.grid_2.addWidget(self.history_lbl, 1, 0, 2, 0)
+            self.grid_2.addWidget(self.history_btn, 0, 0, 2, 0)
+            self.widget_2.setLayout(self.grid_2)
+            self.stacked_widget.addWidget(self.widget_2)
+
+        self.stacked_widget.setCurrentIndex(1)
