@@ -1313,8 +1313,9 @@ class UI_VarWindow(object):
             elif self.user_results[ind] and 26 <= ind <= 27:
                 self.first_points = self.first_points + 2
         self.total_points = int(Config.POINTS[str(self.first_points)])
-        self.points_form = Config.getPointsForm(self.first_points)
-        self.result_points_text = Localization.RESULT_IN_POINTS % (self.first_points, self.points_form, self.total_points)
+        self.points_form = Config.getCountEnding(self.first_points)
+        self.points_form_text = Localization.__dict__["POINTS_" + self.points_form.upper()]
+        self.result_points_text = Localization.RESULT_IN_POINTS % (self.first_points, self.points_form_text, self.total_points)
         self.result_text = self.result_text + '\n' + self.result_points_text
 
         save_manager.write_var_completed_to_save(self.user_answers, self.user_results, self.tasks_data, self.first_points)

@@ -7,8 +7,9 @@ from PyQt5.QtGui import QIcon
 from data_manager import Localization, Config, ID_Vars, Logger
 from ui_base import UI_BaseWindow
 from ui_exam import UI_VarWindow
-from ui_main import UI_MainWindow
+from ui_main import UI_MainWindow, UI_StatsWindow
 import save_manager
+
 
 class BaseWindow(QMainWindow, UI_BaseWindow):
     def __init__(self, parent=None):
@@ -16,6 +17,11 @@ class BaseWindow(QMainWindow, UI_BaseWindow):
         self.setupUi(self)
         self.setWindowTitle(Localization.BASE_WIN_TITLE)
 
+class StatsWindow(QMainWindow, UI_StatsWindow):
+    def __init__(self, parent=None):
+        super(StatsWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowTitle(Localization.STATS)
 
 class VarWindow(QMainWindow, UI_VarWindow):
     by_id = False
@@ -43,6 +49,7 @@ class Main(QMainWindow, UI_MainWindow):
         self.setupUi(self)
         self.btn_1.clicked.connect(self.show_window_2)
         self.btn_2.clicked.connect(self.window_3_dialogAction)
+        self.btn_4.clicked.connect(self.show_window_4)
 
     def show_window_2(self):
         self.w2 = BaseWindow()
@@ -51,6 +58,10 @@ class Main(QMainWindow, UI_MainWindow):
     def show_window_3(self):
         self.w3 = VarWindow()
         self.w3.show()
+
+    def show_window_4(self):
+        self.w4 = StatsWindow()
+        self.w4.show()
 
     def dialogAction_no_clicked(self):
         self.no_clicked = True

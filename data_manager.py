@@ -6,9 +6,11 @@ import os
 import socket
 import base64
 from github import Github
+from collections import Counter
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
+import save_manager
 
 
 for t in range(1, 28):
@@ -72,22 +74,44 @@ class Config(object):
         latest_build = Config.getLatestBuild()
         return latest_build == Config.build
 
-    def getPointsForm(num: int) -> str:
-        forms = {
-            "1": Localization.POINTS_SINGULAR,
-            "2_4": Localization.POINTS_PLURAL_0,
-            "5": Localization.POINTS_PLURAL_1
-        }
+    def getCountEnding(num: int) -> str:
         if 11 <= num % 100 <= 14:
-            form = "5"
+            form = "plural_1"
         elif 2 <= num % 10 <= 4:
-            form = "2_4"
+            form = "plural_0"
         elif num % 10 == 1:
-            form = "1"
+            form = "singular"
         else:
-            form = "5"
-        return forms[form]
-        
+            form = "plural_1"
+        return form
+
+    def getStats() -> int:
+        exam_history = save_manager.read_save()["exam_history"]
+        if not exam_history:
+            return None
+        vars_ever_solved = len(exam_history)
+        all_results = [dct["result"] for dct in exam_history]
+        res_first = round(sum(all_results) / len(all_results))
+        res_ege = int(Config.POINTS[str(res_first)])
+        return vars_ever_solved, res_first, res_ege
+
+    def getMostSolvedTasks() -> int:
+        exam_history = save_manager.read_save()["exam_history"]
+        tasks_correct = dict(zip(range(1, 28), [0 for _ in range(28)]))
+        tasks_incorrect = dict(zip(range(1, 28), [0 for _ in range(28)]))
+        for dct in exam_history:
+            for k in dct["tasks_info"]:
+                if dct["tasks_info"][k]["correct"]:
+                    tasks_correct[int(k)] += 1
+                else:
+                    tasks_incorrect[int(k)] += 1
+        c = Counter(tasks_correct)
+        most_correct = c.most_common(1)[0]
+        cc = Counter(tasks_incorrect)
+        most_incorrect = list(cc.most_common(1)[0])
+        most_incorrect[1] = tasks_correct[most_incorrect[0]]
+        return most_correct, tuple(most_incorrect)
+
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:
