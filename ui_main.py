@@ -1,7 +1,7 @@
 import webbrowser
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtGui import QIcon, QFont, QPixmap
 
 from data_manager import Localization, Config
 
@@ -19,6 +19,11 @@ class UI_MainWindow(object):
 
         self.lbl = QLabel(Localization.MAIN_HEADER, self)
         self.lbl.setFont(QFont('Arial', 20))
+
+        self.logo_path = 'icons/icon.png'
+        self.logo = QPixmap(self.logo_path)
+        self.logo_lbl = QLabel(self)
+        self.logo_lbl.setPixmap(self.logo)
 
         self.btn_1 = QPushButton(Localization.BASE_BUTTON, self)
         self.btn_2 = QPushButton(Localization.VAR_BUTTON, self)
@@ -42,11 +47,12 @@ class UI_MainWindow(object):
         self.fileMenu.addAction(self.exitAction)
 
         self.grid.setSpacing(10)
-        self.grid.addWidget(self.lbl, 1, 0, alignment=Qt.AlignCenter)
-        self.grid.addWidget(self.btn_1, 2, 0, 4, 0)
-        self.grid.addWidget(self.btn_2, 3, 0, 5, 0)
-        self.grid.addWidget(self.btn_4, 4, 0, 6, 0)
-        self.grid.addWidget(self.btn_3, 5, 0, 7, 0)
+        self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
+        self.grid.addWidget(self.logo_lbl, 2, 0, alignment=Qt.AlignCenter)
+        self.grid.addWidget(self.btn_1, 3, 0, 4, 0)
+        self.grid.addWidget(self.btn_2, 4, 0, 5, 0)
+        self.grid.addWidget(self.btn_4, 5, 0, 6, 0)
+        self.grid.addWidget(self.btn_3, 6, 0, 7, 0)
 
         self.widget.setLayout(self.grid)
         self.setCentralWidget(self.widget)
