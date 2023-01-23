@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 
 from data_manager import Localization, Config
+import save_manager
 
 
 class UI_MainWindow(object):
@@ -105,7 +106,8 @@ class UI_StatsWindow(object):
 
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
 
-        if Config.getStats():
+        self.user_have_stats = bool(Config.getStats())
+        if self.user_have_stats:
             self.vars_ever_solved, self.average_first, self.average_ege = Config.getStats()
             self.most_correct, self.most_incorrect = Config.getMostSolvedTasks()
             self.stats_1 = Localization.STATS_VARS_COUNT_TEXT % (self.vars_ever_solved,
@@ -122,12 +124,15 @@ class UI_StatsWindow(object):
         self.stats_lbl = QLabel(self.stats_text)
         self.stats_lbl.setWordWrap(True)
         self.stats_lbl.setAlignment(Qt.AlignCenter)
-
-        self.more_btn = QPushButton(Localization.HISTORY_BUTTON, self)
-        self.more_btn.clicked.connect(self.more_clicked)
-
         self.grid.addWidget(self.stats_lbl, 1, 0, 2, 0)
-        self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
+
+        if self.user_have_stats:
+            self.more_btn = QPushButton(Localization.HISTORY_BUTTON, self)
+            self.more_btn.clicked.connect(self.more_clicked)
+            self.reset_btn = QPushButton(Localization.RESET_STATS, self)
+            self.reset_btn.clicked.connect(self.reset_clicked)
+            self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
+            self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
 
         self.widget_1.setLayout(self.grid)
         self.stacked_widget.addWidget(self.widget_1)
@@ -176,3 +181,22 @@ class UI_StatsWindow(object):
             self.stacked_widget.addWidget(self.widget_2)
 
         self.stacked_widget.setCurrentIndex(1)
+
+    def reset_clicked(self):
+        box = QMessageBox()
+        box.setIcon(QMessageBox.Warning)
+        box.setWindowIcon(QIcon('icons/icon.png'))
+        box.setWindowTitle(Localization.RESET_STATS_TITLE)
+        box.setText(Localization.RESET_STATS_CONFIRM)
+        box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        buttonY = box.button(QMessageBox.Yes)
+        buttonY.setText(Localization.YES)
+        buttonN = box.button(QMessageBox.No)
+        buttonN.setText(Localization.NO)
+        buttonY.clicked.connect(self.clear_confirmed)
+        box.exec_()
+    
+    def clear_confirmed(self):
+        save_manager.clear_exam_history()
+        self.close()
+        QMessageBox.information(self, Localization.RESET_STATS_TITLE, Localization.STATS_RESET_SUCCESS, QMessageBox.Ok)

@@ -58,3 +58,8 @@ def write_var_completed_to_save(answers: list, results: list, tasks_data: dict, 
         save_data["exam_history"] = []
     save_data["exam_history"].append(exam_data)
     update_save(save_data)
+
+def clear_exam_history():
+    save_data = read_save()
+    save_data["exam_history"] = []
+    update_save(save_data)
