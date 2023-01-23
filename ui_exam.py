@@ -482,7 +482,7 @@ class UI_VarWindow(object):
                 shutil.copy(self.task_9_file_path, destination_path)
             except FileNotFoundError:
                 pass
-            self.task_9_get_file_btn.clicked.connect(task_9_get_file_button_clicked)
+        self.task_9_get_file_btn.clicked.connect(task_9_get_file_button_clicked)
         
         self.task_9_widget_clicked_grid.addWidget(self.task_9_text, 1, 0, 7, 0)
         self.task_9_widget_clicked_grid.addWidget(self.task_9_get_file_btn, 8, 0, 9, 0)
@@ -525,7 +525,7 @@ class UI_VarWindow(object):
                 shutil.copy(self.task_10_file_path, destination_path)
             except FileNotFoundError:
                 pass
-            self.task_10_get_file_btn.clicked.connect(task_10_get_file_button_clicked)
+        self.task_10_get_file_btn.clicked.connect(task_10_get_file_button_clicked)
         
         self.task_10_widget_clicked_grid.addWidget(self.task_10_text, 1, 0, 7, 0)
         self.task_10_widget_clicked_grid.addWidget(self.task_10_get_file_btn, 8, 0, 10, 0)
