@@ -1369,7 +1369,7 @@ class UI_VarWindow(object):
         return self.result_file_content
     
     def generateResultFile(self, content):
-        self.result_file_path = '%s/INFA100/result.txt' %  os.environ['APPDATA']
+        self.result_file_path = '%s/INFA100/result.txt' %  os.environ['LOCALAPPDATA']
         with open(self.result_file_path, 'w', encoding='utf-8') as email_file:
             email_file.write(content)
 

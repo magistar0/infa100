@@ -134,7 +134,7 @@ class Email(object):
         pswd = Config.e_token
         sender_email = 'infa100mail@gmail.com'
         msg_subject = Localization.EMAIL_SUBJECT
-        msg_filename = '%s/INFA100/result.txt' %  os.environ['APPDATA']
+        msg_filename = '%s/INFA100/result.txt' %  os.environ['LOCALAPPDATA']
         with open(msg_filename, 'r', encoding='utf-8') as result_file_temp:
             msg_text_from_file = result_file_temp.read()
         msg_text = Localization.EMAIL_TEXT + '\n\n\n\n' + msg_text_from_file
@@ -227,7 +227,7 @@ class ID_Vars(object):
 
 
 class Logger(object):
-    log_path = '%s/INFA100/log.txt' %  os.environ['APPDATA']
+    log_path = '%s/INFA100/log.txt' %  os.environ['LOCALAPPDATA']
 
     def generate_empty_log() -> None:
         with open(Logger.log_path, 'w', encoding='utf-8') as logf:
