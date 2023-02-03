@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap
 
 from task_manager import Task_Chooser
-from data_manager import Localization, Config
+from data_manager import Localization, Config, Logger
 import save_manager
 
 
@@ -226,16 +226,36 @@ class UI_BaseWindow(object):
         def task_3_descr_button_clicked():
             self.task_3_show_descr_btn.setParent(None)
             task_3_widget_clicked_grid.addWidget(self.task_3_description_widget, 1400, 0, 1407, 0)
-        def task_3_get_file_button_clicked():
+
+        def show_permission_error(self):
+            QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EXAM_GET_DESTINATION_ERROR, QMessageBox.Ok)
+
+        def show_unknown_file_getting_error(self):
+            QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EXAM_GET_FILE_ERROR, QMessageBox.Ok)
+
+        def task_get_file_button_clicked(t: int):
+            r = {
+                3: ".xlsx", 9: ".xlsx", 10: ".docx",
+                18: ".xlsx", 24: ".txt", 26: ".txt"
+            }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
-                shutil.copy(self.task_3_file_path, destination_path)
+                self.task_file_path = self.__dict__["task_%d_file_path" % t]
+                shutil.copy(self.task_file_path, destination_path)
+                iddata = self.__dict__["task_%d_data" % t]
+                repl = iddata["id"] + r[t] if t != 17 else self.task_17_data['fileName']
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (repl), QMessageBox.Ok)
+            except PermissionError:
+                show_permission_error(self)
             except FileNotFoundError:
                 pass
+            except Exception as E:
+                Logger.add_line_to_log("Error getting file for task %d. More: %s" % (t, E))
+                show_unknown_file_getting_error(self)
 
         self.task_3_show_ans_btn.clicked.connect(task_3_ans_button_clicked)
         self.task_3_show_descr_btn.clicked.connect(task_3_descr_button_clicked)
-        self.task_3_get_file_btn.clicked.connect(task_3_get_file_button_clicked)
+        self.task_3_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(3))
 
 
         # 4444444444
@@ -426,16 +446,10 @@ class UI_BaseWindow(object):
         def task_9_descr_button_clicked():
             self.task_9_show_descr_btn.setParent(None)
             task_9_widget_clicked_grid.addWidget(self.task_9_description_widget, 70, 0, 74, 0)
-        def task_9_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_9_file_path, destination_path)
-            except FileNotFoundError:
-                pass
 
         self.task_9_show_ans_btn.clicked.connect(task_9_ans_button_clicked)
         self.task_9_show_descr_btn.clicked.connect(task_9_descr_button_clicked)
-        self.task_9_get_file_btn.clicked.connect(task_9_get_file_button_clicked)
+        self.task_9_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(9))
 
 
         # 10101010101010101010
@@ -468,16 +482,10 @@ class UI_BaseWindow(object):
         def task_10_descr_button_clicked():
             self.task_10_show_descr_btn.setParent(None)
             task_10_widget_clicked_grid.addWidget(self.task_10_description_widget, 60, 0, 64, 0)
-        def task_10_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_10_file_path, destination_path)
-            except FileNotFoundError:
-                pass
 
         self.task_10_show_ans_btn.clicked.connect(task_10_ans_button_clicked)
         self.task_10_show_descr_btn.clicked.connect(task_10_descr_button_clicked)
-        self.task_10_get_file_btn.clicked.connect(task_10_get_file_button_clicked)
+        self.task_10_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(10))
 
 
         # 11111111111111111111
@@ -749,13 +757,7 @@ class UI_BaseWindow(object):
         self.task_17_show_ans_btn.clicked.connect(task_17_ans_button_clicked)
         self.task_17_show_descr_btn.clicked.connect(task_17_descr_button_clicked)
 
-        def task_17_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_17_file_path, destination_path)
-            except FileNotFoundError:
-                pass
-        self.task_17_get_file_btn.clicked.connect(task_17_get_file_button_clicked)
+        self.task_17_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(17))
 
 
         # 1818181818181818181818181818
@@ -798,13 +800,7 @@ class UI_BaseWindow(object):
         self.task_18_show_ans_btn.clicked.connect(task_18_ans_button_clicked)
         self.task_18_show_descr_btn.clicked.connect(task_18_descr_button_clicked)
 
-        def task_18_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_18_file_path, destination_path)
-            except FileNotFoundError:
-                pass
-        self.task_18_get_file_btn.clicked.connect(task_18_get_file_button_clicked)
+        self.task_18_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(18))
 
 
         # 19191919191919191919
@@ -999,13 +995,7 @@ class UI_BaseWindow(object):
         self.task_24_show_ans_btn.clicked.connect(task_24_ans_button_clicked)
         self.task_24_show_descr_btn.clicked.connect(task_24_descr_button_clicked)
 
-        def task_24_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_24_file_path, destination_path)
-            except FileNotFoundError:
-                pass
-        self.task_24_get_file_btn.clicked.connect(task_24_get_file_button_clicked)
+        self.task_24_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(24))
 
 
         # 2525252525252525252525252525
@@ -1077,13 +1067,7 @@ class UI_BaseWindow(object):
         self.task_26_show_ans_btn.clicked.connect(task_26_ans_button_clicked)
         self.task_26_show_descr_btn.clicked.connect(task_26_descr_button_clicked)
 
-        def task_26_get_file_button_clicked():
-            destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
-            try:
-                shutil.copy(self.task_26_file_path, destination_path)
-            except FileNotFoundError:
-                pass
-        self.task_26_get_file_btn.clicked.connect(task_26_get_file_button_clicked)
+        self.task_26_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(26))
 
 
         # 2727272727272727272727272727
@@ -1129,16 +1113,28 @@ class UI_BaseWindow(object):
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
                 shutil.copy(self.task_27_file_a_path, destination_path)
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_A.txt'), QMessageBox.Ok)
+            except PermissionError:
+                show_permission_error(self)
             except FileNotFoundError:
                 pass
+            except Exception as E:
+                Logger.add_line_to_log("Error getting file for task 27_A. More: %s" % E)
+                show_unknown_file_getting_error(self)
         self.task_27_get_file_a_btn.clicked.connect(task_27_get_file_a_button_clicked)
 
         def task_27_get_file_b_button_clicked():
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
                 shutil.copy(self.task_27_file_b_path, destination_path)
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_B.txt'), QMessageBox.Ok)
+            except PermissionError:
+                show_permission_error(self)
             except FileNotFoundError:
                 pass
+            except Exception as E:
+                Logger.add_line_to_log("Error getting file for task 27_B. More: %s" % E)
+                show_unknown_file_getting_error(self)
         self.task_27_get_file_b_btn.clicked.connect(task_27_get_file_b_button_clicked)
 
 
