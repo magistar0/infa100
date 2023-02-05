@@ -1037,10 +1037,11 @@ class UI_VarWindow(object):
         self.task_25_answer = self.task_25_data['answer']
         self.task_25_widget_clicked_grid = QGridLayout()
 
-        self.task_25_blank = QLineEdit()
+        self.task_25_blank = QPlainTextEdit()
+        self.task_25_blank.setFixedHeight(Config.multiplyNumberAccordingToSize(100, save_manager.getCurrentSettings()["size"]))
         self.task_25_blank.setPlaceholderText(Localization.BLANK_PLACEHOLDER)
         def save_task_25():
-            self.user_answers[25] = self.task_25_blank.text()
+            self.user_answers[25] = self.task_25_blank.toPlainText()
             self.task_25_blank.setEnabled(False)
             self.task_25_save_button.setParent(None)
             self.task_25_widget_clicked_grid.addWidget(self.task_25_edit_button, 9, 0, 10, 0)
@@ -1238,6 +1239,7 @@ class UI_VarWindow(object):
         self.centralLayout.addWidget(self.save_var_btn, 3, 4, 4, 12)
         self.centralWidget.setLayout(self.centralLayout)
         self.setCentralWidget(self.centralWidget)
+        self.showMaximized()
 
     def save_var_clicked(self):
         if not self.var_saved and not self.by_id:
@@ -1281,8 +1283,15 @@ class UI_VarWindow(object):
             for task in range(task_num, task_num + 9):
                 correct_text = Localization.CORRECT if self.user_answers[task] == self.tasks_data[task]['answer'] else Localization.INCORRECT
                 header_text = Localization.RESULTS_HEADER_TEXT % (task, correct_text)
-                user_text = Localization.YOUR_ANSWER % self.user_answers[task] if not self.user_answers[task] is None else Localization.NO_ANSWER
-                descr_text = Localization.CORRECT_ANSWER % self.tasks_data[task]['answer']
+                your_answer_text = Localization.YOUR_ANSWER
+                if task == 25:
+                    your_answer_text = Localization.YOUR_ANSWER_25
+                no_answer = self.user_answers[task] is None or self.user_answers[task] == ""
+                user_text = your_answer_text % self.user_answers[task] if not no_answer else Localization.NO_ANSWER
+                correct_answer_text = Localization.CORRECT_ANSWER
+                if task == 25:
+                    correct_answer_text = Localization.CORRECT_ANSWER_25
+                descr_text = correct_answer_text % self.tasks_data[task]['answer']
                 lbl = QLabel(header_text + '\n' + user_text + '\n' + descr_text)
                 row = task
                 if 10 <= row <= 18:

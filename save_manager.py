@@ -26,7 +26,9 @@ def generate_empty_save() -> None:
     save_data = {}
     for task in range(1, 28):
         save_data[task] = []
-    save_ex = {"save_data": save_data, "exam_history": [], 'update_time': str(datetime.datetime.now())}
+    save_ex = {"save_data": save_data, "exam_history": [],
+                "settings": {"size": "default"},
+                'update_time': str(datetime.datetime.now())}
     update_save(save_ex)
 
 def check_id_in_save(task: str, id: str) -> bool:
@@ -104,3 +106,22 @@ def getExamHistory() -> list:
         result = dct["result"]
         res.append((time_formatted, result))
     return res
+
+def addSettingsParameter() -> None:
+    save_data = read_save()
+    save_data["settings"] = {"size": "default"}
+    update_save(save_data)
+
+def changeSize(new_size: str) -> None:
+    save_data = read_save()
+    save_data["settings"]["size"] = new_size
+    update_save(save_data)
+
+def getCurrentSettings() -> dict:
+    save_data = read_save()
+    return save_data["settings"]
+
+def updateSettings(settings: dict) -> None:
+    save_data = read_save()
+    save_data["settings"] = settings
+    update_save(save_data)

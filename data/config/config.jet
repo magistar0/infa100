@@ -33,5 +33,10 @@
 	},
 	"TIMER_TIME_IN_SECONDS": 14101,
 	"TIMER_FORMAT": "%s:%s:%s",
-	"build": "19"
+	"build": "23",
+	"SIZE_PARAMETERS":
+		{"tiny": {"multiplier": 0.7, "font": 10},
+		 "default": {"multiplier": 1, "font": 12},
+		 "big": {"multiplier": 1.3, "font": 16},
+		 "large": {"multiplier": 1.7, "font": 20}}
 }

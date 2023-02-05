@@ -65,6 +65,7 @@ class UI_BaseWindow(object):
         
         self.centralWidget.setLayout(grid)
         self.setCentralWidget(self.centralWidget)
+        self.showMaximized()
 
     def show_btn_clicked(self):
         task_num = self.combo.currentText().replace(Localization.TASK, '')

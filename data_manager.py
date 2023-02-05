@@ -24,9 +24,14 @@ for el, index in (('Localization.json', 'loc'), ('config.jet', 'config')):
     with open('data/config/' + el, 'r', encoding='utf-8') as locals()[index + '_file']:
         locals()[index + '_dict'] = json.loads(locals()[index + '_file'].read())
 
+
 class Localization(object):
     for name in globals()['loc_dict']:
         locals()[name] = globals()['loc_dict'][name]
+
+    def getPrintfText(key: str) -> str:
+        return Localization.__dict__[key.upper()]
+
 
 class Config(object):
     for name in globals()['config_dict']:
@@ -98,6 +103,14 @@ class Config(object):
             form = "plural_1"
         return form
 
+    def getFontSize(setting) -> int:
+        parameters = Config.SIZE_PARAMETERS
+        return parameters[setting]["font"]
+
+    def multiplyNumberAccordingToSize(number, size) -> int:
+        parameters = Config.SIZE_PARAMETERS
+        multiplier = parameters[size]["multiplier"]
+        return int(number * multiplier)
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:

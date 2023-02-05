@@ -1,4 +1,6 @@
 import webbrowser
+import sys
+from copy import deepcopy
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QFont, QPixmap
@@ -11,15 +13,16 @@ class UI_MainWindow(object):
     def setupUi(self, MainWindow):
         self.setWindowTitle(Localization.MAIN_WIN_TITLE)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(300)
-        self.setMinimumHeight(300)
-        MainWindow.resize(1000, 600)
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        MainWindow.resize(Config.multiplyNumberAccordingToSize(1000, save_manager.getCurrentSettings()["size"]),
+                           Config.multiplyNumberAccordingToSize(600, save_manager.getCurrentSettings()["size"]))
 
         self.widget = QWidget()
         self.grid = QGridLayout()
 
         self.lbl = QLabel(Localization.MAIN_HEADER, self)
-        self.lbl.setFont(QFont('Arial', 20))
+        self.lbl.setFont(QFont('Arial', Config.multiplyNumberAccordingToSize(30, save_manager.getCurrentSettings()["size"])))
 
         self.logo_path = 'icons/icon.png'
         self.logo = QPixmap(self.logo_path)
@@ -29,6 +32,7 @@ class UI_MainWindow(object):
         self.btn_1 = QPushButton(Localization.BASE_BUTTON, self)
         self.btn_2 = QPushButton(Localization.VAR_BUTTON, self)
         self.btn_4 = QPushButton(Localization.STATS, self)
+        self.btn_5 = QPushButton(Localization.SETTINGS, self)
         self.btn_3 = QPushButton(Localization.EXIT_BUTTON, self)
         self.btn_3.clicked.connect(QApplication.instance().quit)
 
@@ -53,10 +57,12 @@ class UI_MainWindow(object):
         self.grid.addWidget(self.btn_1, 3, 0, 4, 0)
         self.grid.addWidget(self.btn_2, 4, 0, 5, 0)
         self.grid.addWidget(self.btn_4, 5, 0, 6, 0)
-        self.grid.addWidget(self.btn_3, 6, 0, 7, 0)
+        self.grid.addWidget(self.btn_5, 6, 0, 7, 0)
+        self.grid.addWidget(self.btn_3, 7, 0, 8, 0)
 
         self.widget.setLayout(self.grid)
         self.setCentralWidget(self.widget)
+        self.showMaximized()
 
     def infoAction(self):
         self.box = QMessageBox()
@@ -76,9 +82,10 @@ class UI_StatsWindow(object):
     def setupUi(self, StatsWindow):
         self.setWindowTitle(Localization.STATS)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(300)
-        self.setMinimumHeight(300)
-        StatsWindow.resize(1000, 600)
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        StatsWindow.resize(Config.multiplyNumberAccordingToSize(1000, save_manager.getCurrentSettings()["size"]),
+                           Config.multiplyNumberAccordingToSize(600, save_manager.getCurrentSettings()["size"]))
         StatsWindow.move(150, 150)
         self.stats_already_generated = False
 
@@ -87,7 +94,7 @@ class UI_StatsWindow(object):
         self.grid = QGridLayout()
 
         self.lbl = QLabel(Localization.STATS_HEADER, self)
-        self.lbl.setFont(QFont('Arial', 15))
+        self.lbl.setFont(QFont('Arial', Config.multiplyNumberAccordingToSize(15, save_manager.getCurrentSettings()["size"])))
 
         self.exitAction = QAction(QIcon('icons/exit.png'), '&' + Localization.EXIT, self)
         self.exitAction.setShortcut(Localization.EXIT_SHORTCUT)
@@ -138,6 +145,7 @@ class UI_StatsWindow(object):
         self.stacked_widget.addWidget(self.widget_1)
         self.stacked_widget.setCurrentIndex(0)
         self.setCentralWidget(self.stacked_widget)
+        self.showMaximized()
 
     def infoAction(self):
         self.box = QMessageBox()
@@ -200,3 +208,67 @@ class UI_StatsWindow(object):
         save_manager.clear_exam_history()
         self.close()
         QMessageBox.information(self, Localization.RESET_STATS_TITLE, Localization.STATS_RESET_SUCCESS, QMessageBox.Ok)
+
+
+class UI_Settings(object):
+    check_box = None
+ 
+    def setupUi(self, SettingsWindow):
+        self.setMinimumSize(QSize(Config.multiplyNumberAccordingToSize(480, save_manager.getCurrentSettings()["size"]),
+                                  Config.multiplyNumberAccordingToSize(240, save_manager.getCurrentSettings()["size"])))
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+ 
+        grid_layout = QGridLayout()
+        central_widget.setLayout(grid_layout)
+        grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
+
+        self.combo = QComboBox()
+        self.list_of_items = [Localization.getPrintfText(key) for key in ["tiny", "default", "big", "large"]]
+        self.combo.addItems(self.list_of_items)
+        self.combo.setCurrentText(Localization.getPrintfText(save_manager.getCurrentSettings()["size"]))
+ 
+        self.ok_btn = QPushButton(Localization.ACCEPT)
+        self.cancel_btn = QPushButton(Localization.CANCEL)
+        self.cancel_btn.clicked.connect(lambda: self.close())
+        self.ok_btn.clicked.connect(self.ok_btn_clicked)
+
+        grid_layout.addWidget(self.combo, 1, 0, 1, 2)
+        grid_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding), 2, 0, 1, 2)
+        grid_layout.addWidget(self.ok_btn, 3, 0)
+        grid_layout.addWidget(self.cancel_btn, 3, 1)
+ 
+    def ok_btn_clicked(self):
+        sizes = {
+            0: "tiny", 1: "default", 2: "big", 3: "large"
+        }
+        size_index = self.combo.currentIndex()
+        current_settings = save_manager.getCurrentSettings()
+        new_settings = deepcopy(current_settings)
+
+        new_size = sizes[size_index]
+        new_settings["size"] = new_size
+        if not new_settings == current_settings:
+            save_manager.updateSettings(new_settings)
+            self.ask_for_reload()
+        else:
+            self.close()
+
+    def ask_for_reload(self):
+        box = QMessageBox()
+        box.setIcon(QMessageBox.Warning)
+        box.setWindowIcon(QIcon('icons/icon.png'))
+        box.setWindowTitle(Localization.RELOAD_TITLE)
+        box.setText(Localization.RELOAD_REQUIRED_TEXT)
+        box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        buttonY = box.button(QMessageBox.Yes)
+        buttonY.setText(Localization.RELOAD_NOW)
+        buttonN = box.button(QMessageBox.No)
+        buttonN.setText(Localization.RELOAD_LATER)
+        box.exec_()
+
+        if box.clickedButton() == buttonY:
+            self.close()
+            QCoreApplication.exit(1337)
+        elif box.clickedButton() == buttonN:
+            self.close()

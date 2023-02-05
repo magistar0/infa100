@@ -2,12 +2,12 @@ import sys
 import os
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 
 from data_manager import Localization, Config, ID_Vars, Logger
 from ui_base import UI_BaseWindow
 from ui_exam import UI_VarWindow
-from ui_main import UI_MainWindow, UI_StatsWindow
+from ui_main import UI_MainWindow, UI_StatsWindow, UI_Settings
 import save_manager
 
 
@@ -22,6 +22,12 @@ class StatsWindow(QMainWindow, UI_StatsWindow):
         super(StatsWindow, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle(Localization.STATS)
+
+class SettingsWindow(QMainWindow, UI_Settings):
+    def __init__(self, parent=None):
+        super(SettingsWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowTitle(Localization.SETTINGS)
 
 class VarWindow(QMainWindow, UI_VarWindow):
     by_id = False
@@ -50,6 +56,8 @@ class Main(QMainWindow, UI_MainWindow):
         self.btn_1.clicked.connect(self.show_window_2)
         self.btn_2.clicked.connect(self.window_3_dialogAction)
         self.btn_4.clicked.connect(self.show_window_4)
+        self.btn_5.clicked.connect(self.show_window_5)
+        
 
     def show_window_2(self):
         self.w2 = BaseWindow()
@@ -62,6 +70,10 @@ class Main(QMainWindow, UI_MainWindow):
     def show_window_4(self):
         self.w4 = StatsWindow()
         self.w4.show()
+
+    def show_window_5(self):
+        self.w5 = SettingsWindow()
+        self.w5.show()
 
     def dialogAction_no_clicked(self):
         self.no_clicked = True
@@ -104,22 +116,39 @@ class Main(QMainWindow, UI_MainWindow):
                     pass
 
 
-if __name__ == "__main__":
+def main():
     if not os.path.exists(save_manager.dir_path):
         os.makedirs(save_manager.dir_path)
     if not os.path.exists(save_manager.dir_path + 'user_save.save'):
         save_manager.generate_empty_save()
     if not os.path.exists(Logger.log_path):
         Logger.generate_empty_log()
-    app = QApplication(sys.argv)
-    win = Main()
-    win.show()
-    if Config.checkInternetConnection():
-        if not Config.checkIfBuildIsLatest():
-            update_box = QMessageBox()
-            update_box.setIcon(QMessageBox.Information)
-            update_box.setWindowIcon(QIcon('icons/icon.png'))
-            update_box.setWindowTitle(Localization.UPDATE_HEADER)
-            update_box.setText(Localization.UPDATE_TEXT)
-            update_box.exec_()
-    sys.exit(app.exec_())
+    if not "settings" in save_manager.read_save():
+        save_manager.addSettingsParameter()
+    
+    currentExitCode = 1337
+    while currentExitCode == 1337:
+
+        custom_font = QFont()
+        program_size = save_manager.getCurrentSettings()["size"]
+        font_size = Config.getFontSize(program_size)
+        custom_font.setPointSize(font_size)
+        app = QApplication(sys.argv)
+        app.setFont(custom_font)
+        app.setFont(custom_font, "QPushButton")
+
+        win = Main()
+        win.show()
+        if Config.checkInternetConnection():
+            if not Config.checkIfBuildIsLatest():
+                update_box = QMessageBox()
+                update_box.setIcon(QMessageBox.Information)
+                update_box.setWindowIcon(QIcon('icons/icon.png'))
+                update_box.setWindowTitle(Localization.UPDATE_HEADER)
+                update_box.setText(Localization.UPDATE_TEXT)
+                update_box.exec_()
+        currentExitCode = app.exec_()
+        app = None
+
+if __name__ == "__main__":
+    main()
