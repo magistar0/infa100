@@ -22,7 +22,7 @@ class UI_MainWindow(object):
         self.grid = QGridLayout()
 
         self.lbl = QLabel(Localization.MAIN_HEADER, self)
-        self.lbl.setFont(QFont('Arial', Config.multiplyNumberAccordingToSize(30, save_manager.getCurrentSettings()["size"])))
+        self.lbl.setFont(QFont("SF Pro Display", Config.multiplyNumberAccordingToSize(45, save_manager.getCurrentSettings()["size"])))
 
         self.logo_path = 'icons/icon.png'
         self.logo = QPixmap(self.logo_path)
@@ -218,6 +218,7 @@ class UI_Settings(object):
                                   Config.multiplyNumberAccordingToSize(240, save_manager.getCurrentSettings()["size"])))
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
+        self.setWindowIcon(QIcon('icons/icon.png'))
  
         grid_layout = QGridLayout()
         central_widget.setLayout(grid_layout)

@@ -107,10 +107,14 @@ class Config(object):
         parameters = Config.SIZE_PARAMETERS
         return parameters[setting]["font"]
 
-    def multiplyNumberAccordingToSize(number, size) -> int:
+    def multiplyNumberAccordingToSize(number: int, size: str) -> int:
         parameters = Config.SIZE_PARAMETERS
         multiplier = parameters[size]["multiplier"]
         return int(number * multiplier)
+
+    def getFontStyleFromSize(size: str) -> str:
+        parameters = Config.SIZE_PARAMETERS
+        return parameters[size]["font-family"]
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:

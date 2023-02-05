@@ -1,8 +1,9 @@
 import sys
 import os
+from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtCore import Qt, QDir
+from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 
 from data_manager import Localization, Config, ID_Vars, Logger
 from ui_base import UI_BaseWindow
@@ -116,6 +117,14 @@ class Main(QMainWindow, UI_MainWindow):
                     pass
 
 
+def load_fonts_from_dir(directory):
+    families = set()
+    for fi in QDir(directory).entryInfoList(["*.ttf", "*.otf"]):
+        _id = QFontDatabase.addApplicationFont(fi.absoluteFilePath())
+        families |= set(QFontDatabase.applicationFontFamilies(_id))
+    return families
+
+
 def main():
     if not os.path.exists(save_manager.dir_path):
         os.makedirs(save_manager.dir_path)
@@ -128,14 +137,16 @@ def main():
     
     currentExitCode = 1337
     while currentExitCode == 1337:
-
-        custom_font = QFont()
-        program_size = save_manager.getCurrentSettings()["size"]
-        font_size = Config.getFontSize(program_size)
-        custom_font.setPointSize(font_size)
         app = QApplication(sys.argv)
-        app.setFont(custom_font)
-        app.setFont(custom_font, "QPushButton")
+
+        program_size = save_manager.getCurrentSettings()["size"]
+        families = load_fonts_from_dir(os.fspath("fonts/"))
+        db = QFontDatabase()
+        font_style = Config.getFontStyleFromSize(program_size)
+        font = db.font("SF Pro Display", font_style, 10)
+        font_size = Config.getFontSize(program_size)
+        font.setPointSize(font_size)
+        app.setFont(font)
 
         win = Main()
         win.show()
