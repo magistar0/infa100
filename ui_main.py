@@ -106,10 +106,10 @@ class UI_StatsWindow(object):
 
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
 
-        self.user_have_stats = bool(Config.getStats())
+        self.user_have_stats = bool(save_manager.getStats())
         if self.user_have_stats:
-            self.vars_ever_solved, self.average_first, self.average_ege = Config.getStats()
-            self.most_correct, self.most_incorrect = Config.getMostSolvedTasks()
+            self.vars_ever_solved, self.average_first, self.average_ege = save_manager.getStats()
+            self.most_correct, self.most_incorrect = save_manager.getMostSolvedTasks()
             self.stats_1 = Localization.STATS_VARS_COUNT_TEXT % (self.vars_ever_solved,
                 Localization.__dict__["STATS_VARS_COUNT_" + Config.getCountEnding(self.vars_ever_solved).upper()])
             self.stats_2 = Localization.STATS_AVERAGE_RESULT_TEXT % (self.average_first, Localization.__dict__["POINTS_" + Config.getCountEnding(self.average_first).upper()],
@@ -155,7 +155,7 @@ class UI_StatsWindow(object):
 
     def more_clicked(self):
         if not self.stats_already_generated:
-            self.history = Config.getExamHistory()
+            self.history = save_manager.getExamHistory()
             self.history_text = ""
             k = 1
             for exam in self.history:

@@ -5,13 +5,12 @@ import datetime
 import os
 import socket
 import base64
+import sys
+import pathlib
 from github import Github
-from collections import Counter
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-import save_manager
-
 
 for t in range(1, 28):
     file_path = 'data/tasks_data/%d/%d_data.json' % (t, t)
@@ -36,6 +35,17 @@ class Config(object):
     g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
     aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
     e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
+
+    def getAppData() -> str:
+        home = pathlib.Path.home()
+        match sys.platform:
+            case pl if pl.startswith("linux"):
+                return home / ".local/share"
+            case "darwin":
+                return home / "Library/Application Support"
+            case _:
+                return os.environ['LOCALAPPDATA']
+    APPDATA = getAppData()
 
     def getTimeAsStr(datetime: datetime.datetime) -> str:
         date = str(datetime.date())
@@ -88,44 +98,6 @@ class Config(object):
             form = "plural_1"
         return form
 
-    def getStats() -> int:
-        exam_history = save_manager.read_save()["exam_history"]
-        if not exam_history:
-            return None
-        vars_ever_solved = len(exam_history)
-        all_results = [dct["result"] for dct in exam_history]
-        res_first = round(sum(all_results) / len(all_results))
-        res_ege = int(Config.POINTS[str(res_first)])
-        return vars_ever_solved, res_first, res_ege
-
-    def getMostSolvedTasks() -> int:
-        exam_history = save_manager.read_save()["exam_history"]
-        tasks_correct = dict(zip(range(1, 28), [0 for _ in range(28)]))
-        tasks_incorrect = dict(zip(range(1, 28), [0 for _ in range(28)]))
-        for dct in exam_history:
-            for k in dct["tasks_info"]:
-                if dct["tasks_info"][k]["correct"]:
-                    tasks_correct[int(k)] += 1
-                else:
-                    tasks_incorrect[int(k)] += 1
-        c = Counter(tasks_correct)
-        most_correct = c.most_common(1)[0]
-        cc = Counter(tasks_incorrect)
-        most_incorrect = list(cc.most_common(1)[0])
-        most_incorrect[1] = tasks_correct[most_incorrect[0]]
-        return most_correct, tuple(most_incorrect)
-
-    def getExamHistory() -> list:
-        exam_history = save_manager.read_save()["exam_history"]
-        res = []
-        for dct in exam_history:
-            time_as_str = dct["time"]
-            time = datetime.datetime.strptime(time_as_str, '%Y-%m-%d %H:%M:%S.%f')
-            time_formatted = Config.getTimeAsStr(time)
-            result = dct["result"]
-            res.append((time_formatted, result))
-        return res
-
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:
@@ -134,7 +106,7 @@ class Email(object):
         pswd = Config.e_token
         sender_email = 'infa100mail@gmail.com'
         msg_subject = Localization.EMAIL_SUBJECT
-        msg_filename = '%s/INFA100/result.txt' %  os.environ['LOCALAPPDATA']
+        msg_filename = '%s/INFA100/result.txt' %  Config.APPDATA
         with open(msg_filename, 'r', encoding='utf-8') as result_file_temp:
             msg_text_from_file = result_file_temp.read()
         msg_text = Localization.EMAIL_TEXT + '\n\n\n\n' + msg_text_from_file
@@ -227,7 +199,7 @@ class ID_Vars(object):
 
 
 class Logger(object):
-    log_path = '%s/INFA100/log.txt' %  os.environ['LOCALAPPDATA']
+    log_path = '%s/INFA100/log.txt' %  Config.APPDATA
 
     def generate_empty_log() -> None:
         with open(Logger.log_path, 'w', encoding='utf-8') as logf:
