@@ -33,7 +33,7 @@
 	},
 	"TIMER_TIME_IN_SECONDS": 14101,
 	"TIMER_FORMAT": "%s:%s:%s",
-	"build": "23",
+	"build": "24",
 	"SIZE_PARAMETERS":
 		{"tiny": {"multiplier": 0.7, "font": 14, "font-family": "Semibold"},
 		 "default": {"multiplier": 1, "font": 18, "font-family": "Semibold"},

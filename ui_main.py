@@ -13,8 +13,8 @@ class UI_MainWindow(object):
     def setupUi(self, MainWindow):
         self.setWindowTitle(Localization.MAIN_WIN_TITLE)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
-        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
         MainWindow.resize(Config.multiplyNumberAccordingToSize(1000, save_manager.getCurrentSettings()["size"]),
                            Config.multiplyNumberAccordingToSize(600, save_manager.getCurrentSettings()["size"]))
 
@@ -51,14 +51,14 @@ class UI_MainWindow(object):
         self.fileMenu.addAction(self.infoAction_var)
         self.fileMenu.addAction(self.exitAction)
 
-        self.grid.setSpacing(10)
+        k = 2 if save_manager.getCurrentSettings()["size"] == "large" else 1
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
         self.grid.addWidget(self.logo_lbl, 2, 0, alignment=Qt.AlignCenter)
-        self.grid.addWidget(self.btn_1, 3, 0, 4, 0)
-        self.grid.addWidget(self.btn_2, 4, 0, 5, 0)
-        self.grid.addWidget(self.btn_4, 5, 0, 6, 0)
-        self.grid.addWidget(self.btn_5, 6, 0, 7, 0)
-        self.grid.addWidget(self.btn_3, 7, 0, 8, 0)
+        self.grid.addWidget(self.btn_1, 3*k, 0, 4, 0)
+        self.grid.addWidget(self.btn_2, 4*k, 0, 4, 0)
+        self.grid.addWidget(self.btn_4, 5*k, 0, 4, 0)
+        self.grid.addWidget(self.btn_5, 6*k, 0, 4, 0)
+        self.grid.addWidget(self.btn_3, 7*k, 0, 4, 0)
 
         self.widget.setLayout(self.grid)
         self.setCentralWidget(self.widget)
@@ -82,8 +82,8 @@ class UI_StatsWindow(object):
     def setupUi(self, StatsWindow):
         self.setWindowTitle(Localization.STATS)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
-        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(300, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
         StatsWindow.resize(Config.multiplyNumberAccordingToSize(1000, save_manager.getCurrentSettings()["size"]),
                            Config.multiplyNumberAccordingToSize(600, save_manager.getCurrentSettings()["size"]))
         StatsWindow.move(150, 150)
