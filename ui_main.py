@@ -216,8 +216,6 @@ class UI_StatsWindow(object):
 
 
 class UI_Settings(object):
-    check_box = None
- 
     def setupUi(self, SettingsWindow):
         self.setMinimumSize(QSize(Config.multiplyNumberAccordingToSize(480, save_manager.getCurrentSettings()["size"]),
                                   Config.multiplyNumberAccordingToSize(240, save_manager.getCurrentSettings()["size"])))
@@ -229,8 +227,11 @@ class UI_Settings(object):
         central_widget.setLayout(grid_layout)
         grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
 
+        self.available_sizes = ["tiny", "default", "big", "large"]
+        if save_manager.checkIfEasterEggIsUnlocked():
+            self.available_sizes.append("secret")
         self.combo = QComboBox()
-        self.list_of_items = [Localization.getPrintfText(key) for key in ["tiny", "default", "big", "large"]]
+        self.list_of_items = [Localization.getPrintfText(key) for key in self.available_sizes]
         self.combo.addItems(self.list_of_items)
         self.combo.setCurrentText(Localization.getPrintfText(save_manager.getCurrentSettings()["size"]))
  
@@ -246,7 +247,7 @@ class UI_Settings(object):
  
     def ok_btn_clicked(self):
         sizes = {
-            0: "tiny", 1: "default", 2: "big", 3: "large"
+            0: "tiny", 1: "default", 2: "big", 3: "large", 4: "secret"
         }
         size_index = self.combo.currentIndex()
         current_settings = save_manager.getCurrentSettings()

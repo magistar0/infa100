@@ -7,10 +7,12 @@ import socket
 import base64
 import sys
 import pathlib
+import Levenshtein
 from github import Github
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
+
 
 for t in range(1, 28):
     file_path = 'data/tasks_data/%d/%d_data.json' % (t, t)
@@ -67,6 +69,11 @@ class Config(object):
     def checkInternetConnection() -> bool:
         try:
             socket.gethostbyaddr('www.yandex.ru')
+        except socket.herror:
+            try:
+                socket.gethostbyaddr('www.google.com')
+            except socket.gaierror:
+                return False
         except socket.gaierror:
             return False
         return True
@@ -115,6 +122,22 @@ class Config(object):
     def getFontStyleFromSize(size: str) -> str:
         parameters = Config.SIZE_PARAMETERS
         return parameters[size]["font-family"]
+
+    def getEasterEggTriggers() -> list:
+        triggers_asstr = Config.EASTEREGG_TRIGGERS
+        return triggers_asstr.split("|")
+
+    def stringsAreClose(s1: str, s2: str) -> bool:
+        distance = Levenshtein.distance(s1, s2)
+        return distance <= len(max(s1, s2, key=len)) / 4
+
+    def checkIfNameNeedsToBeTriggered(name: str) -> bool:
+        triggers = Config.getEasterEggTriggers()
+        for trigger in triggers:
+            if Config.stringsAreClose(trigger.lower(), name.lower()):
+                return True
+        return False
+
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:

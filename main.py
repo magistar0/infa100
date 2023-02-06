@@ -134,6 +134,8 @@ def main():
         Logger.generate_empty_log()
     if not "settings" in save_manager.read_save():
         save_manager.addSettingsParameter()
+    if not "easteregg_unlocked" in save_manager.read_save():
+        save_manager.addEasterEggParameter()
     
     currentExitCode = 1337
     while currentExitCode == 1337:

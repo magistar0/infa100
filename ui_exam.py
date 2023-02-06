@@ -1340,6 +1340,9 @@ class UI_VarWindow(object):
         if dialog.exec():
             self.ok = True
             self.email_address, self.email_name = dialog.getInputs()
+            if (not save_manager.checkIfEasterEggIsUnlocked()) and Config.checkIfNameNeedsToBeTriggered(self.email_name):
+                QMessageBox.information(self, Localization.EMAIL_EASTEREGG_HEADER, Localization.EMAIL_EASTEREGG_TEXT, QMessageBox.Ok)
+                save_manager.setEasterEggUnlocked()
         if Config.checkInternetConnection():
             if self.ok:
                 self.result_file_content_writeable = self.generateResultFileContent()
@@ -1381,7 +1384,6 @@ class UI_VarWindow(object):
     def deleteResultFile(self):
         if os.path.exists(self.result_file_path):
             os.remove(self.result_file_path)
-
 
 
 class EmailInputDialog(QDialog):

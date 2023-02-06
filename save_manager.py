@@ -26,7 +26,7 @@ def generate_empty_save() -> None:
     save_data = {}
     for task in range(1, 28):
         save_data[task] = []
-    save_ex = {"save_data": save_data, "exam_history": [],
+    save_ex = {"save_data": save_data, "easteregg_unlocked": False, "exam_history": [],
                 "settings": {"size": "default"},
                 'update_time': str(datetime.datetime.now())}
     update_save(save_ex)
@@ -125,3 +125,17 @@ def updateSettings(settings: dict) -> None:
     save_data = read_save()
     save_data["settings"] = settings
     update_save(save_data)
+
+def addEasterEggParameter() -> None:
+    save_data = read_save()
+    save_data["easteregg_unlocked"] = False
+    update_save(save_data)
+
+def setEasterEggUnlocked() -> None:
+    save_data = read_save()
+    save_data["easteregg_unlocked"] = True
+    update_save(save_data)
+
+def checkIfEasterEggIsUnlocked() -> bool:
+    save_data = read_save()
+    return save_data["easteregg_unlocked"]
