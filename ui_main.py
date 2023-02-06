@@ -94,7 +94,7 @@ class UI_StatsWindow(object):
         self.grid = QGridLayout()
 
         self.lbl = QLabel(Localization.STATS_HEADER, self)
-        self.lbl.setFont(QFont('Arial', Config.multiplyNumberAccordingToSize(15, save_manager.getCurrentSettings()["size"])))
+        self.lbl.setFont(QFont("SF Pro Display", Config.multiplyNumberAccordingToSize(30, save_manager.getCurrentSettings()["size"])))
 
         self.exitAction = QAction(QIcon('icons/exit.png'), '&' + Localization.EXIT, self)
         self.exitAction.setShortcut(Localization.EXIT_SHORTCUT)
@@ -141,6 +141,7 @@ class UI_StatsWindow(object):
             self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
             self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
 
+
         self.widget_1.setLayout(self.grid)
         self.stacked_widget.addWidget(self.widget_1)
         self.stacked_widget.setCurrentIndex(0)
@@ -177,16 +178,20 @@ class UI_StatsWindow(object):
             self.widget_2 = QWidget()
             self.grid_2 = QGridLayout()
 
+            self.scrollArea = QScrollArea()
+            self.scrollArea.setWidgetResizable(True)
+
             self.history_lbl = QLabel(self.history_text)
             self.history_lbl.setWordWrap(True)
             self.history_lbl.setAlignment(Qt.AlignCenter)
             self.history_btn = QPushButton(Localization.BACK, self)
             self.history_btn.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
 
-            self.grid_2.addWidget(self.history_lbl, 1, 0, 2, 0)
             self.grid_2.addWidget(self.history_btn, 0, 0, 2, 0)
+            self.grid_2.addWidget(self.history_lbl, 2, 0, 2, 0)
             self.widget_2.setLayout(self.grid_2)
-            self.stacked_widget.addWidget(self.widget_2)
+            self.scrollArea.setWidget(self.widget_2)
+            self.stacked_widget.addWidget(self.scrollArea)
 
         self.stacked_widget.setCurrentIndex(1)
 
