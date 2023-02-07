@@ -1,44 +1,77 @@
 {
-	"POINTS": {
-		"0": "0",
-		"1": "7",
-		"2": "14",
-		"3": "20",
-		"4": "27",
-		"5": "34",
-		"6": "40",
-		"7": "43",
-		"8": "46",
-		"9": "48",
-		"10": "51",
-		"11": "54",
-		"12": "56",
-		"13": "59",
-		"14": "62",
-		"15": "64",
-		"16": "67",
-		"17": "70",
-		"18": "72",
-		"19": "75",
-		"20": "78",
-		"21": "80",
-		"22": "83",
-		"23": "85",
-		"24": "88",
-		"25": "90",
-		"26": "93",
-		"27": "95",
-		"28": "98",
-		"29": "100"
-	},
-	"TIMER_TIME_IN_SECONDS": 14101,
-	"TIMER_FORMAT": "%s:%s:%s",
-	"build": "24",
-	"SIZE_PARAMETERS":
-		{"tiny": {"multiplier": 0.7, "font": 14, "font-family": "Semibold"},
-		 "default": {"multiplier": 1, "font": 18, "font-family": "Semibold"},
-		 "big": {"multiplier": 1.3, "font": 24, "font-family": "Regular"},
-		 "large": {"multiplier": 1.7, "font": 28, "font-family": "Regular"},
-		 "secret": {"multiplier": 2.5, "font": 70, "font-family": "Semibold"}},
-	"EASTEREGG_TRIGGERS": "егор крид|кристина парфентьева"
+    "POINTS": {
+        "0": "0",
+        "1": "7",
+        "2": "14",
+        "3": "20",
+        "4": "27",
+        "5": "34",
+        "6": "40",
+        "7": "43",
+        "8": "46",
+        "9": "48",
+        "10": "51",
+        "11": "54",
+        "12": "56",
+        "13": "59",
+        "14": "62",
+        "15": "64",
+        "16": "67",
+        "17": "70",
+        "18": "72",
+        "19": "75",
+        "20": "78",
+        "21": "80",
+        "22": "83",
+        "23": "85",
+        "24": "88",
+        "25": "90",
+        "26": "93",
+        "27": "95",
+        "28": "98",
+        "29": "100"
+    },
+    "TIMER_TIME_IN_SECONDS": 14101,
+    "TIMER_FORMAT": "%s:%s:%s",
+    "build": "27",
+    "SIZE_PARAMETERS": {
+        "tiny": {
+            "multiplier": 0.7,
+            "font": 14,
+            "font-family": "Semibold"
+        },
+        "default": {
+            "multiplier": 1,
+            "font": 18,
+            "font-family": "Semibold"
+        },
+        "big": {
+            "multiplier": 1.3,
+            "font": 24,
+            "font-family": "Regular"
+        },
+        "large": {
+            "multiplier": 1.7,
+            "font": 28,
+            "font-family": "Regular"
+        },
+        "secret": {
+            "multiplier": 2.5,
+            "font": 70,
+            "font-family": "Semibold"
+        }
+    },
+    "EASTEREGG_TRIGGERS": "егор крид|кристина парфентьева",
+    "button_styles": {
+        "exam_in_progress": {
+            "current": "border: 4px solid #474747; border-radius: 7px; background-color: #3265b3; ",
+            "answered": "background-color: #99c5cf; ",
+            "skipped": "background-color: #e2f046; "
+        },
+        "exam_finished": {
+            "current": "border: 4px solid #474747; border-radius: 7px; ",
+            "correct": "background-color: #3eab48; ",
+            "wrong": "background-color: #ab3b2c; "
+        }
+    }
 }

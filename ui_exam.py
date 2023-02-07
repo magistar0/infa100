@@ -109,6 +109,7 @@ class UI_VarWindow(object):
         for button in self.buttons_list[1:]:
             self.nums_widget_layout.addWidget(button, self.placing_x, 0)
             self.placing_x = self.placing_x + 1
+        self.buttons_style_list = [None] + ["transition-duration: 0.1s; " for _ in range(1, 28)]
         self.contents_nums.setLayout(self.nums_widget_layout)
 
         self.contents_tasks = QStackedWidget()
@@ -123,10 +124,11 @@ class UI_VarWindow(object):
         self.count = 0
         self.timer.timeout.connect(self.timerAction)
         self.timer.start(1000)
-        self.timer_text_lbl = QLabel('Таймер запустится, когда вы откроете любое задание.')
+        self.timer_text_lbl = QLabel(Localization.EXAM_TIMER_NOT_STARTED)
         self.timer_isnt_started = True
         self.timer_has_ended = False
         self.var_saved = False
+        self.user_finished = False
 
 
         # 111111111
@@ -1195,7 +1197,10 @@ class UI_VarWindow(object):
         for key in self.widgets_list:
             self.contents_tasks.addWidget(self.widgets_list[key])
 
+        self.opened_nums = []
         def btn_clicked(button_num):
+            styles = Config.getButtonStyles()
+            self.opened_nums.append(button_num)
             try:
                 if self.timer_isnt_started and not self.timer_has_ended:
                     self.timerSetup()
@@ -1210,11 +1215,33 @@ class UI_VarWindow(object):
                 except:
                     pass
                 self.contents_tasks.setCurrentIndex(button_num)
+                self.style_key = "exam_in_progress" if not self.user_finished else "exam_finished"
+                self.buttons_style_list[button_num] += styles[self.style_key]["current"]
+                for n in range(1, 28):
+                    if n != button_num:
+                        self.buttons_style_list[n] = self.buttons_style_list[n].replace(styles[self.style_key]["current"], "")
+                if not self.user_finished:
+                    for n in range(1, 28):
+                        if self.user_answers[n] is None and n in self.opened_nums and n != button_num:
+                            if not styles["exam_in_progress"]["skipped"] in self.buttons_style_list[n]:
+                                self.buttons_style_list[n] += styles["exam_in_progress"]["skipped"]
+                        if (not (self.user_answers[n] is None)) and n in self.opened_nums:
+                            if styles["exam_in_progress"]["skipped"] in self.buttons_style_list[n]:
+                                self.buttons_style_list[n] = self.buttons_style_list[n].replace(styles["exam_in_progress"]["skipped"], "")
+                            if not styles["exam_in_progress"]["answered"] in self.buttons_style_list[n]:
+                                self.buttons_style_list[n] += styles["exam_in_progress"]["answered"]
+                update_button_styles()
             except KeyError:
                 pass
 
         def buttons_set(num):
             self.buttons_list[num].clicked.connect(lambda: btn_clicked(num))
+            self.buttons_list[num].setStyleSheet(self.buttons_style_list[num])
+
+        def update_button_styles():
+            for num in range(1, 28):
+                self.buttons_list[num].setStyleSheet(self.buttons_style_list[num])
+
         for num in range(1, 28):
             buttons_set(num)
 
@@ -1310,6 +1337,15 @@ class UI_VarWindow(object):
                 self.user_results.append(False)
         self.number_of_completed_tasks = self.user_results.count(True)
         self.result_text = Localization.RESULT % self.number_of_completed_tasks
+
+        self.button_styles = Config.getButtonStyles()
+        for task in range(1, 28):
+            if self.user_results[task]:
+                self.buttons_style_list[task] = "transition-duration: 0.1s; " + self.button_styles["exam_finished"]["correct"]
+            else:
+                self.buttons_style_list[task] = "transition-duration: 0.1s; " + self.button_styles["exam_finished"]["wrong"]
+            self.buttons_list[task].setStyleSheet(self.buttons_style_list[task])
+        
 
         self.first_points = 0
         for ind in range(1, 28):

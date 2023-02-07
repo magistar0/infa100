@@ -138,6 +138,9 @@ class Config(object):
                 return True
         return False
 
+    def getButtonStyles() -> dict:
+        return Config.button_styles
+
 
 class Email(object):
     def send_message(receiver_email: str) -> tuple:
