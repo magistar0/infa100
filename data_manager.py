@@ -8,6 +8,7 @@ import base64
 import sys
 import pathlib
 import Levenshtein
+import re
 from github import Github
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -38,10 +39,10 @@ class Localization(object):
 class Config(object):
     for name in globals()['config_dict']:
         locals()[name] = globals()['config_dict'][name]
-    a, j, k = b'Z2hwX2hMMG5RUGd0R3', b'ElpYzNlbnlFNA', b'liZlAwWksyU2cwOFEzTzNha'
-    g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
-    aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
-    e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
+    gt = (bytes(os.getenv("I100_GTOKEN"), "utf-8") + b"==")
+    g_token = base64.b64decode(gt).decode("utf-8")
+    et = (bytes(os.getenv("I100_ETOKEN"), "utf-8") + b"==")
+    e_token = base64.b64decode(et).decode("utf-8")
 
     def getAppData() -> str:
         home = pathlib.Path.home()
@@ -140,6 +141,13 @@ class Config(object):
 
     def getButtonStyles() -> dict:
         return Config.button_styles
+    
+    def checkIfSizeWasChanged(old_settings: dict, new_settings: dict) -> bool:
+        return old_settings["size"] != new_settings["size"]
+    
+    def emailIsValid(email: str) -> bool:
+        pattern = r"[^@]+@[^@]+\.[^@]+"
+        return not not re.match(pattern, email) or email is None
 
 
 class Email(object):

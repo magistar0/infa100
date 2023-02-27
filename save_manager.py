@@ -1,7 +1,5 @@
 import json
 import datetime
-import os
-import platform
 from collections import Counter
 from data_manager import Config
 
@@ -27,7 +25,7 @@ def generate_empty_save() -> None:
     for task in range(1, 28):
         save_data[task] = []
     save_ex = {"save_data": save_data, "easteregg_unlocked": False, "exam_history": [],
-                "settings": {"size": "default"},
+                "settings": {"size": "default", "name": None, "email": None},
                 'update_time': str(datetime.datetime.now())}
     update_save(save_ex)
 
@@ -109,7 +107,7 @@ def getExamHistory() -> list:
 
 def addSettingsParameter() -> None:
     save_data = read_save()
-    save_data["settings"] = {"size": "default"}
+    save_data["settings"] = {"size": "default", "name": None, "email": None}
     update_save(save_data)
 
 def changeSize(new_size: str) -> None:
@@ -139,3 +137,9 @@ def setEasterEggUnlocked() -> None:
 def checkIfEasterEggIsUnlocked() -> bool:
     save_data = read_save()
     return save_data["easteregg_unlocked"]
+
+def addNameEmailParameters() -> None:
+    save_data = read_save()
+    save_data["settings"]["name"] = None
+    save_data["settings"]["email"] = None
+    update_save(save_data)
