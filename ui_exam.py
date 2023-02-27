@@ -3,7 +3,7 @@ import shutil
 import webbrowser
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 
 from task_manager import Task_Chooser
 from data_manager import Localization, Config, Email, ID_Vars, Logger
@@ -1392,8 +1392,6 @@ class UI_VarWindow(object):
                     Logger.add_line_to_log("Succesfully sent Email to %s." % self.email)
                     QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EMAIL_SUCCESS_TEXT, QMessageBox.Ok)
                 self.deleteResultFile()
-            else:
-                QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_1, QMessageBox.Ok)
         else:
             Logger.add_line_to_log("Error initializing Email module. Code: 2. Cause: no Internet access.")
             QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.EMAIL_ERROR_2, QMessageBox.Ok)
@@ -1428,11 +1426,30 @@ class EmailInputDialog(QDialog):
 
         self.first = QLineEdit(self)
         self.second = QLineEdit(self)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self);
+        self.current_settings = save_manager.getCurrentSettings()
+        self.current_name = self.current_settings["name"]
+        self.current_email = self.current_settings["email"]
+        if self.current_name:
+            self.second.setText(self.current_name)
+        if self.current_email:
+            self.first.setText(self.current_email)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
 
         layout = QFormLayout(self)
         layout.addRow(Localization.EMAIL_ASK_TEXT, self.first)
         layout.addRow(Localization.EMAIL_NAME_ASK_TEXT, self.second)
+        if not self.current_name and not self.current_email:
+            self.tip_label = QLabel(Localization.EMAIL_TIP_NO_NAME_AND_EMAIL)
+        elif not self.current_name:
+            self.tip_label = QLabel(Localization.EMAIL_TIP_NO_NAME)
+        elif not self.current_email:
+            self.tip_label = QLabel(Localization.EMAIL_TIP_NO_EMAIL)
+        else:
+            self.tip_label = None
+        if self.tip_label:
+            self.tip_label.setFont(QFont("SF Pro Display", Config.multiplyNumberAccordingToSize(16, save_manager.getCurrentSettings()["size"])))
+            layout.addRow(self.tip_label)
+
         layout.addWidget(buttonBox)
 
         buttonBox.accepted.connect(self.acceptAction)

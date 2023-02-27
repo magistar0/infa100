@@ -217,15 +217,16 @@ class UI_StatsWindow(object):
 
 class UI_Settings(object):
     def setupUi(self, SettingsWindow):
-        self.setMinimumSize(QSize(Config.multiplyNumberAccordingToSize(480, save_manager.getCurrentSettings()["size"]),
-                                  Config.multiplyNumberAccordingToSize(240, save_manager.getCurrentSettings()["size"])))
-        central_widget = QWidget(self)
-        self.setCentralWidget(central_widget)
+        current_settings = save_manager.getCurrentSettings()
+        self.setMinimumSize(QSize(Config.multiplyNumberAccordingToSize(480, current_settings["size"]),
+                                  Config.multiplyNumberAccordingToSize(240, current_settings["size"])))
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
         self.setWindowIcon(QIcon('icons/icon.png'))
  
-        grid_layout = QGridLayout()
-        central_widget.setLayout(grid_layout)
-        grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
+        self.grid_layout = QGridLayout()
+        self.central_widget.setLayout(self.grid_layout)
+        self.grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
 
         self.available_sizes = ["tiny", "default", "big", "large"]
         if save_manager.checkIfEasterEggIsUnlocked():
@@ -233,33 +234,64 @@ class UI_Settings(object):
         self.combo = QComboBox()
         self.list_of_items = [Localization.getPrintfText(key) for key in self.available_sizes]
         self.combo.addItems(self.list_of_items)
-        self.combo.setCurrentText(Localization.getPrintfText(save_manager.getCurrentSettings()["size"]))
+        self.combo.setCurrentText(Localization.getPrintfText(current_settings["size"]))
+
+        self.current_name, self.current_email = current_settings["name"], current_settings["email"]
+        self.name_blank = QLineEdit()
+        self.name_blank.setPlaceholderText(Localization.ENTER_NAME)
+        self.email_blank = QLineEdit()
+        self.email_blank.setPlaceholderText(Localization.ENTER_EMAIL)
+        if self.current_name:
+            self.name_blank.setText(self.current_name)
+        if self.current_email:
+            self.email_blank.setText(self.current_email)
  
         self.ok_btn = QPushButton(Localization.ACCEPT)
         self.cancel_btn = QPushButton(Localization.CANCEL)
         self.cancel_btn.clicked.connect(lambda: self.close())
         self.ok_btn.clicked.connect(self.ok_btn_clicked)
 
-        grid_layout.addWidget(self.combo, 1, 0, 1, 2)
-        grid_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding), 2, 0, 1, 2)
-        grid_layout.addWidget(self.ok_btn, 3, 0)
-        grid_layout.addWidget(self.cancel_btn, 3, 1)
+        self.grid_layout.addWidget(self.combo, 1, 0, 1, 2)
+        self.grid_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding), 2, 0, 1, 2)
+        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_NAME_TEXT, self), 3, 0)
+        self.grid_layout.addWidget(self.name_blank, 4, 0, 1, 2)
+        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_EMAIL_TEXT, self), 5, 0)
+        self.grid_layout.addWidget(self.email_blank, 6, 0, 1, 2)
+        self.grid_layout.addWidget(self.ok_btn, 7, 0)
+        self.grid_layout.addWidget(self.cancel_btn, 7, 1)
  
     def ok_btn_clicked(self):
+        current_settings = save_manager.getCurrentSettings()
+        new_settings = deepcopy(current_settings)
+
         sizes = {
             0: "tiny", 1: "default", 2: "big", 3: "large", 4: "secret"
         }
         size_index = self.combo.currentIndex()
-        current_settings = save_manager.getCurrentSettings()
-        new_settings = deepcopy(current_settings)
-
         new_size = sizes[size_index]
         new_settings["size"] = new_size
-        if not new_settings == current_settings:
+
+        name = self.name_blank.text()
+        email = self.email_blank.text()
+        new_settings["name"] = name if name else None
+        new_settings["email"] = email if email else None
+
+        settings_was_changed = new_settings != current_settings
+        reload_required = Config.checkIfSizeWasChanged(current_settings, new_settings)
+        email_was_changed = new_settings["email"] != current_settings["email"]
+        email_is_valid = True
+        if email_was_changed:
+            email_is_valid = Config.emailIsValid(new_settings["email"])
+        if settings_was_changed and reload_required:
+            if not email_is_valid:
+                QMessageBox.information(self, Localization.WARNING_HEADER, Localization.EMAIL_WARNING_TEXT, QMessageBox.Ok)
             save_manager.updateSettings(new_settings)
             self.ask_for_reload()
-        else:
-            self.close()
+        elif settings_was_changed:
+            save_manager.updateSettings(new_settings)
+        if not email_is_valid:
+            QMessageBox.information(self, Localization.WARNING_HEADER, Localization.EMAIL_WARNING_TEXT, QMessageBox.Ok)
+        self.close()
 
     def ask_for_reload(self):
         box = QMessageBox()

@@ -8,6 +8,7 @@ import base64
 import sys
 import pathlib
 import Levenshtein
+import re
 from github import Github
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -140,6 +141,13 @@ class Config(object):
 
     def getButtonStyles() -> dict:
         return Config.button_styles
+    
+    def checkIfSizeWasChanged(old_settings: dict, new_settings: dict) -> bool:
+        return old_settings["size"] != new_settings["size"]
+    
+    def emailIsValid(email: str) -> bool:
+        pattern = r"[^@]+@[^@]+\.[^@]+"
+        return not not re.match(pattern, email) or email is None
 
 
 class Email(object):

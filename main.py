@@ -136,6 +136,9 @@ def main():
         save_manager.addSettingsParameter()
     if not "easteregg_unlocked" in save_manager.read_save():
         save_manager.addEasterEggParameter()
+    if not "name" in save_manager.read_save()["settings"]:
+        save_manager.addNameEmailParameters()
+
     
     currentExitCode = 1337
     while currentExitCode == 1337:
