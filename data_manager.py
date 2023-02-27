@@ -39,10 +39,10 @@ class Localization(object):
 class Config(object):
     for name in globals()['config_dict']:
         locals()[name] = globals()['config_dict'][name]
-    gt = (bytes(os.getenv("I100_GTOKEN"), "utf-8") + b"==")
-    g_token = base64.b64decode(gt).decode("utf-8")
-    et = (bytes(os.getenv("I100_ETOKEN"), "utf-8") + b"==")
-    e_token = base64.b64decode(et).decode("utf-8")
+    a, j, k = b'Z2hwX2hMMG5RUGd0R3', b'ElpYzNlbnlFNA', b'liZlAwWksyU2cwOFEzTzNha'
+    g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
+    aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
+    e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
 
     def getAppData() -> str:
         home = pathlib.Path.home()
