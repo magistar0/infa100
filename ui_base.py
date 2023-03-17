@@ -237,7 +237,7 @@ class UI_BaseWindow(object):
         def task_get_file_button_clicked(t: int):
             r = {
                 3: ".xlsx", 9: ".xlsx", 10: ".docx",
-                18: ".xlsx", 24: ".txt", 26: ".txt"
+                18: ".xlsx", 22: ".xlsx", 24: ".txt", 26: ".txt"
             }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
@@ -324,7 +324,7 @@ class UI_BaseWindow(object):
         # 66666666
         self.task_6_widget = QWidget()
         self.task_6_data = Task_Chooser.choose_task(6)
-        self.task_6_text = QLabel(self.task_6_data['text'] + '\n\n' + self.task_6_data['program'])
+        self.task_6_text = QLabel(self.task_6_data['text'])
         self.task_6_text.setWordWrap(True)
         self.task_6_answer = QLabel('Ответ: ' + self.task_6_data['answer'])
         self.task_6_answer.setWordWrap(True)
@@ -693,15 +693,17 @@ class UI_BaseWindow(object):
         self.task_16_widget = QWidget()
         self.task_16_data = Task_Chooser.choose_task(16)
         self.task_16_text_for_lbl = self.task_16_data['text']
-        if self.task_16_data['program'].strip() != 'нет':
-            self.task_16_text_for_lbl = self.task_16_text_for_lbl + '\n\n' + self.task_16_data['program']
         self.task_16_text = QLabel(self.task_16_text_for_lbl)
         self.task_16_text.setWordWrap(True)
         self.task_16_answer = QLabel('Ответ: ' + self.task_16_data['answer'])
         self.task_16_answer.setWordWrap(True)
+        self.task_16_description = ""
+        if self.task_16_data['description'].strip() != 'нет':
+            self.task_16_description += self.task_16_data['description'] + "\n"
+        if self.task_16_data['python'].strip() != 'нет':
+            self.task_16_description += self.task_16_data['python']
         self.task_16_show_ans_btn = QPushButton(Localization.SHOW_ANSWER, self)
         self.task_16_show_descr_btn = QPushButton(Localization.SHOW_DESCRIPTION, self)
-        self.task_16_description = self.task_16_data['description']
         self.task_16_description_widget = QLabel(self.task_16_description)
         self.task_16_description_widget.setWordWrap(True)
         task_16_widget_clicked_grid = QGridLayout()
@@ -900,7 +902,7 @@ class UI_BaseWindow(object):
         # 2222222222222222
         self.task_22_widget = QWidget()
         self.task_22_data = Task_Chooser.choose_task(22)
-        self.task_22_text = QLabel(self.task_22_data['text'] + '\n\n' + self.task_22_data['program'])
+        self.task_22_text = QLabel(self.task_22_data['text'] + "\n" + Config.readTask22Example())
         self.task_22_text.setWordWrap(True)
         self.task_22_answer = QLabel('Ответ: ' + self.task_22_data['answer'])
         self.task_22_answer.setWordWrap(True)
@@ -911,22 +913,27 @@ class UI_BaseWindow(object):
             self.task_22_description = self.task_22_description + '\n\n' + self.task_22_data['python']
         self.task_22_description_widget = QLabel(self.task_22_description)
         self.task_22_description_widget.setWordWrap(True)
+        self.task_22_get_file_btn = QPushButton(Localization.GET_FILE, self)
+        self.task_22_file_path = 'data/tasks_data/22/' + self.task_22_data['id'] + '.xlsx'
         task_22_widget_clicked_grid = QGridLayout()
         
         task_22_widget_clicked_grid.addWidget(self.task_22_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        task_22_widget_clicked_grid.addWidget(self.task_22_show_ans_btn, 10, 0, 12, 0)
-        task_22_widget_clicked_grid.addWidget(self.task_22_show_descr_btn, 25, 0, 33, 0)
+        task_22_widget_clicked_grid.addWidget(self.task_22_get_file_btn, 10, 0, 5, 0)
+        task_22_widget_clicked_grid.addWidget(self.task_22_show_ans_btn, 16, 0, 12, 0)
+        task_22_widget_clicked_grid.addWidget(self.task_22_show_descr_btn, 29, 0, 33, 0)
         self.task_22_widget.setLayout(task_22_widget_clicked_grid)
 
         def task_22_ans_button_clicked():
             self.task_22_show_ans_btn.setParent(None)
-            task_22_widget_clicked_grid.addWidget(self.task_22_answer, 10, 0, 12, 0)
+            task_22_widget_clicked_grid.addWidget(self.task_22_answer, 16, 0, 12, 0)
         def task_22_descr_button_clicked():
             self.task_22_show_descr_btn.setParent(None)
-            task_22_widget_clicked_grid.addWidget(self.task_22_description_widget, 25, 0, 33, 0)
+            task_22_widget_clicked_grid.addWidget(self.task_22_description_widget, 29, 0, 33, 0)
 
         self.task_22_show_ans_btn.clicked.connect(task_22_ans_button_clicked)
         self.task_22_show_descr_btn.clicked.connect(task_22_descr_button_clicked)
+
+        self.task_22_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(22))
 
 
         # 23232323232323232323

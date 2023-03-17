@@ -297,7 +297,7 @@ class UI_VarWindow(object):
         def task_get_file_button_clicked(t: int):
             r = {
                 3: ".xlsx", 9: ".xlsx", 10: ".docx",
-                18: ".xlsx", 24: ".txt", 26: ".txt"
+                18: ".xlsx", 22: ".xlsx", 24: ".txt", 26: ".txt"
             }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
@@ -382,7 +382,7 @@ class UI_VarWindow(object):
         #666666666
         self.task_6_widget = QWidget()
         self.task_6_data = self.tasks_data[6]
-        self.task_6_text = QLabel(self.task_6_data['text'] + '\n\n' + self.task_6_data['program'])
+        self.task_6_text = QLabel(self.task_6_data['text'])
         self.task_6_text.setWordWrap(True)
         self.task_6_answer = self.task_6_data['answer']
         self.task_6_widget_clicked_grid = QGridLayout()
@@ -730,8 +730,6 @@ class UI_VarWindow(object):
         self.task_16_widget = QWidget()
         self.task_16_data = self.tasks_data[16]
         self.task_16_text_for_lbl = self.task_16_data['text']
-        if self.task_16_data['program'].strip() != 'нет':
-            self.task_16_text_for_lbl = self.task_16_text_for_lbl + '\n\n' + self.task_16_data['program']
         self.task_16_text = QLabel(self.task_16_text_for_lbl)
         self.task_16_text.setWordWrap(True)
         self.task_16_answer = self.task_16_data['answer']
@@ -933,9 +931,7 @@ class UI_VarWindow(object):
         #222222222222222222
         self.task_22_widget = QWidget()
         self.task_22_data = self.tasks_data[22]
-        self.task_22_text_for_lbl = self.task_22_data['text']
-        if self.task_22_data['program'].strip() != 'нет':
-            self.task_22_text_for_lbl = self.task_22_text_for_lbl + '\n\n' + self.task_22_data['program']
+        self.task_22_text_for_lbl = self.task_22_data['text'] + "\n" + Config.readTask22Example()
         self.task_22_text = QLabel(self.task_22_text_for_lbl)
         self.task_22_text.setWordWrap(True)
         self.task_22_answer = self.task_22_data['answer']
@@ -956,10 +952,15 @@ class UI_VarWindow(object):
         self.task_22_save_button.clicked.connect(save_task_22)
         self.task_22_edit_button = QPushButton(Localization.EDIT)
         self.task_22_edit_button.clicked.connect(edit_task_22)
+
+        self.task_22_get_file_btn = QPushButton(Localization.GET_FILE, self)
+        self.task_22_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(22))
+        self.task_22_file_path = 'data/tasks_data/22/' + self.task_22_data['id'] + '.xlsx'
         
         self.task_22_widget_clicked_grid.addWidget(self.task_22_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 8, 0, 9, 0)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 9, 0, 10, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_get_file_btn, 8, 0, 9, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 9, 0, 10, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 10, 0, 11, 0)
         self.task_22_widget.setLayout(self.task_22_widget_clicked_grid)
 
 

@@ -44,6 +44,11 @@ class Config(object):
     aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
     e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
 
+    def readTask22Example() -> str:
+        with open("data/tasks_data/22/22_example.json", "r", encoding="utf-8") as f:
+            example = json.loads(f.read())
+        return example["example"]
+
     def getAppData() -> str:
         home = pathlib.Path.home()
         match sys.platform:
