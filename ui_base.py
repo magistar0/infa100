@@ -22,7 +22,8 @@ class UI_BaseWindow(object):
         self.buttonY.setText(Localization.HELP_BUTTON)
         self.buttonY.clicked.connect(lambda: webbrowser.open('https://forms.gle/GZUVBykDbkdH5gXp9'))
         self.buttonN = self.box.button(QMessageBox.No)
-        self.buttonN.setVisible(False)
+        self.buttonN.setText(Localization.SITE_BUTTON)
+        self.buttonN.clicked.connect(lambda: webbrowser.open('https://sga235.ru/infa100'))
         self.box.exec_()
 
     def back_btn_clicked(self):

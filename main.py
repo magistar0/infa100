@@ -4,6 +4,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
 from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
+import webbrowser
 
 from data_manager import Localization, Config, ID_Vars, Logger
 from ui_base import UI_BaseWindow
@@ -164,6 +165,12 @@ def main():
                 update_box.setWindowIcon(QIcon('icons/icon.png'))
                 update_box.setWindowTitle(Localization.UPDATE_HEADER)
                 update_box.setText(Localization.UPDATE_TEXT)
+                update_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+                buttonY = update_box.button(QMessageBox.Yes)
+                buttonY.setText(Localization.UPDATE_YES)
+                buttonY.clicked.connect(lambda: webbrowser.open('https://sga235.ru/infa100'))
+                buttonN = update_box.button(QMessageBox.No)
+                buttonN.setText(Localization.UPDATE_NO)
                 update_box.exec_()
         currentExitCode = app.exec_()
         app = None
