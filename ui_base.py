@@ -947,6 +947,8 @@ class UI_BaseWindow(object):
         self.task_23_show_ans_btn = QPushButton(Localization.SHOW_ANSWER, self)
         self.task_23_show_descr_btn = QPushButton(Localization.SHOW_DESCRIPTION, self)
         self.task_23_description = self.task_23_data['description']
+        if self.task_23_data['python'].strip() != 'нет':
+            self.task_23_description = self.task_23_description + '\n\n' + self.task_23_data['python']
         self.task_23_description_widget = QLabel(self.task_23_description)
         self.task_23_description_widget.setWordWrap(True)
         task_23_widget_clicked_grid = QGridLayout()
