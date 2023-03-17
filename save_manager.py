@@ -2,6 +2,7 @@ import json
 import datetime
 from collections import Counter
 from data_manager import Config
+from itertools import chain
 
 dir_path = '%s/INFA100/' % Config.APPDATA
 
@@ -22,7 +23,7 @@ def add_id_to_save(task: str, id: str) -> None:
 
 def generate_empty_save() -> None:
     save_data = {}
-    for task in range(1, 28):
+    for task in chain(range(1, 19), range(22, 28), ("19-21",)):
         save_data[task] = []
     save_ex = {"save_data": save_data, "easteregg_unlocked": False, "exam_history": [],
                 "settings": {"size": "default", "name": None, "email": None},
@@ -45,7 +46,10 @@ def get_save_data_for_task(task: str) -> list:
 def generate_result_dict(answers: list, results: list, tasks_data: dict) -> dict:
     user_result = {}
     for t in range(1, 28):
-        dct = {"id": tasks_data[t]["id"], "answer": answers[t], "correct": results[t]}
+        idkey = t
+        if 19 <= t <= 21:
+            idkey = "19-21"
+        dct = {"id": tasks_data[idkey]["id"], "answer": answers[t], "correct": results[t]}
         user_result[t] = dct
     return user_result
 
@@ -142,4 +146,12 @@ def addNameEmailParameters() -> None:
     save_data = read_save()
     save_data["settings"]["name"] = None
     save_data["settings"]["email"] = None
+    update_save(save_data)
+
+def change19_21SaveFormat() -> None:
+    save_data = read_save()
+    save_data["save_data"]["19-21"] = []
+    del save_data["save_data"]["19"]
+    del save_data["save_data"]["20"]
+    del save_data["save_data"]["21"]
     update_save(save_data)

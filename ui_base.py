@@ -54,7 +54,7 @@ class UI_BaseWindow(object):
 
         self.centralWidget = QWidget()
         self.combo = QComboBox()
-        self.list_of_items = [Localization.TASK + str(num) for num in range(1, 28)]
+        self.list_of_items = [Localization.TASK + str(num) for num in range(1, 19)] + [Localization.TASKS + "19-21"] + [Localization.TASK + str(num) for num in range(22, 28)]
         self.combo.addItems(self.list_of_items)
 
         grid = QGridLayout()
@@ -68,9 +68,10 @@ class UI_BaseWindow(object):
         self.showMaximized()
 
     def show_btn_clicked(self):
-        task_num = self.combo.currentText().replace(Localization.TASK, '')
+        task_num = self.combo.currentText().replace(Localization.TASK, '').replace(Localization.TASKS, '')
 
-        self.lbl2 = QLabel(Localization.TASK_HEADER % task_num, self)
+        self.lbl2_text = Localization.TASK_HEADER if task_num != "19-21" else Localization.TASKS_HEADER
+        self.lbl2 = QLabel(self.lbl2_text % task_num, self)
         self.back_btn = QPushButton(Localization.BACK, self)
         self.back_btn.clicked.connect(self.back_btn_clicked)
 
@@ -806,17 +807,29 @@ class UI_BaseWindow(object):
         self.task_18_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(18))
 
 
-        # 19191919191919191919
+        # 192021192021192021
+        self.tasks19_21tab_widget = QTabWidget()
+        self.task_19_21_data = Task_Chooser.choose_task("19-21")
+
+        self.tasks19_21_text = QWidget()
+        self.tasks19_21text_layout = QGridLayout()
+        self.task_19_header = QLabel(self.task_19_21_data['text'])
+        self.task_19_header.setWordWrap(True)
+        self.task_19_header.setAlignment(Qt.AlignCenter)
+        self.tasks19_21text_layout.addWidget(self.task_19_header)
+        self.tasks19_21_text.setLayout(self.tasks19_21text_layout)
+
         self.task_19_widget = QWidget()
-        self.task_19_data = Task_Chooser.choose_task(19)
-        self.task_19_text = QLabel(self.task_19_data['text'])
+        self.task_19_text = QLabel(self.task_19_21_data['19_text'])
         self.task_19_text.setWordWrap(True)
         self.task_19_text.setAlignment(Qt.AlignCenter)
-        self.task_19_answer = QLabel('Ответ: ' + self.task_19_data['answer'])
+        self.task_19_answer = QLabel('Ответ: ' + self.task_19_21_data['19_answer'])
         self.task_19_answer.setWordWrap(True)
         self.task_19_show_ans_btn = QPushButton(Localization.SHOW_ANSWER, self)
         self.task_19_show_descr_btn = QPushButton(Localization.SHOW_DESCRIPTION, self)
-        self.task_19_description = self.task_19_data['description']
+        self.task_19_description = self.task_19_21_data['19_description']
+        if self.task_19_21_data['19_python'].strip() != 'нет':
+            self.task_19_description = self.task_19_description + '\n\n' + self.task_19_21_data['19_python']
         self.task_19_description_widget = QLabel(self.task_19_description)
         self.task_19_description_widget.setWordWrap(True)
         task_19_widget_clicked_grid = QGridLayout()
@@ -837,17 +850,17 @@ class UI_BaseWindow(object):
         self.task_19_show_descr_btn.clicked.connect(task_19_descr_button_clicked)
 
 
-        # 20202020202020202020
         self.task_20_widget = QWidget()
-        self.task_20_data = Task_Chooser.choose_task(20)
-        self.task_20_text = QLabel(self.task_20_data['text'])
+        self.task_20_text = QLabel(self.task_19_21_data['20_text'])
         self.task_20_text.setWordWrap(True)
         self.task_20_text.setAlignment(Qt.AlignCenter)
-        self.task_20_answer = QLabel('Ответ: ' + self.task_20_data['answer'])
+        self.task_20_answer = QLabel('Ответ: ' + self.task_19_21_data['20_answer'])
         self.task_20_answer.setWordWrap(True)
         self.task_20_show_ans_btn = QPushButton(Localization.SHOW_ANSWER, self)
         self.task_20_show_descr_btn = QPushButton(Localization.SHOW_DESCRIPTION, self)
-        self.task_20_description = self.task_20_data['description']
+        self.task_20_description = self.task_19_21_data['20_description']
+        if self.task_19_21_data['20_python'].strip() != 'нет':
+            self.task_20_description = self.task_20_description + '\n\n' + self.task_19_21_data['20_python']
         self.task_20_description_widget = QLabel(self.task_20_description)
         self.task_20_description_widget.setWordWrap(True)
         task_20_widget_clicked_grid = QGridLayout()
@@ -868,17 +881,17 @@ class UI_BaseWindow(object):
         self.task_20_show_descr_btn.clicked.connect(task_20_descr_button_clicked)
 
 
-        # 21212121212121212121
         self.task_21_widget = QWidget()
-        self.task_21_data = Task_Chooser.choose_task(21)
-        self.task_21_text = QLabel(self.task_21_data['text'])
+        self.task_21_text = QLabel(self.task_19_21_data['21_text'])
         self.task_21_text.setWordWrap(True)
         self.task_21_text.setAlignment(Qt.AlignCenter)
-        self.task_21_answer = QLabel('Ответ: ' + self.task_21_data['answer'])
+        self.task_21_answer = QLabel('Ответ: ' + self.task_19_21_data['21_answer'])
         self.task_21_answer.setWordWrap(True)
         self.task_21_show_ans_btn = QPushButton(Localization.SHOW_ANSWER, self)
         self.task_21_show_descr_btn = QPushButton(Localization.SHOW_DESCRIPTION, self)
-        self.task_21_description = self.task_21_data['description']
+        self.task_21_description = self.task_19_21_data['21_description']
+        if self.task_19_21_data['21_python'].strip() != 'нет':
+            self.task_21_description = self.task_21_description + '\n\n' + self.task_19_21_data['21_python']
         self.task_21_description_widget = QLabel(self.task_21_description)
         self.task_21_description_widget.setWordWrap(True)
         task_21_widget_clicked_grid = QGridLayout()
@@ -897,6 +910,12 @@ class UI_BaseWindow(object):
 
         self.task_21_show_ans_btn.clicked.connect(task_21_ans_button_clicked)
         self.task_21_show_descr_btn.clicked.connect(task_21_descr_button_clicked)
+
+
+        self.tasks19_21tab_widget.addTab(self.tasks19_21_text, Localization.T19_21_TEXT_TAB)
+        self.tasks19_21tab_widget.addTab(self.task_19_widget, Localization.T19_21_TAB_1)
+        self.tasks19_21tab_widget.addTab(self.task_20_widget, Localization.T19_21_TAB_2)
+        self.tasks19_21tab_widget.addTab(self.task_21_widget, Localization.T19_21_TAB_3)
 
 
         # 2222222222222222
@@ -1170,9 +1189,7 @@ class UI_BaseWindow(object):
             '16': self.task_16_widget,
             '17': self.task_17_widget,
             '18': self.task_18_widget,
-            '19': self.task_19_widget,
-            '20': self.task_20_widget,
-            '21': self.task_21_widget,
+            '19-21': self.tasks19_21tab_widget,
             '22': self.task_22_widget,
             '23': self.task_23_widget,
             '24': self.task_24_widget,
@@ -1186,7 +1203,11 @@ class UI_BaseWindow(object):
             pass
         self.grid_clicked.addWidget(self.back_btn, 6, 0, 8, 0)
 
-        save_manager.add_id_to_save(task_num, self.__dict__['task_%s_data' % str(task_num)]['id'])
+        if task_num == "19-21":
+            self.save_key = self.__dict__['task_19_21_data']['id']
+        else:
+            self.save_key = self.__dict__['task_%s_data' % str(task_num)]['id']
+        save_manager.add_id_to_save(task_num, self.save_key)
 
         self.scrollArea = QScrollArea()
         self.setCentralWidget(self.scrollArea)

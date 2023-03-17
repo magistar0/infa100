@@ -138,6 +138,8 @@ def main():
         save_manager.addEasterEggParameter()
     if not "name" in save_manager.read_save()["settings"]:
         save_manager.addNameEmailParameters()
+    if not "19-21" in save_manager.read_save()["save_data"]:
+        save_manager.change19_21SaveFormat()
 
     
     currentExitCode = 1337
