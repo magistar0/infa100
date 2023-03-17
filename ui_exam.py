@@ -4,6 +4,7 @@ import webbrowser
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap, QFont
+from itertools import chain
 
 from task_manager import Task_Chooser
 from data_manager import Localization, Config, Email, ID_Vars, Logger
@@ -27,7 +28,8 @@ class UI_VarWindow(object):
         self.buttonY.setText(Localization.HELP_BUTTON)
         self.buttonY.clicked.connect(lambda: webbrowser.open('https://forms.gle/GZUVBykDbkdH5gXp9'))
         self.buttonN = self.box.button(QMessageBox.No)
-        self.buttonN.setVisible(False)
+        self.buttonN.setText(Localization.SITE_BUTTON)
+        self.buttonN.clicked.connect(lambda: webbrowser.open('https://sga235.ru/infa100'))
         self.box.exec_()
 
     def getTasksData(self, var_by_id=None):
@@ -36,7 +38,7 @@ class UI_VarWindow(object):
         self.tasks_data = dict()
         if var_by_id:
             self.var_data = ID_Vars.get_data_by_id(self.var_id)
-            for task in range(1, 28):
+            for task in chain(range(1, 19), range(22, 28), ("19-21",)):
                 self.task_id_in_base = self.var_data[str(task)]
                 self.task_list = Task_Chooser.get_task_list(task)
                 for elem in self.task_list:
@@ -47,7 +49,7 @@ class UI_VarWindow(object):
                         break
             Logger.add_line_to_log("Succesfully loaded ID %s." % self.var_id)
         else:
-            for number in range(1, 28):
+            for number in chain(range(1, 19), range(22, 28), ("19-21",)):
                 self.tasks_data[number] = Task_Chooser.choose_task(number)
                 save_manager.add_id_to_save(number, self.tasks_data[number]['id'])
         self.user_answers = [None for _ in range(28)]
@@ -297,7 +299,7 @@ class UI_VarWindow(object):
         def task_get_file_button_clicked(t: int):
             r = {
                 3: ".xlsx", 9: ".xlsx", 10: ".docx",
-                18: ".xlsx", 24: ".txt", 26: ".txt"
+                18: ".xlsx", 22: ".xlsx", 24: ".txt", 26: ".txt"
             }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
@@ -382,7 +384,7 @@ class UI_VarWindow(object):
         #666666666
         self.task_6_widget = QWidget()
         self.task_6_data = self.tasks_data[6]
-        self.task_6_text = QLabel(self.task_6_data['text'] + '\n\n' + self.task_6_data['program'])
+        self.task_6_text = QLabel(self.task_6_data['text'])
         self.task_6_text.setWordWrap(True)
         self.task_6_answer = self.task_6_data['answer']
         self.task_6_widget_clicked_grid = QGridLayout()
@@ -730,8 +732,6 @@ class UI_VarWindow(object):
         self.task_16_widget = QWidget()
         self.task_16_data = self.tasks_data[16]
         self.task_16_text_for_lbl = self.task_16_data['text']
-        if self.task_16_data['program'].strip() != 'нет':
-            self.task_16_text_for_lbl = self.task_16_text_for_lbl + '\n\n' + self.task_16_data['program']
         self.task_16_text = QLabel(self.task_16_text_for_lbl)
         self.task_16_text.setWordWrap(True)
         self.task_16_answer = self.task_16_data['answer']
@@ -838,12 +838,13 @@ class UI_VarWindow(object):
 
 
         #191919191919191919
+        self.task_19_21_data = self.tasks_data["19-21"]
+
         self.task_19_widget = QWidget()
-        self.task_19_data = self.tasks_data[19]
-        self.task_19_text = QLabel(self.task_19_data['text'])
+        self.task_19_text = QLabel(self.task_19_21_data['text'] + "\n" + self.task_19_21_data['19_text'])
         self.task_19_text.setWordWrap(True)
         self.task_19_text.setAlignment(Qt.AlignCenter)
-        self.task_19_answer = self.task_19_data['answer']
+        self.task_19_answer = self.task_19_21_data['19_answer']
         self.task_19_widget_clicked_grid = QGridLayout()
 
         self.task_19_blank = QLineEdit()
@@ -870,11 +871,10 @@ class UI_VarWindow(object):
 
         #202020202020202020
         self.task_20_widget = QWidget()
-        self.task_20_data = self.tasks_data[20]
-        self.task_20_text = QLabel(self.task_20_data['text'])
+        self.task_20_text = QLabel(Localization.T20_21_PRETEXT + "\n" + self.task_19_21_data['20_text'])
         self.task_20_text.setWordWrap(True)
         self.task_20_text.setAlignment(Qt.AlignCenter)
-        self.task_20_answer = self.task_20_data['answer']
+        self.task_20_answer = self.task_19_21_data['20_answer']
         self.task_20_widget_clicked_grid = QGridLayout()
 
         self.task_20_blank = QLineEdit()
@@ -901,11 +901,10 @@ class UI_VarWindow(object):
 
         #212121212121212121
         self.task_21_widget = QWidget()
-        self.task_21_data = self.tasks_data[21]
-        self.task_21_text = QLabel(self.task_21_data['text'])
+        self.task_21_text = QLabel(Localization.T20_21_PRETEXT + "\n" + self.task_19_21_data['21_text'])
         self.task_21_text.setWordWrap(True)
         self.task_21_text.setAlignment(Qt.AlignCenter)
-        self.task_21_answer = self.task_21_data['answer']
+        self.task_21_answer = self.task_19_21_data['21_answer']
         self.task_21_widget_clicked_grid = QGridLayout()
 
         self.task_21_blank = QLineEdit()
@@ -933,9 +932,7 @@ class UI_VarWindow(object):
         #222222222222222222
         self.task_22_widget = QWidget()
         self.task_22_data = self.tasks_data[22]
-        self.task_22_text_for_lbl = self.task_22_data['text']
-        if self.task_22_data['program'].strip() != 'нет':
-            self.task_22_text_for_lbl = self.task_22_text_for_lbl + '\n\n' + self.task_22_data['program']
+        self.task_22_text_for_lbl = self.task_22_data['text'] + "\n" + Config.readTask22Example()
         self.task_22_text = QLabel(self.task_22_text_for_lbl)
         self.task_22_text.setWordWrap(True)
         self.task_22_answer = self.task_22_data['answer']
@@ -956,10 +953,15 @@ class UI_VarWindow(object):
         self.task_22_save_button.clicked.connect(save_task_22)
         self.task_22_edit_button = QPushButton(Localization.EDIT)
         self.task_22_edit_button.clicked.connect(edit_task_22)
+
+        self.task_22_get_file_btn = QPushButton(Localization.GET_FILE, self)
+        self.task_22_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(22))
+        self.task_22_file_path = 'data/tasks_data/22/' + self.task_22_data['id'] + '.xlsx'
         
         self.task_22_widget_clicked_grid.addWidget(self.task_22_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 8, 0, 9, 0)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 9, 0, 10, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_get_file_btn, 8, 0, 9, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 9, 0, 10, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 10, 0, 11, 0)
         self.task_22_widget.setLayout(self.task_22_widget_clicked_grid)
 
 
@@ -1308,7 +1310,10 @@ class UI_VarWindow(object):
         task_num = 1
         for column in range(1, 4):
             for task in range(task_num, task_num + 9):
-                correct_text = Localization.CORRECT if self.user_answers[task] == self.tasks_data[task]['answer'] else Localization.INCORRECT
+                if 19 <= task <= 21:
+                    correct_text = Localization.CORRECT if self.user_answers[task] == self.task_19_21_data['%d_answer' % task] else Localization.INCORRECT
+                else:
+                    correct_text = Localization.CORRECT if self.user_answers[task] == self.tasks_data[task]['answer'] else Localization.INCORRECT
                 header_text = Localization.RESULTS_HEADER_TEXT % (task, correct_text)
                 your_answer_text = Localization.YOUR_ANSWER
                 if task == 25:
@@ -1318,7 +1323,10 @@ class UI_VarWindow(object):
                 correct_answer_text = Localization.CORRECT_ANSWER
                 if task == 25:
                     correct_answer_text = Localization.CORRECT_ANSWER_25
-                descr_text = correct_answer_text % self.tasks_data[task]['answer']
+                if 19 <= task <= 21:
+                    descr_text = correct_answer_text % self.task_19_21_data['%d_answer' % task]
+                else:
+                    descr_text = correct_answer_text % self.tasks_data[task]['answer']
                 lbl = QLabel(header_text + '\n' + user_text + '\n' + descr_text)
                 row = task
                 if 10 <= row <= 18:
@@ -1331,10 +1339,16 @@ class UI_VarWindow(object):
 
         self.user_results = [None]
         for task in range(1, 28):
-            if self.user_answers[task] == self.tasks_data[task]['answer']:
-                self.user_results.append(True)
+            if 19 <= task <= 21:
+                if self.user_answers[task] == self.task_19_21_data['%d_answer' % task]:
+                    self.user_results.append(True)
+                else:
+                    self.user_results.append(False)
             else:
-                self.user_results.append(False)
+                if self.user_answers[task] == self.tasks_data[task]['answer']:
+                    self.user_results.append(True)
+                else:
+                    self.user_results.append(False)
         self.number_of_completed_tasks = self.user_results.count(True)
         self.result_text = Localization.RESULT % self.number_of_completed_tasks
 

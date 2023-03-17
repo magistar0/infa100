@@ -10,16 +10,17 @@ import pathlib
 import Levenshtein
 import re
 from github import Github
+from itertools import chain
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 
 
-for t in range(1, 28):
-    file_path = 'data/tasks_data/%d/%d_data.json' % (t, t)
-    file_name_local = 'data_%d_file' % t
+for t in chain(range(1, 19), range(22, 28), ("19-21",)):
+    file_path = f'data/tasks_data/{t}/{t}_data.json'
+    file_name_local = f'data_{t}_file'
     with open(file_path, 'r', encoding='utf-8') as locals()[file_name_local]:
-        task_name_dict_local, task_name_list_local = 'task_%d_dict' % t, 'task_%d_list_of_dicts' % t
+        task_name_dict_local, task_name_list_local = f'task_{t}_dict', f'task_{t}_list_of_dicts'
         locals()[task_name_dict_local] = json.loads(locals()[file_name_local].read())
         locals()[task_name_list_local] = locals()[task_name_dict_local]['tasks']
 
@@ -43,6 +44,11 @@ class Config(object):
     g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
     aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
     e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
+
+    def readTask22Example() -> str:
+        with open("data/tasks_data/22/22_example.json", "r", encoding="utf-8") as f:
+            example = json.loads(f.read())
+        return example["example"]
 
     def getAppData() -> str:
         home = pathlib.Path.home()
