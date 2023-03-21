@@ -1213,7 +1213,7 @@ class UI_VarWindow(object):
                     else:
                         self.finish_btn = QPushButton(Localization.SHOW_RESULTS)
                     self.finish_btn.clicked.connect(self.finish)
-                    self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 3)
+                    self.centralLayout.addWidget(self.finish_btn, 3, 80, 4, 100)
                 except:
                     pass
                 self.contents_tasks.setCurrentIndex(button_num)
@@ -1263,8 +1263,8 @@ class UI_VarWindow(object):
         self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU)
         self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
 
-        self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 160)
-        self.centralLayout.addWidget(self.scrollArea_nums, 0, 160, 1, 20)
+        self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 172)
+        self.centralLayout.addWidget(self.scrollArea_nums, 0, 172, 1, 8)
         self.centralLayout.addWidget(self.timer_text_lbl, 1, 0, 2, 160)
         self.centralLayout.addWidget(self.back_to_menu_btn, 3, 0, 4, 40)
         self.centralLayout.addWidget(self.save_var_btn, 3, 40, 4, 40)

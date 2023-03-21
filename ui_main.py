@@ -142,12 +142,18 @@ class UI_StatsWindow(object):
             self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
             self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
 
+        self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU, self)
+        self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
+        self.grid.addWidget(self.back_to_menu_btn, 4, 0, 2, 0)
 
         self.widget_1.setLayout(self.grid)
         self.stacked_widget.addWidget(self.widget_1)
         self.stacked_widget.setCurrentIndex(0)
         self.setCentralWidget(self.stacked_widget)
         self.showMaximized()
+
+    def back_to_menu_btn_clicked(self):
+        self.win.translateToMain()
 
     def infoAction(self):
         self.box = QMessageBox()
@@ -213,7 +219,7 @@ class UI_StatsWindow(object):
     
     def clear_confirmed(self):
         save_manager.clear_exam_history()
-        self.close()
+        self.win.translateToMain()
         QMessageBox.information(self, Localization.RESET_STATS_TITLE, Localization.STATS_RESET_SUCCESS, QMessageBox.Ok)
 
 
