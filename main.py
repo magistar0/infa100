@@ -115,9 +115,12 @@ class Main(QMainWindow, UI_MainWindow):
                     pass
 
 
-class VeryMain(QMainWindow):
+class CoreMain(QMainWindow):
     def __init__(self):
-        super(VeryMain, self).__init__()
+        super(CoreMain, self).__init__()
+        self.basew = None
+        self.statsw = None
+        self.varw = None
         self.setupUi()
 
     def setupUi(self):
@@ -130,27 +133,30 @@ class VeryMain(QMainWindow):
         self.w = QStackedWidget()
         self.mainw = Main()
         self.w.addWidget(self.mainw)
-        self.basew = BaseWindow()
-        self.w.addWidget(self.basew)
-        self.statsw = StatsWindow()
-        self.w.addWidget(self.statsw)
-        self.w.setCurrentIndex(0)
+
         self.setCentralWidget(self.w)
 
     def translateToBase(self):
+        if self.basew is None:
+            self.basew = BaseWindow()
+            self.w.addWidget(self.basew)
         self.basew.win = win
-        self.w.setCurrentIndex(1)
+        self.w.setCurrentWidget(self.basew)
 
     def translateToVar(self):
-        self.varw = VarWindow()
-        self.w.addWidget(self.varw)
-        self.w.setCurrentIndex(3)
+        if self.varw is None:
+            self.varw = VarWindow()
+            self.w.addWidget(self.varw)
+        self.w.setCurrentWidget(self.varw)
 
     def translateToStats(self):
-        self.w.setCurrentIndex(2)
+        if self.statsw is None:
+            self.statsw = StatsWindow()
+            self.w.addWidget(self.statsw)
+        self.w.setCurrentWidget(self.statsw)
 
     def translateToMain(self):
-        self.w.setCurrentIndex(0)
+        self.w.setCurrentWidget(self.mainw)
 
 
 def load_fonts_from_dir(directory):
@@ -191,7 +197,7 @@ if __name__ == "__main__":
         font.setPointSize(font_size)
         app.setFont(font)
 
-        win = VeryMain()
+        win = CoreMain()
         win.show()
 
         if Config.checkInternetConnection():
