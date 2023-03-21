@@ -28,6 +28,7 @@
 	"TASK_HEADER": "Задание %s.",
 	"TASKS_HEADER": "Задания %s.",
 	"BACK": "Назад",
+	"BACK_TO_MENU": "Назад в меню",
 	"ANSWER": "Ответ: ",
 	"SHOW_ANSWER": "Показать ответ",
 	"SHOW_DESCRIPTION": "Показать решение",
