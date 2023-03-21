@@ -81,6 +81,23 @@ def getStats() -> int:
     res_ege = int(Config.POINTS[str(res_first)])
     return vars_ever_solved, res_first, res_ege
 
+def checkIfStatsIsAvailable() -> bool:
+    stats = getStats()
+    if stats:
+        return stats[0] >= 3
+    return False
+
+def getUnavailableStatsDescriptionKey() -> str:
+    stats = getStats()
+    solved_vars = stats[0] if stats else 0
+    match solved_vars:
+        case 1:
+            return "STATS_TEXT_1_VAR_SOLVED"
+        case 2:
+            return "STATS_TEXT_2_VARS_SOLVED"
+        case _:
+            return "STATS_TEXT_0_VARS_SOLVED"
+
 def getMostSolvedTasks() -> int:
     exam_history = read_save()["exam_history"]
     tasks_correct = dict(zip(range(1, 28), [0 for _ in range(28)]))
@@ -92,11 +109,12 @@ def getMostSolvedTasks() -> int:
             else:
                 tasks_incorrect[int(k)] += 1
     c = Counter(tasks_correct)
-    most_correct = c.most_common(1)[0]
+    most_correct = c.most_common()
     cc = Counter(tasks_incorrect)
-    most_incorrect = list(cc.most_common(1)[0])
-    most_incorrect[1] = tasks_correct[most_incorrect[0]]
-    return most_correct, tuple(most_incorrect)
+    most_incorrect = list(cc.most_common())
+    most_correct = list(filter(lambda tpl: tpl[1] == most_correct[0][1], most_correct))
+    most_incorrect = list(filter(lambda tpl: tpl[1] == most_incorrect[0][1], most_incorrect))
+    return most_correct, most_incorrect
 
 def getExamHistory() -> list:
     exam_history = read_save()["exam_history"]
