@@ -144,15 +144,17 @@ class CoreMain(QMainWindow):
         self.w.setCurrentWidget(self.basew)
 
     def translateToVar(self):
-        if self.varw is None:
-            self.varw = VarWindow()
-            self.w.addWidget(self.varw)
+        self.w.removeWidget(self.varw)
+        self.varw = VarWindow()
+        self.w.addWidget(self.varw)
+        self.varw.win = win
         self.w.setCurrentWidget(self.varw)
 
     def translateToStats(self):
         if self.statsw is None:
             self.statsw = StatsWindow()
             self.w.addWidget(self.statsw)
+        self.statsw.win = win
         self.w.setCurrentWidget(self.statsw)
 
     def translateToMain(self):

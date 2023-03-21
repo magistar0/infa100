@@ -1260,15 +1260,35 @@ class UI_VarWindow(object):
         self.finish_btn.clicked.connect(self.finish)
         self.save_var_btn = QPushButton(Localization.SAVE_VAR)
         self.save_var_btn.clicked.connect(self.save_var_clicked)
+        self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU)
+        self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
 
-        self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 1)
-        self.centralLayout.addWidget(self.scrollArea_nums, 0, 2, 1, 12)
-        self.centralLayout.addWidget(self.timer_text_lbl, 1, 0, 2, 12)
-        self.centralLayout.addWidget(self.finish_btn, 3, 0, 4, 3)
-        self.centralLayout.addWidget(self.save_var_btn, 3, 4, 4, 12)
+        self.centralLayout.addWidget(self.scrollArea_tasks, 0, 0, 1, 160)
+        self.centralLayout.addWidget(self.scrollArea_nums, 0, 160, 1, 20)
+        self.centralLayout.addWidget(self.timer_text_lbl, 1, 0, 2, 160)
+        self.centralLayout.addWidget(self.back_to_menu_btn, 3, 0, 4, 40)
+        self.centralLayout.addWidget(self.save_var_btn, 3, 40, 4, 40)
+        self.centralLayout.addWidget(self.finish_btn, 3, 80, 4, 100)
         self.centralWidget.setLayout(self.centralLayout)
         self.setCentralWidget(self.centralWidget)
         self.showMaximized()
+
+    def back_to_menu_btn_clicked(self):
+        if not self.user_finished:
+            box = QMessageBox()
+            box.setIcon(QMessageBox.Warning)
+            box.setWindowIcon(QIcon('icons/icon.png'))
+            box.setWindowTitle(Localization.EXAM_RESULT_LOSS_WARNING_HEADER)
+            box.setText(Localization.EXAM_RESULT_LOSS_WARNING)
+            box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+            buttonY = box.button(QMessageBox.Yes)
+            buttonY.setText(Localization.EXAM_RESULT_LOSS_WARNING_EXIT)
+            buttonN = box.button(QMessageBox.No)
+            buttonN.setText(Localization.EXAM_RESULT_LOSS_WARNING_RETURN)
+            buttonY.clicked.connect(lambda: self.win.translateToMain())
+            box.exec_()
+        else:
+            self.win.translateToMain()
 
     def save_var_clicked(self):
         if not self.var_saved and not self.by_id:
@@ -1291,7 +1311,7 @@ class UI_VarWindow(object):
         self.finish_btn.setParent(None)
         self.email_btn = QPushButton(Localization.EMAIL_BUTTON)
         self.email_btn.clicked.connect(self.emailAction)
-        self.centralLayout.addWidget(self.email_btn, 3, 0, 4, 3)
+        self.centralLayout.addWidget(self.email_btn, 3, 80, 4, 100)
 
         for task in range(1, 28):
             self.finish_btn.setText(Localization.SHOW_RESULTS)
