@@ -278,6 +278,9 @@ class UI_Settings(object):
         new_settings["name"] = name if name else None
         new_settings["email"] = email if email else None
 
+        if (not save_manager.checkIfEasterEggIsUnlocked()) and Config.checkIfNameNeedsToBeTriggered(new_settings["name"]):
+            QMessageBox.information(self, Localization.EMAIL_EASTEREGG_HEADER, Localization.EMAIL_EASTEREGG_TEXT, QMessageBox.Ok)
+            save_manager.setEasterEggUnlocked()
         settings_was_changed = new_settings != current_settings
         reload_required = Config.checkIfSizeWasChanged(current_settings, new_settings)
         email_was_changed = new_settings["email"] != current_settings["email"]
