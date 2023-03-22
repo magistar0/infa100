@@ -125,6 +125,8 @@ class UI_StatsWindow(object):
             if len(self.most_correct) == 1:
                 self.stats_3 = Localization.STATS_MOST_TIMES_CORRECT_TEXT % (self.most_correct[0][0], 
                     self.most_correct[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.most_correct[0][1]).upper()])
+            elif self.average_first == 0:
+                self.stats_3 = ""
             else:
                 self.correct_list_as_str = ", ".join(list(map(str, [tpl[0] for tpl in self.most_correct])))
                 self.stats_3 = Localization.STATS_MOST_TIMES_CORRECT_TEXT_PLURAL % (self.correct_list_as_str, 
@@ -136,7 +138,10 @@ class UI_StatsWindow(object):
                 self.incorrect_list_as_str = ", ".join(list(map(str, [tpl[0] for tpl in self.most_incorrect])))
                 self.stats_4 = Localization.STATS_MOST_TIMES_INCORRECT_TEXT_PLURAL % (self.incorrect_list_as_str, 
                     self.vars_ever_solved - self.most_incorrect[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.vars_ever_solved - self.most_incorrect[0][1]).upper()])
-            self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_3 + "\n" + self.stats_4
+            if self.stats_3:
+                self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_3 + "\n" + self.stats_4
+            else:
+                self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_4
         else:
             self.why_unavailable = Localization.getPrintfText(save_manager.getUnavailableStatsDescriptionKey())
             self.stats_text = Localization.STATS_TEXT_EMPTY_HISTORY + "\n" + self.why_unavailable
