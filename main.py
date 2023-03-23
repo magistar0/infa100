@@ -1,7 +1,7 @@
 import sys
 import os
 from pathlib import Path
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog, QStackedWidget
 from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtGui import QIcon, QFont, QFontDatabase
 import webbrowser
@@ -33,6 +33,7 @@ class SettingsWindow(QMainWindow, UI_Settings):
 
 class VarWindow(QMainWindow, UI_VarWindow):
     by_id = False
+    var_id = None
     def __init__(self, parent=None):
         super(VarWindow, self).__init__(parent)
         self.setupUi(self)
@@ -60,18 +61,14 @@ class Main(QMainWindow, UI_MainWindow):
         self.btn_4.clicked.connect(self.show_window_4)
         self.btn_5.clicked.connect(self.show_window_5)
         
-
     def show_window_2(self):
-        self.w2 = BaseWindow()
-        self.w2.show()
+        win.translateToBase()
 
     def show_window_3(self):
-        self.w3 = VarWindow()
-        self.w3.show()
+        win.translateToVar()
 
     def show_window_4(self):
-        self.w4 = StatsWindow()
-        self.w4.show()
+        win.translateToStats()
 
     def show_window_5(self):
         self.w5 = SettingsWindow()
@@ -118,6 +115,52 @@ class Main(QMainWindow, UI_MainWindow):
                     pass
 
 
+class CoreMain(QMainWindow):
+    def __init__(self):
+        super(CoreMain, self).__init__()
+        self.basew = None
+        self.statsw = None
+        self.varw = None
+        self.setupUi()
+
+    def setupUi(self):
+        self.setWindowTitle(Localization.MAIN_WIN_TITLE)
+        self.setWindowIcon(QIcon('icons/icon.png'))
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.showMaximized()
+
+        self.w = QStackedWidget()
+        self.mainw = Main()
+        self.w.addWidget(self.mainw)
+
+        self.setCentralWidget(self.w)
+
+    def translateToBase(self):
+        if self.basew is None:
+            self.basew = BaseWindow()
+            self.w.addWidget(self.basew)
+        self.basew.win = win
+        self.w.setCurrentWidget(self.basew)
+
+    def translateToVar(self):
+        self.w.removeWidget(self.varw)
+        self.varw = VarWindow()
+        self.w.addWidget(self.varw)
+        self.varw.win = win
+        self.w.setCurrentWidget(self.varw)
+
+    def translateToStats(self):
+        self.w.removeWidget(self.statsw)
+        self.statsw = StatsWindow()
+        self.w.addWidget(self.statsw)
+        self.statsw.win = win
+        self.w.setCurrentWidget(self.statsw)
+
+    def translateToMain(self):
+        self.w.setCurrentWidget(self.mainw)
+
+
 def load_fonts_from_dir(directory):
     families = set()
     for fi in QDir(directory).entryInfoList(["*.ttf", "*.otf"]):
@@ -126,7 +169,7 @@ def load_fonts_from_dir(directory):
     return families
 
 
-def main():
+if __name__ == "__main__":
     if not os.path.exists(save_manager.dir_path):
         os.makedirs(save_manager.dir_path)
     if not os.path.exists(save_manager.dir_path + 'user_save.save'):
@@ -156,8 +199,9 @@ def main():
         font.setPointSize(font_size)
         app.setFont(font)
 
-        win = Main()
+        win = CoreMain()
         win.show()
+
         if Config.checkInternetConnection():
             if not Config.checkIfBuildIsLatest():
                 update_box = QMessageBox()
@@ -174,6 +218,3 @@ def main():
                 update_box.exec_()
         currentExitCode = app.exec_()
         app = None
-
-if __name__ == "__main__":
-    main()

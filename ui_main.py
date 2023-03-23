@@ -114,7 +114,7 @@ class UI_StatsWindow(object):
 
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
 
-        self.user_have_stats = bool(save_manager.getStats())
+        self.user_have_stats = save_manager.checkIfStatsIsAvailable()
         if self.user_have_stats:
             self.vars_ever_solved, self.average_first, self.average_ege = save_manager.getStats()
             self.most_correct, self.most_incorrect = save_manager.getMostSolvedTasks()
@@ -122,32 +122,56 @@ class UI_StatsWindow(object):
                 Localization.__dict__["STATS_VARS_COUNT_" + Config.getCountEnding(self.vars_ever_solved).upper()])
             self.stats_2 = Localization.STATS_AVERAGE_RESULT_TEXT % (self.average_first, Localization.__dict__["POINTS_" + Config.getCountEnding(self.average_first).upper()],
                 self.average_ege, Localization.__dict__["STATS_AVERAGE_POINTS_" + Config.getCountEnding(self.average_ege).upper()])
-            self.stats_3 = Localization.STATS_MOST_TIMES_CORRECT_TEXT % (self.most_correct[0], 
-                self.most_correct[1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.most_correct[1]).upper()])
-            self.stats_4 = Localization.STATS_MOST_TIMES_INCORRECT_TEXT % (self.most_incorrect[0], 
-                self.most_incorrect[1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.most_incorrect[1]).upper()])
-            self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_3 + "\n" + self.stats_4
+            if len(self.most_correct) == 1:
+                self.stats_3 = Localization.STATS_MOST_TIMES_CORRECT_TEXT % (self.most_correct[0][0], 
+                    self.most_correct[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.most_correct[0][1]).upper()])
+            elif self.average_first == 0:
+                self.stats_3 = ""
+            else:
+                self.correct_list_as_str = ", ".join(list(map(str, [tpl[0] for tpl in self.most_correct])))
+                self.stats_3 = Localization.STATS_MOST_TIMES_CORRECT_TEXT_PLURAL % (self.correct_list_as_str, 
+                    self.most_correct[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.most_correct[0][1]).upper()])
+            if len(self.most_incorrect) == 1:
+                self.stats_4 = Localization.STATS_MOST_TIMES_INCORRECT_TEXT % (self.most_incorrect[0][0], 
+                    self.vars_ever_solved - self.most_incorrect[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.vars_ever_solved - self.most_incorrect[0][1]).upper()])
+            else:
+                self.incorrect_list_as_str = ", ".join(list(map(str, [tpl[0] for tpl in self.most_incorrect])))
+                self.stats_4 = Localization.STATS_MOST_TIMES_INCORRECT_TEXT_PLURAL % (self.incorrect_list_as_str, 
+                    self.vars_ever_solved - self.most_incorrect[0][1], Localization.__dict__["STATS_TIMES_" + Config.getCountEnding(self.vars_ever_solved - self.most_incorrect[0][1]).upper()])
+            if self.stats_3:
+                self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_3 + "\n" + self.stats_4
+            else:
+                self.stats_text = self.stats_1 + "\n" + self.stats_2 + "\n" + self.stats_4
         else:
-            self.stats_text = Localization.STATS_TEXT_EMPTY_HISTORY
+            self.why_unavailable = Localization.getPrintfText(save_manager.getUnavailableStatsDescriptionKey())
+            self.stats_text = Localization.STATS_TEXT_EMPTY_HISTORY + "\n" + self.why_unavailable
         self.stats_lbl = QLabel(self.stats_text)
         self.stats_lbl.setWordWrap(True)
         self.stats_lbl.setAlignment(Qt.AlignCenter)
         self.grid.addWidget(self.stats_lbl, 1, 0, 2, 0)
 
-        if self.user_have_stats:
-            self.more_btn = QPushButton(Localization.HISTORY_BUTTON, self)
-            self.more_btn.clicked.connect(self.more_clicked)
-            self.reset_btn = QPushButton(Localization.RESET_STATS, self)
-            self.reset_btn.clicked.connect(self.reset_clicked)
-            self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
-            self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
+        self.stats = save_manager.getStats()
+        if self.stats:
+            if self.stats[0] >= 1:
+                self.more_btn = QPushButton(Localization.HISTORY_BUTTON, self)
+                self.more_btn.clicked.connect(self.more_clicked)
+                self.reset_btn = QPushButton(Localization.RESET_STATS, self)
+                self.reset_btn.clicked.connect(self.reset_clicked)
+                self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
+                self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
 
+        self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU, self)
+        self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
+        self.grid.addWidget(self.back_to_menu_btn, 4, 0, 2, 0)
 
         self.widget_1.setLayout(self.grid)
         self.stacked_widget.addWidget(self.widget_1)
         self.stacked_widget.setCurrentIndex(0)
         self.setCentralWidget(self.stacked_widget)
         self.showMaximized()
+
+    def back_to_menu_btn_clicked(self):
+        self.win.translateToMain()
 
     def infoAction(self):
         self.box = QMessageBox()
@@ -213,7 +237,7 @@ class UI_StatsWindow(object):
     
     def clear_confirmed(self):
         save_manager.clear_exam_history()
-        self.close()
+        self.win.translateToMain()
         QMessageBox.information(self, Localization.RESET_STATS_TITLE, Localization.STATS_RESET_SUCCESS, QMessageBox.Ok)
 
 
@@ -278,6 +302,9 @@ class UI_Settings(object):
         new_settings["name"] = name if name else None
         new_settings["email"] = email if email else None
 
+        if (not save_manager.checkIfEasterEggIsUnlocked()) and Config.checkIfNameNeedsToBeTriggered(new_settings["name"]):
+            QMessageBox.information(self, Localization.EMAIL_EASTEREGG_HEADER, Localization.EMAIL_EASTEREGG_TEXT, QMessageBox.Ok)
+            save_manager.setEasterEggUnlocked()
         settings_was_changed = new_settings != current_settings
         reload_required = Config.checkIfSizeWasChanged(current_settings, new_settings)
         email_was_changed = new_settings["email"] != current_settings["email"]

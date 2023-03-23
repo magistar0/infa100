@@ -50,8 +50,12 @@ class UI_BaseWindow(object):
         self.fileMenu_var.addAction(self.exitAction_var)
 
         self.lbl = QLabel(Localization.CHOOSE_TASK, self)
+        self.lbl.setAlignment(Qt.AlignCenter)
         self.show_btn = QPushButton(Localization.SHOW, self)
         self.show_btn.clicked.connect(self.show_btn_clicked)
+
+        self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU, self)
+        self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
 
         self.centralWidget = QWidget()
         self.combo = QComboBox()
@@ -59,14 +63,17 @@ class UI_BaseWindow(object):
         self.combo.addItems(self.list_of_items)
 
         grid = QGridLayout()
-        grid.setSpacing(10)
-        grid.addWidget(self.lbl, 1, 0, alignment=Qt.AlignCenter)
-        grid.addWidget(self.combo, 2, 0, 4, 0)
-        grid.addWidget(self.show_btn, 3, 0, 5, 0)
+        grid.addWidget(self.lbl, 0, 0, 1, 0)
+        grid.addWidget(self.combo, 1, 0, 2, 0)
+        grid.addWidget(self.show_btn, 2, 0, 1, 0)
+        grid.addWidget(self.back_to_menu_btn, 3, 0, 2, 0)
         
         self.centralWidget.setLayout(grid)
         self.setCentralWidget(self.centralWidget)
         self.showMaximized()
+
+    def back_to_menu_btn_clicked(self):
+        self.win.translateToMain()
 
     def show_btn_clicked(self):
         task_num = self.combo.currentText().replace(Localization.TASK, '').replace(Localization.TASKS, '')

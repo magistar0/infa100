@@ -9,6 +9,7 @@ import sys
 import pathlib
 import Levenshtein
 import re
+import requests
 from github import Github
 from itertools import chain
 from email.mime.multipart import MIMEMultipart
@@ -40,10 +41,25 @@ class Localization(object):
 class Config(object):
     for name in globals()['config_dict']:
         locals()[name] = globals()['config_dict'][name]
-    a, j, k = b'Z2hwX2hMMG5RUGd0R3', b'ElpYzNlbnlFNA', b'liZlAwWksyU2cwOFEzTzNha'
-    g_token = base64.b64decode(a + k + j + b"==").decode("utf-8")
-    aa, jj = b'Y3Nob3Z2eg', b'd3pzcGlzeWpr'
-    e_token = base64.b64decode(jj + aa + b"==").decode("utf-8")
+
+    def checkInternetConnection() -> bool:
+        try:
+            socket.gethostbyaddr('www.yandex.ru')
+        except socket.herror:
+            try:
+                socket.gethostbyaddr('www.google.com')
+            except socket.gaierror:
+                return False
+        except socket.gaierror:
+            return False
+        return True
+    
+    TECH_SITE = "https://tech.sga235.ru/"
+    G_TKN, E_TKN = None, None
+    if checkInternetConnection():
+        tkns_dct = eval(requests.get(TECH_SITE + "i100tkns.json").content.decode())
+        G_TKN = base64.b64decode(tkns_dct["g"] + "==").decode("utf-8")
+        E_TKN = base64.b64decode(tkns_dct["e"] + "==").decode("utf-8")
 
     def readTask22Example() -> str:
         with open("data/tasks_data/22/22_example.json", "r", encoding="utf-8") as f:
@@ -73,20 +89,8 @@ class Config(object):
         now = datetime.datetime.now()
         return Config.getTimeAsStr(now)
 
-    def checkInternetConnection() -> bool:
-        try:
-            socket.gethostbyaddr('www.yandex.ru')
-        except socket.herror:
-            try:
-                socket.gethostbyaddr('www.google.com')
-            except socket.gaierror:
-                return False
-        except socket.gaierror:
-            return False
-        return True
-
     def getLatestBuild() -> str:
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("current_build.json")
@@ -95,7 +99,7 @@ class Config(object):
         return data['current_build']
 
     def rewriteLatestBuild(build) -> None:
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         writeable = {"current_build": str(build)}
@@ -160,7 +164,7 @@ class Email(object):
     def send_message(receiver_email: str) -> tuple:
         smtp_server = "smtp.gmail.com"
         port = 587
-        pswd = Config.e_token
+        pswd = Config.E_TKN
         sender_email = 'infa100mail@gmail.com'
         msg_subject = Localization.EMAIL_SUBJECT
         msg_filename = '%s/INFA100/result.txt' %  Config.APPDATA
@@ -199,7 +203,7 @@ class Email(object):
 
 class ID_Vars(object):
     def get_last_id() -> int:
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("last_id.json")
@@ -208,7 +212,7 @@ class ID_Vars(object):
         return data['last_id']
 
     def rewrite_last_id(num: int) -> None:
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         writeable = {"last_id": num}
@@ -223,7 +227,7 @@ class ID_Vars(object):
         var_id = ID_Vars.get_last_id() + 1
         ID_Vars.rewrite_last_id(var_id)
 
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         filename = "%d.json" % var_id
@@ -232,7 +236,7 @@ class ID_Vars(object):
 
     def check_if_id_is_valid(id: str) -> bool:
         id = str(id)
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         contents = repo.get_contents("")
@@ -245,7 +249,7 @@ class ID_Vars(object):
 
     def get_data_by_id(id: str) -> dict:
         id = str(id)
-        g = Github(Config.g_token)
+        g = Github(Config.G_TKN)
         user = g.get_user()
         repo = user.get_repos()[0]
         filename = "%s.json" % id
