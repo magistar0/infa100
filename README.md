@@ -1,12 +1,18 @@
 # ИНФА100
 ИНФА100 – компьютерная программа для подготовки к ЕГЭ, которая позволит удовлетворить такие потребности при подготовке, как просмотр заданий с подробным решением, решение полных вариантов, отслеживание прогресса подготовки и обратная связь с учителем.
-Последняя версия – 1.2 (build 33).
+Последняя версия – 1.2.1 (build 36).
 
 INFA100 is a program which helps students to prepare for the State Exam, including such functions as viewing different tasks with solutions, passing full exam-typed tests, tracking the progress of preparation and getting feedback from the teacher.
-The latest version is 1.2 (build 33).
+The latest version is 1.2.1 (build 36).
 
 
 Список изменений:
+
+* 2023-03-23 - v1.2.1 (build 36)
+  * Исправлено:
+    * Более не появляются лишние окна.
+    * Скорректирована система подсчёта статистики.
+    * Мелкие исправления в коде.
 
 * 2023-03-17 - v1.2 (build 33)
   * Добавлено:
