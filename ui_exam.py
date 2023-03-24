@@ -599,11 +599,11 @@ class UI_VarWindow(object):
             self.user_answers[12] = self.task_12_blank.text()
             self.task_12_blank.setEnabled(False)
             self.task_12_save_button.setParent(None)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_edit_button, 21, 0, 22, 0)
+            self.task_12_widget_clicked_grid.addWidget(self.task_12_edit_button, 38, 0, 22, 0)
         def edit_task_12():
             self.task_12_blank.setEnabled(True)
             self.task_12_edit_button.setParent(None)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 21, 0, 22, 0)
+            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 38, 0, 22, 0)
         self.task_12_save_button = QPushButton(Localization.SAVE)
         self.task_12_save_button.clicked.connect(save_task_12)
         self.task_12_edit_button = QPushButton(Localization.EDIT)
@@ -612,7 +612,7 @@ class UI_VarWindow(object):
         if self.task_12_data['hasPictures'] == False:
             self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 1, 0, 15, 0)
             self.task_12_widget_clicked_grid.addWidget(self.task_12_blank, 18, 0, 20, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 21, 0, 22, 0)
+            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 38, 0, 22, 0)
             self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
         elif self.task_12_data['hasPictures'] == True:
             self.task_12_widget_clicked_grid.addWidget(self.task_12_picture_lbl, 1, 0, 15, 1)
