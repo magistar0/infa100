@@ -1501,6 +1501,10 @@ class EmailInputDialog(QDialog):
         if self.current_email:
             self.first.setText(self.current_email)
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        buttonY = buttonBox.button(QDialogButtonBox.Ok)
+        buttonY.setText(Localization.SEND)
+        buttonN = buttonBox.button(QDialogButtonBox.Cancel)
+        buttonN.setText(Localization.CANCEL)
 
         layout = QFormLayout(self)
         layout.addRow(Localization.EMAIL_ASK_TEXT, self.first)
