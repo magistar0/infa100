@@ -64,13 +64,16 @@ class UI_BaseWindow(object):
         if self.combo_last_picked_index is not None:
             self.combo.setCurrentIndex(self.combo_last_picked_index)
 
-        grid = QGridLayout()
-        grid.addWidget(self.lbl, 0, 0, 1, 0)
-        grid.addWidget(self.combo, 1, 0, 2, 0)
-        grid.addWidget(self.show_btn, 2, 0, 1, 0)
-        grid.addWidget(self.back_to_menu_btn, 3, 0, 2, 0)
+        self.grid = QGridLayout()
+        self.grid.addWidget(self.lbl, 0, 0)
+        self.grid.addItem(QSpacerItem(250, 250, QSizePolicy.Expanding, QSizePolicy.Expanding), 1, 0)
+        self.grid.addWidget(self.combo, 2, 0)
+        self.grid.addWidget(self.show_btn, 3, 0)
+        self.grid.addItem(QSpacerItem(250, 250, QSizePolicy.Expanding, QSizePolicy.Expanding), 4, 0)
+        self.grid.addWidget(self.back_to_menu_btn, 5, 0)
+        self.grid.setRowStretch(6, 1) 
         
-        self.centralWidget.setLayout(grid)
+        self.centralWidget.setLayout(self.grid)
         self.setCentralWidget(self.centralWidget)
         self.showMaximized()
 

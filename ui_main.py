@@ -51,14 +51,15 @@ class UI_MainWindow(object):
         self.fileMenu.addAction(self.infoAction_var)
         self.fileMenu.addAction(self.exitAction)
 
-        k = 2 if save_manager.getCurrentSettings()["size"] == "large" else 1
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
-        self.grid.addWidget(self.logo_lbl, 2, 0, alignment=Qt.AlignCenter)
-        self.grid.addWidget(self.btn_1, 3*k, 0, 4, 0)
-        self.grid.addWidget(self.btn_2, 4*k, 0, 4, 0)
-        self.grid.addWidget(self.btn_4, 5*k, 0, 4, 0)
-        self.grid.addWidget(self.btn_5, 6*k, 0, 4, 0)
-        self.grid.addWidget(self.btn_3, 7*k, 0, 4, 0)
+        self.grid.addWidget(self.logo_lbl, 1, 0, alignment=Qt.AlignCenter)
+        self.grid.addItem(QSpacerItem(150, 150, QSizePolicy.Expanding, QSizePolicy.Expanding), 2, 0)
+        self.grid.addWidget(self.btn_1, 3, 0)
+        self.grid.addWidget(self.btn_2, 4, 0)
+        self.grid.addWidget(self.btn_4, 5, 0)
+        self.grid.addWidget(self.btn_5, 6, 0)
+        self.grid.addWidget(self.btn_3, 7, 0)
+        self.grid.setRowStretch(8, 1) 
 
         self.widget.setLayout(self.grid)
         self.setCentralWidget(self.widget)
@@ -113,6 +114,7 @@ class UI_StatsWindow(object):
         self.fileMenu.addAction(self.exitAction)
 
         self.grid.addWidget(self.lbl, 0, 0, alignment=Qt.AlignCenter)
+        self.grid.addItem(QSpacerItem(250, 250, QSizePolicy.Expanding, QSizePolicy.Expanding), 1, 0)
 
         self.user_have_stats = save_manager.checkIfStatsIsAvailable()
         if self.user_have_stats:
@@ -148,7 +150,8 @@ class UI_StatsWindow(object):
         self.stats_lbl = QLabel(self.stats_text)
         self.stats_lbl.setWordWrap(True)
         self.stats_lbl.setAlignment(Qt.AlignCenter)
-        self.grid.addWidget(self.stats_lbl, 1, 0, 2, 0)
+        self.grid.addWidget(self.stats_lbl, 2, 0)
+        self.grid.addItem(QSpacerItem(250, 250, QSizePolicy.Expanding, QSizePolicy.Expanding), 3, 0)
 
         self.stats = save_manager.getStats()
         if self.stats:
@@ -157,12 +160,13 @@ class UI_StatsWindow(object):
                 self.more_btn.clicked.connect(self.more_clicked)
                 self.reset_btn = QPushButton(Localization.RESET_STATS, self)
                 self.reset_btn.clicked.connect(self.reset_clicked)
-                self.grid.addWidget(self.more_btn, 2, 0, 2, 0)
-                self.grid.addWidget(self.reset_btn, 3, 0, 2, 0)
+                self.grid.addWidget(self.more_btn, 4, 0)
+                self.grid.addWidget(self.reset_btn, 5, 0)
 
         self.back_to_menu_btn = QPushButton(Localization.BACK_TO_MENU, self)
         self.back_to_menu_btn.clicked.connect(self.back_to_menu_btn_clicked)
-        self.grid.addWidget(self.back_to_menu_btn, 4, 0, 2, 0)
+        self.grid.addWidget(self.back_to_menu_btn, 6, 0)
+        self.grid.setRowStretch(7, 1)
 
         self.widget_1.setLayout(self.grid)
         self.stacked_widget.addWidget(self.widget_1)

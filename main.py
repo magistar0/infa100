@@ -126,8 +126,8 @@ class CoreMain(QMainWindow):
     def setupUi(self):
         self.setWindowTitle(Localization.MAIN_WIN_TITLE)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
-        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(800, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(500, save_manager.getCurrentSettings()["size"]))
         self.showMaximized()
 
         self.w = QStackedWidget()
