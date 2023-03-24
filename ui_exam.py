@@ -1340,10 +1340,16 @@ class UI_VarWindow(object):
         self.widgets_list[28] = self.results_contents
         self.contents_tasks.addWidget(self.widgets_list[28])
         self.results_grid_clicked = QGridLayout()
+        self.results_table = QTableWidget()
+        self.results_table.setColumnCount(5)
+        self.results_table.setRowCount(6)
+        self.results_table.setSpan(0, 4, 4, 1)
 
         task_num = 1
-        for column in range(1, 4):
-            for task in range(task_num, task_num + 9):
+        for column in range(5):
+            for task in range(task_num, task_num + 6):
+                if task > 27:
+                    break
                 if 19 <= task <= 21:
                     correct_text = Localization.CORRECT if self.user_answers[task] == self.task_19_21_data['%d_answer' % task] else Localization.INCORRECT
                 else:
@@ -1361,15 +1367,28 @@ class UI_VarWindow(object):
                     descr_text = correct_answer_text % self.task_19_21_data['%d_answer' % task]
                 else:
                     descr_text = correct_answer_text % self.tasks_data[task]['answer']
-                lbl = QLabel(header_text + '\n' + user_text + '\n' + descr_text)
-                row = task
-                if 10 <= row <= 18:
-                    row = row - 9
-                elif row >= 19:
-                    row = row - 18
-                row = row - 1
-                self.results_grid_clicked.addWidget(lbl, row, column)
-            task_num = task_num + 9
+                item = QTableWidgetItem(header_text + '\n' + user_text + '\n' + descr_text)
+                item.setFont(QFont("SF Pro Display", Config.multiplyNumberAccordingToSize(17, save_manager.getCurrentSettings()["size"])))
+                row = (task - 1) % 6
+                if column == 4:
+                    if task == 26:
+                        row = 4
+                    elif task == 27:
+                        row = 5
+                self.results_table.setItem(row, column, item)
+            task_num = task_num + 6
+        self.results_table.resizeColumnsToContents()
+        self.results_table.resizeRowsToContents()
+        self.results_table.verticalHeader().setVisible(False)
+        self.results_table.horizontalHeader().setVisible(False)
+        self.results_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.results_table.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.results_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.results_table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.results_table.setFixedSize(self.results_table.horizontalHeader().length(),
+                                        self.results_table.verticalHeader().length())
+        self.results_table.resizeColumnsToContents()
+        self.results_table.resizeRowsToContents()
 
         self.user_results = [None]
         for task in range(1, 28):
@@ -1394,7 +1413,6 @@ class UI_VarWindow(object):
                 self.buttons_style_list[task] = "transition-duration: 0.1s; " + self.button_styles["exam_finished"]["wrong"]
             self.buttons_list[task].setStyleSheet(self.buttons_style_list[task])
         
-
         self.first_points = 0
         for ind in range(1, 28):
             if self.user_results[ind] and ind < 26:
@@ -1410,7 +1428,8 @@ class UI_VarWindow(object):
         save_manager.write_var_completed_to_save(self.user_answers, self.user_results, self.tasks_data, self.first_points)
 
         self.res_lbl = QLabel(self.result_text)
-        self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, 10, 3, alignment=Qt.AlignCenter)
+        self.results_grid_clicked.addWidget(self.results_table, 0, 0)
+        self.results_grid_clicked.addWidget(self.res_lbl, 1, 0, alignment=Qt.AlignCenter)
         
         self.results_contents.setLayout(self.results_grid_clicked)
         self.contents_tasks.setCurrentWidget(self.widgets_list[28])
