@@ -298,15 +298,15 @@ class UI_VarWindow(object):
 
         def task_get_file_button_clicked(t: int):
             r = {
-                3: ".xlsx", 9: ".xlsx", 10: ".docx",
+                3: ".xlsx", 9: ".xlsx", 10: ".docx", 17: ".txt",
                 18: ".xlsx", 22: ".xlsx", 24: ".txt", 26: ".txt"
             }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
                 self.task_file_path = self.__dict__["task_%d_file_path" % t]
-                shutil.copy(self.task_file_path, destination_path)
+                shutil.copy(self.task_file_path, destination_path + f"/{t}" + r[t])
                 iddata = self.__dict__["task_%d_data" % t]
-                repl = iddata["id"] + r[t] if t != 17 else self.task_17_data['fileName']
+                repl = str(t) + r[t]
                 QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (repl), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
@@ -1133,8 +1133,8 @@ class UI_VarWindow(object):
         def task_27_get_file_a_button_clicked():
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
-                shutil.copy(self.task_27_file_a_path, destination_path)
-                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_A.txt'), QMessageBox.Ok)
+                shutil.copy(self.task_27_file_a_path, destination_path + "/27_A.txt")
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % ('27_A.txt'), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
             except FileNotFoundError:
@@ -1147,8 +1147,8 @@ class UI_VarWindow(object):
         def task_27_get_file_b_button_clicked():
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
-                shutil.copy(self.task_27_file_b_path, destination_path)
-                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_B.txt'), QMessageBox.Ok)
+                shutil.copy(self.task_27_file_b_path, destination_path + "/27_B.txt")
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % ('27_B.txt'), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
             except FileNotFoundError:
