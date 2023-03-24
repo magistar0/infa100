@@ -844,6 +844,10 @@ class UI_BaseWindow(object):
         self.task_19_widget_clicked_grid.setRowStretch(3, 1) 
         self.task_19_widget.setLayout(self.task_19_widget_clicked_grid)
 
+        self.task_19_scroll_area = QScrollArea()
+        self.task_19_scroll_area.setWidgetResizable(True)
+        self.task_19_scroll_area.setWidget(self.task_19_widget)
+
         def task_19_ans_button_clicked():
             self.task_19_show_ans_btn.setParent(None)
             self.task_19_widget_clicked_grid.addWidget(self.task_19_answer, 1, 0)
@@ -875,6 +879,10 @@ class UI_BaseWindow(object):
         self.task_20_widget_clicked_grid.addWidget(self.task_20_show_descr_btn, 2, 0)
         self.task_20_widget_clicked_grid.setRowStretch(3, 1) 
         self.task_20_widget.setLayout(self.task_20_widget_clicked_grid)
+
+        self.task_20_scroll_area = QScrollArea()
+        self.task_20_scroll_area.setWidgetResizable(True)
+        self.task_20_scroll_area.setWidget(self.task_20_widget)
 
         def task_20_ans_button_clicked():
             self.task_20_show_ans_btn.setParent(None)
@@ -908,6 +916,10 @@ class UI_BaseWindow(object):
         self.task_21_widget_clicked_grid.setRowStretch(3, 1) 
         self.task_21_widget.setLayout(self.task_21_widget_clicked_grid)
 
+        self.task_21_scroll_area = QScrollArea()
+        self.task_21_scroll_area.setWidgetResizable(True)
+        self.task_21_scroll_area.setWidget(self.task_21_widget)
+
         def task_21_ans_button_clicked():
             self.task_21_show_ans_btn.setParent(None)
             self.task_21_widget_clicked_grid.addWidget(self.task_21_answer, 1, 0)
@@ -919,9 +931,9 @@ class UI_BaseWindow(object):
         self.task_21_show_descr_btn.clicked.connect(task_21_descr_button_clicked)
 
         self.tasks19_21tab_widget.addTab(self.tasks19_21_text, Localization.T19_21_TEXT_TAB)
-        self.tasks19_21tab_widget.addTab(self.task_19_widget, Localization.T19_21_TAB_1)
-        self.tasks19_21tab_widget.addTab(self.task_20_widget, Localization.T19_21_TAB_2)
-        self.tasks19_21tab_widget.addTab(self.task_21_widget, Localization.T19_21_TAB_3)
+        self.tasks19_21tab_widget.addTab(self.task_19_scroll_area, Localization.T19_21_TAB_1)
+        self.tasks19_21tab_widget.addTab(self.task_20_scroll_area, Localization.T19_21_TAB_2)
+        self.tasks19_21tab_widget.addTab(self.task_21_scroll_area, Localization.T19_21_TAB_3)
 
 
         # 2222222222222222
