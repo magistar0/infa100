@@ -155,21 +155,24 @@ class UI_VarWindow(object):
             self.user_answers[1] = self.task_1_blank.text()
             self.task_1_blank.setEnabled(False)
             self.task_1_save_button.setParent(None)
-            self.task_1_widget_clicked_grid.addWidget(self.task_1_edit_button, 28, 0, 29, 0)
+            self.task_1_widget_clicked_grid.addWidget(self.task_1_edit_button, 2 + self.t1k, 0)
         def edit_task_1():
             self.task_1_blank.setEnabled(True)
             self.task_1_edit_button.setParent(None)
-            self.task_1_widget_clicked_grid.addWidget(self.task_1_save_button, 28, 0, 29, 0)
+            self.task_1_widget_clicked_grid.addWidget(self.task_1_save_button, 2 + self.t1k, 0)
         self.task_1_save_button = QPushButton(Localization.SAVE)
         self.task_1_save_button.clicked.connect(save_task_1)
         self.task_1_edit_button = QPushButton(Localization.EDIT)
         self.task_1_edit_button.clicked.connect(edit_task_1)
         
-        self.task_1_widget_clicked_grid.addWidget(self.task_1_text, 1, 0, 7, 0)
+        self.task_1_widget_clicked_grid.addWidget(self.task_1_text, 0, 0)
+        self.t1k = 0
         if self.task_1_picture_exists:
-            self.task_1_widget_clicked_grid.addWidget(self.task_1_picture_lbl, 8, 0, 15, 0, alignment=Qt.AlignCenter)
-        self.task_1_widget_clicked_grid.addWidget(self.task_1_blank, 25, 0, 26, 0)
-        self.task_1_widget_clicked_grid.addWidget(self.task_1_save_button, 28, 0, 29, 0)
+            self.t1k = 1
+            self.task_1_widget_clicked_grid.addWidget(self.task_1_picture_lbl, 1, 0, alignment=Qt.AlignCenter)
+        self.task_1_widget_clicked_grid.addWidget(self.task_1_blank, 1 + self.t1k, 0)
+        self.task_1_widget_clicked_grid.addWidget(self.task_1_save_button, 2 + self.t1k, 0)
+        self.task_1_widget_clicked_grid.setRowStretch(4, 1) 
         self.task_1_widget.setLayout(self.task_1_widget_clicked_grid)
 
 
@@ -195,21 +198,24 @@ class UI_VarWindow(object):
             self.user_answers[2] = self.task_2_blank.text()
             self.task_2_blank.setEnabled(False)
             self.task_2_save_button.setParent(None)
-            self.task_2_widget_clicked_grid.addWidget(self.task_2_edit_button, 28, 0, 29, 0)
+            self.task_2_widget_clicked_grid.addWidget(self.task_2_edit_button, 2 + self.t2k, 0)
         def edit_task_2():
             self.task_2_blank.setEnabled(True)
             self.task_2_edit_button.setParent(None)
-            self.task_2_widget_clicked_grid.addWidget(self.task_2_save_button, 28, 0, 29, 0)
+            self.task_2_widget_clicked_grid.addWidget(self.task_2_save_button, 2 + self.t2k, 0)
         self.task_2_save_button = QPushButton(Localization.SAVE)
         self.task_2_save_button.clicked.connect(save_task_2)
         self.task_2_edit_button = QPushButton(Localization.EDIT)
         self.task_2_edit_button.clicked.connect(edit_task_2)
         
-        self.task_2_widget_clicked_grid.addWidget(self.task_2_text, 1, 0, 7, 0)
+        self.task_2_widget_clicked_grid.addWidget(self.task_2_text, 0, 0)
+        self.t2k = 0
         if self.task_2_picture_exists:
-            self.task_2_widget_clicked_grid.addWidget(self.task_2_picture_lbl, 8, 0, 25, 0, alignment=Qt.AlignCenter)
-        self.task_2_widget_clicked_grid.addWidget(self.task_2_blank, 25, 0, 26, 0)
-        self.task_2_widget_clicked_grid.addWidget(self.task_2_save_button, 28, 0, 29, 0)
+            self.t2k = 1
+            self.task_2_widget_clicked_grid.addWidget(self.task_2_picture_lbl, 1, 0, alignment=Qt.AlignCenter)
+        self.task_2_widget_clicked_grid.addWidget(self.task_2_blank, 1 + self.t2k, 0)
+        self.task_2_widget_clicked_grid.addWidget(self.task_2_save_button, 2 + self.t2k, 0)
+        self.task_2_widget_clicked_grid.setRowStretch(4, 1)
         self.task_2_widget.setLayout(self.task_2_widget_clicked_grid)
 
 
@@ -265,29 +271,30 @@ class UI_VarWindow(object):
             self.user_answers[3] = self.task_3_blank.text()
             self.task_3_blank.setEnabled(False)
             self.task_3_save_button.setParent(None)
-            self.task_3_widget_clicked_grid.addWidget(self.task_3_edit_button, 1400, 0, 1407, 0)
+            self.task_3_widget_clicked_grid.addWidget(self.task_3_edit_button, 12, 0)
         def edit_task_3():
             self.task_3_blank.setEnabled(True)
             self.task_3_edit_button.setParent(None)
-            self.task_3_widget_clicked_grid.addWidget(self.task_3_save_button, 1400, 0, 1407, 0)
+            self.task_3_widget_clicked_grid.addWidget(self.task_3_save_button, 12, 0)
         self.task_3_save_button = QPushButton(Localization.SAVE)
         self.task_3_save_button.clicked.connect(save_task_3)
         self.task_3_edit_button = QPushButton(Localization.EDIT)
         self.task_3_edit_button.clicked.connect(edit_task_3)
         
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text1, 0, 0, 1, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_get_file_btn, 2, 0, 3, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text2, 4, 0, 6, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_2to3_lbl, 9, 0, 11, 0, alignment=Qt.AlignCenter)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text3, 15, 0, 16, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_3to4_lbl, 25, 0, 27, 0, alignment=Qt.AlignCenter)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text4, 39, 0, 41, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_4to5_lbl, 62, 0, 64, 0, alignment=Qt.AlignCenter)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text5, 86, 0, 87, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_5to6_lbl, 166, 0, 168, 0, alignment=Qt.AlignCenter)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_text6, 330, 0, 332, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_blank, 650, 0, 652, 0)
-        self.task_3_widget_clicked_grid.addWidget(self.task_3_save_button, 1400, 0, 1407, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text1, 0, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_get_file_btn, 1, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text2, 2, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_2to3_lbl, 3, 0, alignment=Qt.AlignCenter)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text3, 4, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_3to4_lbl, 5, 0, alignment=Qt.AlignCenter)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text4, 6, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_4to5_lbl, 7, 0, alignment=Qt.AlignCenter)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text5, 8, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_picture_5to6_lbl, 9, 0, alignment=Qt.AlignCenter)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_text6, 10, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_blank, 11, 0)
+        self.task_3_widget_clicked_grid.addWidget(self.task_3_save_button, 12, 0)
+        self.task_3_widget_clicked_grid.setRowStretch(13, 1)
         self.task_3_widget.setLayout(self.task_3_widget_clicked_grid)
 
         def show_permission_error(self):
@@ -298,15 +305,14 @@ class UI_VarWindow(object):
 
         def task_get_file_button_clicked(t: int):
             r = {
-                3: ".xlsx", 9: ".xlsx", 10: ".docx",
+                3: ".xlsx", 9: ".xlsx", 10: ".docx", 17: ".txt",
                 18: ".xlsx", 22: ".xlsx", 24: ".txt", 26: ".txt"
             }
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
                 self.task_file_path = self.__dict__["task_%d_file_path" % t]
-                shutil.copy(self.task_file_path, destination_path)
-                iddata = self.__dict__["task_%d_data" % t]
-                repl = iddata["id"] + r[t] if t != 17 else self.task_17_data['fileName']
+                shutil.copy(self.task_file_path, destination_path + f"/{t}" + r[t])
+                repl = str(t) + r[t]
                 QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (repl), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
@@ -334,19 +340,20 @@ class UI_VarWindow(object):
             self.user_answers[4] = self.task_4_blank.text()
             self.task_4_blank.setEnabled(False)
             self.task_4_save_button.setParent(None)
-            self.task_4_widget_clicked_grid.addWidget(self.task_4_edit_button, 9, 0, 10, 0)
+            self.task_4_widget_clicked_grid.addWidget(self.task_4_edit_button, 2, 0)
         def edit_task_4():
             self.task_4_blank.setEnabled(True)
             self.task_4_edit_button.setParent(None)
-            self.task_4_widget_clicked_grid.addWidget(self.task_4_save_button, 9, 0, 10, 0)
+            self.task_4_widget_clicked_grid.addWidget(self.task_4_save_button, 2, 0)
         self.task_4_save_button = QPushButton(Localization.SAVE)
         self.task_4_save_button.clicked.connect(save_task_4)
         self.task_4_edit_button = QPushButton(Localization.EDIT)
         self.task_4_edit_button.clicked.connect(edit_task_4)
         
-        self.task_4_widget_clicked_grid.addWidget(self.task_4_text, 1, 0, 7, 0)
-        self.task_4_widget_clicked_grid.addWidget(self.task_4_blank, 8, 0, 9, 0)
-        self.task_4_widget_clicked_grid.addWidget(self.task_4_save_button, 9, 0, 10, 0)
+        self.task_4_widget_clicked_grid.addWidget(self.task_4_text, 0, 0)
+        self.task_4_widget_clicked_grid.addWidget(self.task_4_blank, 1, 0)
+        self.task_4_widget_clicked_grid.addWidget(self.task_4_save_button, 2, 0)
+        self.task_4_widget_clicked_grid.setRowStretch(3, 1)
         self.task_4_widget.setLayout(self.task_4_widget_clicked_grid)
 
 
@@ -365,19 +372,20 @@ class UI_VarWindow(object):
             self.user_answers[5] = self.task_5_blank.text()
             self.task_5_blank.setEnabled(False)
             self.task_5_save_button.setParent(None)
-            self.task_5_widget_clicked_grid.addWidget(self.task_5_edit_button, 9, 0, 10, 0)
+            self.task_5_widget_clicked_grid.addWidget(self.task_5_edit_button, 2, 0)
         def edit_task_5():
             self.task_5_blank.setEnabled(True)
             self.task_5_edit_button.setParent(None)
-            self.task_5_widget_clicked_grid.addWidget(self.task_5_save_button, 9, 0, 10, 0)
+            self.task_5_widget_clicked_grid.addWidget(self.task_5_save_button, 2, 0)
         self.task_5_save_button = QPushButton(Localization.SAVE)
         self.task_5_save_button.clicked.connect(save_task_5)
         self.task_5_edit_button = QPushButton(Localization.EDIT)
         self.task_5_edit_button.clicked.connect(edit_task_5)
         
-        self.task_5_widget_clicked_grid.addWidget(self.task_5_text, 1, 0, 7, 0)
-        self.task_5_widget_clicked_grid.addWidget(self.task_5_blank, 8, 0, 9, 0)
-        self.task_5_widget_clicked_grid.addWidget(self.task_5_save_button, 9, 0, 10, 0)
+        self.task_5_widget_clicked_grid.addWidget(self.task_5_text, 0, 0)
+        self.task_5_widget_clicked_grid.addWidget(self.task_5_blank, 1, 0)
+        self.task_5_widget_clicked_grid.addWidget(self.task_5_save_button, 2, 0)
+        self.task_5_widget_clicked_grid.setRowStretch(3, 1)
         self.task_5_widget.setLayout(self.task_5_widget_clicked_grid)
 
 
@@ -395,19 +403,20 @@ class UI_VarWindow(object):
             self.user_answers[6] = self.task_6_blank.text()
             self.task_6_blank.setEnabled(False)
             self.task_6_save_button.setParent(None)
-            self.task_6_widget_clicked_grid.addWidget(self.task_6_edit_button, 9, 0, 10, 0)
+            self.task_6_widget_clicked_grid.addWidget(self.task_6_edit_button, 2, 0)
         def edit_task_6():
             self.task_6_blank.setEnabled(True)
             self.task_6_edit_button.setParent(None)
-            self.task_6_widget_clicked_grid.addWidget(self.task_6_save_button, 9, 0, 10, 0)
+            self.task_6_widget_clicked_grid.addWidget(self.task_6_save_button, 2, 0)
         self.task_6_save_button = QPushButton(Localization.SAVE)
         self.task_6_save_button.clicked.connect(save_task_6)
         self.task_6_edit_button = QPushButton(Localization.EDIT)
         self.task_6_edit_button.clicked.connect(edit_task_6)
         
-        self.task_6_widget_clicked_grid.addWidget(self.task_6_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        self.task_6_widget_clicked_grid.addWidget(self.task_6_blank, 8, 0, 9, 0)
-        self.task_6_widget_clicked_grid.addWidget(self.task_6_save_button, 9, 0, 10, 0)
+        self.task_6_widget_clicked_grid.addWidget(self.task_6_text, 0, 0, alignment=Qt.AlignCenter)
+        self.task_6_widget_clicked_grid.addWidget(self.task_6_blank, 1, 0)
+        self.task_6_widget_clicked_grid.addWidget(self.task_6_save_button, 2, 0)
+        self.task_6_widget_clicked_grid.setRowStretch(3, 1)
         self.task_6_widget.setLayout(self.task_6_widget_clicked_grid)
 
 
@@ -426,19 +435,20 @@ class UI_VarWindow(object):
             self.user_answers[7] = self.task_7_blank.text()
             self.task_7_blank.setEnabled(False)
             self.task_7_save_button.setParent(None)
-            self.task_7_widget_clicked_grid.addWidget(self.task_7_edit_button, 9, 0, 10, 0)
+            self.task_7_widget_clicked_grid.addWidget(self.task_7_edit_button, 2, 0)
         def edit_task_7():
             self.task_7_blank.setEnabled(True)
             self.task_7_edit_button.setParent(None)
-            self.task_7_widget_clicked_grid.addWidget(self.task_7_save_button, 9, 0, 10, 0)
+            self.task_7_widget_clicked_grid.addWidget(self.task_7_save_button, 2, 0)
         self.task_7_save_button = QPushButton(Localization.SAVE)
         self.task_7_save_button.clicked.connect(save_task_7)
         self.task_7_edit_button = QPushButton(Localization.EDIT)
         self.task_7_edit_button.clicked.connect(edit_task_7)
         
-        self.task_7_widget_clicked_grid.addWidget(self.task_7_text, 1, 0, 7, 0)
-        self.task_7_widget_clicked_grid.addWidget(self.task_7_blank, 8, 0, 9, 0)
-        self.task_7_widget_clicked_grid.addWidget(self.task_7_save_button, 9, 0, 10, 0)
+        self.task_7_widget_clicked_grid.addWidget(self.task_7_text, 0, 0)
+        self.task_7_widget_clicked_grid.addWidget(self.task_7_blank, 1, 0)
+        self.task_7_widget_clicked_grid.addWidget(self.task_7_save_button, 2, 0)
+        self.task_7_widget_clicked_grid.setRowStretch(3, 1)
         self.task_7_widget.setLayout(self.task_7_widget_clicked_grid)
 
 
@@ -457,19 +467,20 @@ class UI_VarWindow(object):
             self.user_answers[8] = self.task_8_blank.text()
             self.task_8_blank.setEnabled(False)
             self.task_8_save_button.setParent(None)
-            self.task_8_widget_clicked_grid.addWidget(self.task_8_edit_button, 9, 0, 10, 0)
+            self.task_8_widget_clicked_grid.addWidget(self.task_8_edit_button, 2, 0)
         def edit_task_8():
             self.task_8_blank.setEnabled(True)
             self.task_8_edit_button.setParent(None)
-            self.task_8_widget_clicked_grid.addWidget(self.task_8_save_button, 9, 0, 10, 0)
+            self.task_8_widget_clicked_grid.addWidget(self.task_8_save_button, 2, 0)
         self.task_8_save_button = QPushButton(Localization.SAVE)
         self.task_8_save_button.clicked.connect(save_task_8)
         self.task_8_edit_button = QPushButton(Localization.EDIT)
         self.task_8_edit_button.clicked.connect(edit_task_8)
         
-        self.task_8_widget_clicked_grid.addWidget(self.task_8_text, 1, 0, 7, 0)
-        self.task_8_widget_clicked_grid.addWidget(self.task_8_blank, 8, 0, 9, 0)
-        self.task_8_widget_clicked_grid.addWidget(self.task_8_save_button, 9, 0, 10, 0)
+        self.task_8_widget_clicked_grid.addWidget(self.task_8_text, 0, 0)
+        self.task_8_widget_clicked_grid.addWidget(self.task_8_blank, 1, 0)
+        self.task_8_widget_clicked_grid.addWidget(self.task_8_save_button, 2, 0)
+        self.task_8_widget_clicked_grid.setRowStretch(3, 1)
         self.task_8_widget.setLayout(self.task_8_widget_clicked_grid)
 
 
@@ -488,11 +499,11 @@ class UI_VarWindow(object):
             self.user_answers[9] = self.task_9_blank.text()
             self.task_9_blank.setEnabled(False)
             self.task_9_save_button.setParent(None)
-            self.task_9_widget_clicked_grid.addWidget(self.task_9_edit_button, 11, 0, 12, 0)
+            self.task_9_widget_clicked_grid.addWidget(self.task_9_edit_button, 3, 0)
         def edit_task_9():
             self.task_9_blank.setEnabled(True)
             self.task_9_edit_button.setParent(None)
-            self.task_9_widget_clicked_grid.addWidget(self.task_9_save_button, 11, 0, 12, 0)
+            self.task_9_widget_clicked_grid.addWidget(self.task_9_save_button, 3, 0)
         self.task_9_save_button = QPushButton(Localization.SAVE)
         self.task_9_save_button.clicked.connect(save_task_9)
         self.task_9_edit_button = QPushButton(Localization.EDIT)
@@ -502,10 +513,11 @@ class UI_VarWindow(object):
         self.task_9_file_path = 'data/tasks_data/9/' + self.task_9_data['id'] + '.xlsx'
         self.task_9_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(9))
         
-        self.task_9_widget_clicked_grid.addWidget(self.task_9_text, 1, 0, 7, 0)
-        self.task_9_widget_clicked_grid.addWidget(self.task_9_get_file_btn, 8, 0, 9, 0)
-        self.task_9_widget_clicked_grid.addWidget(self.task_9_blank, 10, 0, 11, 0)
-        self.task_9_widget_clicked_grid.addWidget(self.task_9_save_button, 11, 0, 12, 0)
+        self.task_9_widget_clicked_grid.addWidget(self.task_9_text, 0, 0)
+        self.task_9_widget_clicked_grid.addWidget(self.task_9_get_file_btn, 1, 0)
+        self.task_9_widget_clicked_grid.addWidget(self.task_9_blank, 2, 0)
+        self.task_9_widget_clicked_grid.addWidget(self.task_9_save_button, 3, 0)
+        self.task_9_widget_clicked_grid.setRowStretch(4, 1)
         self.task_9_widget.setLayout(self.task_9_widget_clicked_grid)
 
 
@@ -525,11 +537,11 @@ class UI_VarWindow(object):
             self.user_answers[10] = self.task_10_blank.text()
             self.task_10_blank.setEnabled(False)
             self.task_10_save_button.setParent(None)
-            self.task_10_widget_clicked_grid.addWidget(self.task_10_edit_button, 11, 0, 12, 0)
+            self.task_10_widget_clicked_grid.addWidget(self.task_10_edit_button, 3, 0)
         def edit_task_10():
             self.task_10_blank.setEnabled(True)
             self.task_10_edit_button.setParent(None)
-            self.task_10_widget_clicked_grid.addWidget(self.task_10_save_button, 11, 0, 12, 0)
+            self.task_10_widget_clicked_grid.addWidget(self.task_10_save_button, 3, 0)
         self.task_10_save_button = QPushButton(Localization.SAVE)
         self.task_10_save_button.clicked.connect(save_task_10)
         self.task_10_edit_button = QPushButton(Localization.EDIT)
@@ -539,10 +551,11 @@ class UI_VarWindow(object):
         self.task_10_file_path = 'data/tasks_data/10/' + self.task_10_data['id'] + '.docx'
         self.task_10_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(10))
         
-        self.task_10_widget_clicked_grid.addWidget(self.task_10_text, 1, 0, 7, 0)
-        self.task_10_widget_clicked_grid.addWidget(self.task_10_get_file_btn, 8, 0, 10, 0)
-        self.task_10_widget_clicked_grid.addWidget(self.task_10_blank, 9, 0, 11, 0)
-        self.task_10_widget_clicked_grid.addWidget(self.task_10_save_button, 11, 0, 12, 0)
+        self.task_10_widget_clicked_grid.addWidget(self.task_10_text, 0, 0)
+        self.task_10_widget_clicked_grid.addWidget(self.task_10_get_file_btn, 1, 0)
+        self.task_10_widget_clicked_grid.addWidget(self.task_10_blank, 2, 0)
+        self.task_10_widget_clicked_grid.addWidget(self.task_10_save_button, 3, 0)
+        self.task_10_widget_clicked_grid.setRowStretch(4, 1)
         self.task_10_widget.setLayout(self.task_10_widget_clicked_grid)
 
 
@@ -561,19 +574,20 @@ class UI_VarWindow(object):
             self.user_answers[11] = self.task_11_blank.text()
             self.task_11_blank.setEnabled(False)
             self.task_11_save_button.setParent(None)
-            self.task_11_widget_clicked_grid.addWidget(self.task_11_edit_button, 9, 0, 10, 0)
+            self.task_11_widget_clicked_grid.addWidget(self.task_11_edit_button, 2, 0)
         def edit_task_11():
             self.task_11_blank.setEnabled(True)
             self.task_11_edit_button.setParent(None)
-            self.task_11_widget_clicked_grid.addWidget(self.task_11_save_button, 9, 0, 10, 0)
+            self.task_11_widget_clicked_grid.addWidget(self.task_11_save_button, 2, 0)
         self.task_11_save_button = QPushButton(Localization.SAVE)
         self.task_11_save_button.clicked.connect(save_task_11)
         self.task_11_edit_button = QPushButton(Localization.EDIT)
         self.task_11_edit_button.clicked.connect(edit_task_11)
         
-        self.task_11_widget_clicked_grid.addWidget(self.task_11_text, 1, 0, 7, 0)
-        self.task_11_widget_clicked_grid.addWidget(self.task_11_blank, 8, 0, 9, 0)
-        self.task_11_widget_clicked_grid.addWidget(self.task_11_save_button, 9, 0, 10, 0)
+        self.task_11_widget_clicked_grid.addWidget(self.task_11_text, 0, 0)
+        self.task_11_widget_clicked_grid.addWidget(self.task_11_blank, 1, 0)
+        self.task_11_widget_clicked_grid.addWidget(self.task_11_save_button, 2, 0)
+        self.task_11_widget_clicked_grid.setRowStretch(3, 1)
         self.task_11_widget.setLayout(self.task_11_widget_clicked_grid)
 
 
@@ -585,41 +599,27 @@ class UI_VarWindow(object):
         self.task_12_answer = self.task_12_data['answer']
         self.task_12_widget_clicked_grid = QGridLayout()
 
-        if self.task_12_data['hasPictures'] == True:
-            self.task_12_picture_path = 'data/tasks_data/12/' + self.task_12_data['id'] + '.png'
-            self.task_12_picture_exists = True if os.path.exists(self.task_12_picture_path) else False
-            if self.task_12_picture_exists:
-                self.task_12_picture = QPixmap(self.task_12_picture_path)
-                self.task_12_picture_lbl = QLabel(self)
-                self.task_12_picture_lbl.setPixmap(self.task_12_picture)
-
         self.task_12_blank = QLineEdit()
         self.task_12_blank.setPlaceholderText(Localization.BLANK_PLACEHOLDER)
         def save_task_12():
             self.user_answers[12] = self.task_12_blank.text()
             self.task_12_blank.setEnabled(False)
             self.task_12_save_button.setParent(None)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_edit_button, 21, 0, 22, 0)
+            self.task_12_widget_clicked_grid.addWidget(self.task_12_edit_button, 2, 0)
         def edit_task_12():
             self.task_12_blank.setEnabled(True)
             self.task_12_edit_button.setParent(None)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 21, 0, 22, 0)
+            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 2, 0)
         self.task_12_save_button = QPushButton(Localization.SAVE)
         self.task_12_save_button.clicked.connect(save_task_12)
         self.task_12_edit_button = QPushButton(Localization.EDIT)
         self.task_12_edit_button.clicked.connect(edit_task_12)
 
-        if self.task_12_data['hasPictures'] == False:
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 1, 0, 15, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_blank, 18, 0, 20, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 21, 0, 22, 0)
-            self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
-        elif self.task_12_data['hasPictures'] == True:
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_picture_lbl, 1, 0, 15, 1)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 1, 2, 15, 9)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_blank, 18, 0, 20, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 21, 0, 22, 0)
-            self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 0, 0)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_blank, 1, 0)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_save_button, 2, 0)
+        self.task_12_widget_clicked_grid.setRowStretch(3, 1)
+        self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
 
 
         # 131313131313131313
@@ -648,21 +648,24 @@ class UI_VarWindow(object):
             self.user_answers[13] = self.task_13_blank.text()
             self.task_13_blank.setEnabled(False)
             self.task_13_save_button.setParent(None)
-            self.task_13_widget_clicked_grid.addWidget(self.task_13_edit_button, 30, 0, 31, 0)
+            self.task_13_widget_clicked_grid.addWidget(self.task_13_edit_button, 2 + self.t13k, 0)
         def edit_task_13():
             self.task_13_blank.setEnabled(True)
             self.task_13_edit_button.setParent(None)
-            self.task_13_widget_clicked_grid.addWidget(self.task_13_save_button, 30, 0, 31, 0)
+            self.task_13_widget_clicked_grid.addWidget(self.task_13_save_button, 2 + self.t13k, 0)
         self.task_13_save_button = QPushButton(Localization.SAVE)
         self.task_13_save_button.clicked.connect(save_task_13)
         self.task_13_edit_button = QPushButton(Localization.EDIT)
         self.task_13_edit_button.clicked.connect(edit_task_13)
         
-        self.task_13_widget_clicked_grid.addWidget(self.task_13_text, 1, 0, 7, 0)
+        self.task_13_widget_clicked_grid.addWidget(self.task_13_text, 0, 0)
+        self.t13k = 0
         if self.task_13_picture_exists:
-            self.task_13_widget_clicked_grid.addWidget(self.task_13_picture_lbl, 8, 0, 15, 0, alignment=Qt.AlignCenter)
-        self.task_13_widget_clicked_grid.addWidget(self.task_13_blank, 25, 0, 26, 0)
-        self.task_13_widget_clicked_grid.addWidget(self.task_13_save_button, 30, 0, 31, 0)
+            self.t13k = 1
+            self.task_13_widget_clicked_grid.addWidget(self.task_13_picture_lbl, 1, 0, alignment=Qt.AlignCenter)
+        self.task_13_widget_clicked_grid.addWidget(self.task_13_blank, 1 + self.t13k, 0)
+        self.task_13_widget_clicked_grid.addWidget(self.task_13_save_button, 2 + self.t13k, 0)
+        self.task_13_widget_clicked_grid.setRowStretch(4, 1)
         self.task_13_widget.setLayout(self.task_13_widget_clicked_grid)
 
 
@@ -681,19 +684,20 @@ class UI_VarWindow(object):
             self.user_answers[14] = self.task_14_blank.text()
             self.task_14_blank.setEnabled(False)
             self.task_14_save_button.setParent(None)
-            self.task_14_widget_clicked_grid.addWidget(self.task_14_edit_button, 9, 0, 10, 0)
+            self.task_14_widget_clicked_grid.addWidget(self.task_14_edit_button, 2, 0)
         def edit_task_14():
             self.task_14_blank.setEnabled(True)
             self.task_14_edit_button.setParent(None)
-            self.task_14_widget_clicked_grid.addWidget(self.task_14_save_button, 9, 0, 10, 0)
+            self.task_14_widget_clicked_grid.addWidget(self.task_14_save_button, 2, 0)
         self.task_14_save_button = QPushButton(Localization.SAVE)
         self.task_14_save_button.clicked.connect(save_task_14)
         self.task_14_edit_button = QPushButton(Localization.EDIT)
         self.task_14_edit_button.clicked.connect(edit_task_14)
         
-        self.task_14_widget_clicked_grid.addWidget(self.task_14_text, 1, 0, 7, 0)
-        self.task_14_widget_clicked_grid.addWidget(self.task_14_blank, 8, 0, 9, 0)
-        self.task_14_widget_clicked_grid.addWidget(self.task_14_save_button, 9, 0, 10, 0)
+        self.task_14_widget_clicked_grid.addWidget(self.task_14_text, 0, 0)
+        self.task_14_widget_clicked_grid.addWidget(self.task_14_blank, 1, 0)
+        self.task_14_widget_clicked_grid.addWidget(self.task_14_save_button, 2, 0)
+        self.task_14_widget_clicked_grid.setRowStretch(3, 1)
         self.task_14_widget.setLayout(self.task_14_widget_clicked_grid)
 
 
@@ -712,19 +716,20 @@ class UI_VarWindow(object):
             self.user_answers[15] = self.task_15_blank.text()
             self.task_15_blank.setEnabled(False)
             self.task_15_save_button.setParent(None)
-            self.task_15_widget_clicked_grid.addWidget(self.task_15_edit_button, 9, 0, 10, 0)
+            self.task_15_widget_clicked_grid.addWidget(self.task_15_edit_button, 2, 0)
         def edit_task_15():
             self.task_15_blank.setEnabled(True)
             self.task_15_edit_button.setParent(None)
-            self.task_15_widget_clicked_grid.addWidget(self.task_15_save_button, 9, 0, 10, 0)
+            self.task_15_widget_clicked_grid.addWidget(self.task_15_save_button, 2, 0)
         self.task_15_save_button = QPushButton(Localization.SAVE)
         self.task_15_save_button.clicked.connect(save_task_15)
         self.task_15_edit_button = QPushButton(Localization.EDIT)
         self.task_15_edit_button.clicked.connect(edit_task_15)
         
-        self.task_15_widget_clicked_grid.addWidget(self.task_15_text, 1, 0, 7, 0)
-        self.task_15_widget_clicked_grid.addWidget(self.task_15_blank, 8, 0, 9, 0)
-        self.task_15_widget_clicked_grid.addWidget(self.task_15_save_button, 9, 0, 10, 0)
+        self.task_15_widget_clicked_grid.addWidget(self.task_15_text, 0, 0)
+        self.task_15_widget_clicked_grid.addWidget(self.task_15_blank, 1, 0)
+        self.task_15_widget_clicked_grid.addWidget(self.task_15_save_button, 2, 0)
+        self.task_15_widget_clicked_grid.setRowStretch(3, 1)
         self.task_15_widget.setLayout(self.task_15_widget_clicked_grid)
 
 
@@ -743,19 +748,20 @@ class UI_VarWindow(object):
             self.user_answers[16] = self.task_16_blank.text()
             self.task_16_blank.setEnabled(False)
             self.task_16_save_button.setParent(None)
-            self.task_16_widget_clicked_grid.addWidget(self.task_16_edit_button, 9, 0, 10, 0)
+            self.task_16_widget_clicked_grid.addWidget(self.task_16_edit_button, 2, 0)
         def edit_task_16():
             self.task_16_blank.setEnabled(True)
             self.task_16_edit_button.setParent(None)
-            self.task_16_widget_clicked_grid.addWidget(self.task_16_save_button, 9, 0, 10, 0)
+            self.task_16_widget_clicked_grid.addWidget(self.task_16_save_button, 2, 0)
         self.task_16_save_button = QPushButton(Localization.SAVE)
         self.task_16_save_button.clicked.connect(save_task_16)
         self.task_16_edit_button = QPushButton(Localization.EDIT)
         self.task_16_edit_button.clicked.connect(edit_task_16)
         
-        self.task_16_widget_clicked_grid.addWidget(self.task_16_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        self.task_16_widget_clicked_grid.addWidget(self.task_16_blank, 8, 0, 9, 0)
-        self.task_16_widget_clicked_grid.addWidget(self.task_16_save_button, 9, 0, 10, 0)
+        self.task_16_widget_clicked_grid.addWidget(self.task_16_text, 0, 0, alignment=Qt.AlignCenter)
+        self.task_16_widget_clicked_grid.addWidget(self.task_16_blank, 1, 0)
+        self.task_16_widget_clicked_grid.addWidget(self.task_16_save_button, 2, 0)
+        self.task_16_widget_clicked_grid.setRowStretch(3, 1)
         self.task_16_widget.setLayout(self.task_16_widget_clicked_grid)
 
 
@@ -774,11 +780,11 @@ class UI_VarWindow(object):
             self.user_answers[17] = self.task_17_blank.text()
             self.task_17_blank.setEnabled(False)
             self.task_17_save_button.setParent(None)
-            self.task_17_widget_clicked_grid.addWidget(self.task_17_edit_button, 11, 0, 12, 0)
+            self.task_17_widget_clicked_grid.addWidget(self.task_17_edit_button, 3, 0)
         def edit_task_17():
             self.task_17_blank.setEnabled(True)
             self.task_17_edit_button.setParent(None)
-            self.task_17_widget_clicked_grid.addWidget(self.task_17_save_button, 11, 0, 12, 0)
+            self.task_17_widget_clicked_grid.addWidget(self.task_17_save_button, 3, 0)
         self.task_17_save_button = QPushButton(Localization.SAVE)
         self.task_17_save_button.clicked.connect(save_task_17)
         self.task_17_edit_button = QPushButton(Localization.EDIT)
@@ -788,10 +794,11 @@ class UI_VarWindow(object):
         self.task_17_file_path = 'data/tasks_data/17/' + self.task_17_data['fileName']
         self.task_17_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(17))
         
-        self.task_17_widget_clicked_grid.addWidget(self.task_17_text, 1, 0, 7, 0)
-        self.task_17_widget_clicked_grid.addWidget(self.task_17_get_file_btn, 8, 0, 10, 0)
-        self.task_17_widget_clicked_grid.addWidget(self.task_17_blank, 9, 0, 11, 0)
-        self.task_17_widget_clicked_grid.addWidget(self.task_17_save_button, 11, 0, 12, 0)
+        self.task_17_widget_clicked_grid.addWidget(self.task_17_text, 0, 0)
+        self.task_17_widget_clicked_grid.addWidget(self.task_17_get_file_btn, 1, 0)
+        self.task_17_widget_clicked_grid.addWidget(self.task_17_blank, 2, 0)
+        self.task_17_widget_clicked_grid.addWidget(self.task_17_save_button, 3, 0)
+        self.task_17_widget_clicked_grid.setRowStretch(4, 1)
         self.task_17_widget.setLayout(self.task_17_widget_clicked_grid)
 
 
@@ -810,11 +817,11 @@ class UI_VarWindow(object):
             self.user_answers[18] = self.task_18_blank.text()
             self.task_18_blank.setEnabled(False)
             self.task_18_save_button.setParent(None)
-            self.task_18_widget_clicked_grid.addWidget(self.task_18_edit_button,14, 0, 15, 0)
+            self.task_18_widget_clicked_grid.addWidget(self.task_18_edit_button, 3, 0)
         def edit_task_18():
             self.task_18_blank.setEnabled(True)
             self.task_18_edit_button.setParent(None)
-            self.task_18_widget_clicked_grid.addWidget(self.task_18_save_button, 14, 0, 15, 0)
+            self.task_18_widget_clicked_grid.addWidget(self.task_18_save_button, 3, 0)
         self.task_18_save_button = QPushButton(Localization.SAVE)
         self.task_18_save_button.clicked.connect(save_task_18)
         self.task_18_edit_button = QPushButton(Localization.EDIT)
@@ -823,17 +830,12 @@ class UI_VarWindow(object):
         self.task_18_get_file_btn = QPushButton(Localization.GET_FILE, self)
         self.task_18_file_path = 'data/tasks_data/18/' + self.task_18_data['id'] + '.xlsx'
         self.task_18_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(18))
-
-        self.task_18_picture_path = 'data/tasks_data/18/example.png'
-        self.task_18_picture = QPixmap(self.task_18_picture_path)
-        self.task_18_picture_lbl = QLabel(self)
-        self.task_18_picture_lbl.setPixmap(self.task_18_picture)
         
-        self.task_18_widget_clicked_grid.addWidget(self.task_18_text, 1, 0, 5, 0)
-        self.task_18_widget_clicked_grid.addWidget(self.task_18_picture_lbl, 5, 0, 9, 0, alignment=Qt.AlignCenter)
-        self.task_18_widget_clicked_grid.addWidget(self.task_18_get_file_btn, 10, 0, 11, 0)
-        self.task_18_widget_clicked_grid.addWidget(self.task_18_blank, 12, 0, 13, 0)
-        self.task_18_widget_clicked_grid.addWidget(self.task_18_save_button, 14, 0, 15, 0)
+        self.task_18_widget_clicked_grid.addWidget(self.task_18_text, 0, 0)
+        self.task_18_widget_clicked_grid.addWidget(self.task_18_get_file_btn, 1, 0)
+        self.task_18_widget_clicked_grid.addWidget(self.task_18_blank, 2, 0)
+        self.task_18_widget_clicked_grid.addWidget(self.task_18_save_button, 3, 0)
+        self.task_18_widget_clicked_grid.setRowStretch(4, 1)
         self.task_18_widget.setLayout(self.task_18_widget_clicked_grid)
 
 
@@ -853,19 +855,20 @@ class UI_VarWindow(object):
             self.user_answers[19] = self.task_19_blank.text()
             self.task_19_blank.setEnabled(False)
             self.task_19_save_button.setParent(None)
-            self.task_19_widget_clicked_grid.addWidget(self.task_19_edit_button, 9, 0, 10, 0)
+            self.task_19_widget_clicked_grid.addWidget(self.task_19_edit_button, 2, 0)
         def edit_task_19():
             self.task_19_blank.setEnabled(True)
             self.task_19_edit_button.setParent(None)
-            self.task_19_widget_clicked_grid.addWidget(self.task_19_save_button, 9, 0, 10, 0)
+            self.task_19_widget_clicked_grid.addWidget(self.task_19_save_button, 2, 0)
         self.task_19_save_button = QPushButton(Localization.SAVE)
         self.task_19_save_button.clicked.connect(save_task_19)
         self.task_19_edit_button = QPushButton(Localization.EDIT)
         self.task_19_edit_button.clicked.connect(edit_task_19)
         
-        self.task_19_widget_clicked_grid.addWidget(self.task_19_text, 1, 0, 7, 0)
-        self.task_19_widget_clicked_grid.addWidget(self.task_19_blank, 8, 0, 9, 0)
-        self.task_19_widget_clicked_grid.addWidget(self.task_19_save_button, 9, 0, 10, 0)
+        self.task_19_widget_clicked_grid.addWidget(self.task_19_text, 0, 0)
+        self.task_19_widget_clicked_grid.addWidget(self.task_19_blank, 1, 0)
+        self.task_19_widget_clicked_grid.addWidget(self.task_19_save_button, 2, 0)
+        self.task_19_widget_clicked_grid.setRowStretch(3, 1)
         self.task_19_widget.setLayout(self.task_19_widget_clicked_grid)
 
 
@@ -883,19 +886,20 @@ class UI_VarWindow(object):
             self.user_answers[20] = self.task_20_blank.text()
             self.task_20_blank.setEnabled(False)
             self.task_20_save_button.setParent(None)
-            self.task_20_widget_clicked_grid.addWidget(self.task_20_edit_button, 9, 0, 10, 0)
+            self.task_20_widget_clicked_grid.addWidget(self.task_20_edit_button, 2, 0)
         def edit_task_20():
             self.task_20_blank.setEnabled(True)
             self.task_20_edit_button.setParent(None)
-            self.task_20_widget_clicked_grid.addWidget(self.task_20_save_button, 9, 0, 10, 0)
+            self.task_20_widget_clicked_grid.addWidget(self.task_20_save_button, 2, 0)
         self.task_20_save_button = QPushButton(Localization.SAVE)
         self.task_20_save_button.clicked.connect(save_task_20)
         self.task_20_edit_button = QPushButton(Localization.EDIT)
         self.task_20_edit_button.clicked.connect(edit_task_20)
         
-        self.task_20_widget_clicked_grid.addWidget(self.task_20_text, 1, 0, 7, 0)
-        self.task_20_widget_clicked_grid.addWidget(self.task_20_blank, 8, 0, 9, 0)
-        self.task_20_widget_clicked_grid.addWidget(self.task_20_save_button, 9, 0, 10, 0)
+        self.task_20_widget_clicked_grid.addWidget(self.task_20_text, 0, 0)
+        self.task_20_widget_clicked_grid.addWidget(self.task_20_blank, 1, 0)
+        self.task_20_widget_clicked_grid.addWidget(self.task_20_save_button, 2, 0)
+        self.task_20_widget_clicked_grid.setRowStretch(3, 1)
         self.task_20_widget.setLayout(self.task_20_widget_clicked_grid)
 
 
@@ -913,26 +917,27 @@ class UI_VarWindow(object):
             self.user_answers[21] = self.task_21_blank.text()
             self.task_21_blank.setEnabled(False)
             self.task_21_save_button.setParent(None)
-            self.task_21_widget_clicked_grid.addWidget(self.task_21_edit_button, 9, 0, 10, 0)
+            self.task_21_widget_clicked_grid.addWidget(self.task_21_edit_button, 2, 0)
         def edit_task_21():
             self.task_21_blank.setEnabled(True)
             self.task_21_edit_button.setParent(None)
-            self.task_21_widget_clicked_grid.addWidget(self.task_21_save_button, 9, 0, 10, 0)
+            self.task_21_widget_clicked_grid.addWidget(self.task_21_save_button, 2, 0)
         self.task_21_save_button = QPushButton(Localization.SAVE)
         self.task_21_save_button.clicked.connect(save_task_21)
         self.task_21_edit_button = QPushButton(Localization.EDIT)
         self.task_21_edit_button.clicked.connect(edit_task_21)
         
-        self.task_21_widget_clicked_grid.addWidget(self.task_21_text, 1, 0, 7, 0)
-        self.task_21_widget_clicked_grid.addWidget(self.task_21_blank, 8, 0, 9, 0)
-        self.task_21_widget_clicked_grid.addWidget(self.task_21_save_button, 9, 0, 10, 0)
+        self.task_21_widget_clicked_grid.addWidget(self.task_21_text, 0, 0)
+        self.task_21_widget_clicked_grid.addWidget(self.task_21_blank, 1, 0)
+        self.task_21_widget_clicked_grid.addWidget(self.task_21_save_button, 2, 0)
+        self.task_21_widget_clicked_grid.setRowStretch(3, 1)
         self.task_21_widget.setLayout(self.task_21_widget_clicked_grid)
 
 
         #222222222222222222
         self.task_22_widget = QWidget()
         self.task_22_data = self.tasks_data[22]
-        self.task_22_text_for_lbl = self.task_22_data['text'] + "\n" + Config.readTask22Example()
+        self.task_22_text_for_lbl = self.task_22_data['text'] + "\n\n" + Config.readTask22Example()
         self.task_22_text = QLabel(self.task_22_text_for_lbl)
         self.task_22_text.setWordWrap(True)
         self.task_22_answer = self.task_22_data['answer']
@@ -944,11 +949,11 @@ class UI_VarWindow(object):
             self.user_answers[22] = self.task_22_blank.text()
             self.task_22_blank.setEnabled(False)
             self.task_22_save_button.setParent(None)
-            self.task_22_widget_clicked_grid.addWidget(self.task_22_edit_button, 9, 0, 10, 0)
+            self.task_22_widget_clicked_grid.addWidget(self.task_22_edit_button, 5, 0)
         def edit_task_22():
             self.task_22_blank.setEnabled(True)
             self.task_22_edit_button.setParent(None)
-            self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 9, 0, 10, 0)
+            self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 5, 0)
         self.task_22_save_button = QPushButton(Localization.SAVE)
         self.task_22_save_button.clicked.connect(save_task_22)
         self.task_22_edit_button = QPushButton(Localization.EDIT)
@@ -958,10 +963,11 @@ class UI_VarWindow(object):
         self.task_22_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(22))
         self.task_22_file_path = 'data/tasks_data/22/' + self.task_22_data['id'] + '.xlsx'
         
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_text, 1, 0, 7, 0, alignment=Qt.AlignCenter)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_get_file_btn, 8, 0, 9, 0)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 9, 0, 10, 0)
-        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 10, 0, 11, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_text, 0, 0, 2, 0, alignment=Qt.AlignCenter)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_get_file_btn, 2, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_blank, 3, 0)
+        self.task_22_widget_clicked_grid.addWidget(self.task_22_save_button, 4, 0)
+        self.task_22_widget_clicked_grid.setRowStretch(5, 1)
         self.task_22_widget.setLayout(self.task_22_widget_clicked_grid)
 
 
@@ -980,19 +986,20 @@ class UI_VarWindow(object):
             self.user_answers[23] = self.task_23_blank.text()
             self.task_23_blank.setEnabled(False)
             self.task_23_save_button.setParent(None)
-            self.task_23_widget_clicked_grid.addWidget(self.task_23_edit_button, 9, 0, 10, 0)
+            self.task_23_widget_clicked_grid.addWidget(self.task_23_edit_button, 2, 0)
         def edit_task_23():
             self.task_23_blank.setEnabled(True)
             self.task_23_edit_button.setParent(None)
-            self.task_23_widget_clicked_grid.addWidget(self.task_23_save_button, 9, 0, 10, 0)
+            self.task_23_widget_clicked_grid.addWidget(self.task_23_save_button, 2, 0)
         self.task_23_save_button = QPushButton(Localization.SAVE)
         self.task_23_save_button.clicked.connect(save_task_23)
         self.task_23_edit_button = QPushButton(Localization.EDIT)
         self.task_23_edit_button.clicked.connect(edit_task_23)
         
-        self.task_23_widget_clicked_grid.addWidget(self.task_23_text, 1, 0, 7, 0)
-        self.task_23_widget_clicked_grid.addWidget(self.task_23_blank, 8, 0, 9, 0)
-        self.task_23_widget_clicked_grid.addWidget(self.task_23_save_button, 9, 0, 10, 0)
+        self.task_23_widget_clicked_grid.addWidget(self.task_23_text, 0, 0)
+        self.task_23_widget_clicked_grid.addWidget(self.task_23_blank, 1, 0)
+        self.task_23_widget_clicked_grid.addWidget(self.task_23_save_button, 2, 0)
+        self.task_23_widget_clicked_grid.setRowStretch(3, 1)
         self.task_23_widget.setLayout(self.task_23_widget_clicked_grid)
 
 
@@ -1011,11 +1018,11 @@ class UI_VarWindow(object):
             self.user_answers[24] = self.task_24_blank.text()
             self.task_24_blank.setEnabled(False)
             self.task_24_save_button.setParent(None)
-            self.task_24_widget_clicked_grid.addWidget(self.task_24_edit_button, 11, 0, 12, 0)
+            self.task_24_widget_clicked_grid.addWidget(self.task_24_edit_button, 3, 0)
         def edit_task_24():
             self.task_24_blank.setEnabled(True)
             self.task_24_edit_button.setParent(None)
-            self.task_24_widget_clicked_grid.addWidget(self.task_24_save_button, 11, 0, 12, 0)
+            self.task_24_widget_clicked_grid.addWidget(self.task_24_save_button, 3, 0)
         self.task_24_save_button = QPushButton(Localization.SAVE)
         self.task_24_save_button.clicked.connect(save_task_24)
         self.task_24_edit_button = QPushButton(Localization.EDIT)
@@ -1025,10 +1032,11 @@ class UI_VarWindow(object):
         self.task_24_file_path = 'data/tasks_data/24/' + self.task_24_data['id'] + '.txt'
         self.task_24_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(24))
         
-        self.task_24_widget_clicked_grid.addWidget(self.task_24_text, 1, 0, 7, 0)
-        self.task_24_widget_clicked_grid.addWidget(self.task_24_get_file_btn, 8, 0, 10, 0)
-        self.task_24_widget_clicked_grid.addWidget(self.task_24_blank, 9, 0, 11, 0)
-        self.task_24_widget_clicked_grid.addWidget(self.task_24_save_button, 11, 0, 12, 0)
+        self.task_24_widget_clicked_grid.addWidget(self.task_24_text, 0, 0)
+        self.task_24_widget_clicked_grid.addWidget(self.task_24_get_file_btn, 1, 0)
+        self.task_24_widget_clicked_grid.addWidget(self.task_24_blank, 2, 0)
+        self.task_24_widget_clicked_grid.addWidget(self.task_24_save_button, 3, 0)
+        self.task_24_widget_clicked_grid.setRowStretch(4, 1)
         self.task_24_widget.setLayout(self.task_24_widget_clicked_grid)
 
 
@@ -1048,19 +1056,20 @@ class UI_VarWindow(object):
             self.user_answers[25] = self.task_25_blank.toPlainText()
             self.task_25_blank.setEnabled(False)
             self.task_25_save_button.setParent(None)
-            self.task_25_widget_clicked_grid.addWidget(self.task_25_edit_button, 9, 0, 10, 0)
+            self.task_25_widget_clicked_grid.addWidget(self.task_25_edit_button, 2, 0)
         def edit_task_25():
             self.task_25_blank.setEnabled(True)
             self.task_25_edit_button.setParent(None)
-            self.task_25_widget_clicked_grid.addWidget(self.task_25_save_button, 9, 0, 10, 0)
+            self.task_25_widget_clicked_grid.addWidget(self.task_25_save_button, 2, 0)
         self.task_25_save_button = QPushButton(Localization.SAVE)
         self.task_25_save_button.clicked.connect(save_task_25)
         self.task_25_edit_button = QPushButton(Localization.EDIT)
         self.task_25_edit_button.clicked.connect(edit_task_25)
         
-        self.task_25_widget_clicked_grid.addWidget(self.task_25_text, 1, 0, 7, 0)
-        self.task_25_widget_clicked_grid.addWidget(self.task_25_blank, 8, 0, 9, 0)
-        self.task_25_widget_clicked_grid.addWidget(self.task_25_save_button, 9, 0, 10, 0)
+        self.task_25_widget_clicked_grid.addWidget(self.task_25_text, 0, 0)
+        self.task_25_widget_clicked_grid.addWidget(self.task_25_blank, 1, 0)
+        self.task_25_widget_clicked_grid.addWidget(self.task_25_save_button, 2, 0)
+        self.task_25_widget_clicked_grid.setRowStretch(3, 1)
         self.task_25_widget.setLayout(self.task_25_widget_clicked_grid)
 
 
@@ -1079,11 +1088,11 @@ class UI_VarWindow(object):
             self.user_answers[26] = self.task_26_blank.text()
             self.task_26_blank.setEnabled(False)
             self.task_26_save_button.setParent(None)
-            self.task_26_widget_clicked_grid.addWidget(self.task_26_edit_button, 11, 0, 12, 0)
+            self.task_26_widget_clicked_grid.addWidget(self.task_26_edit_button, 3, 0)
         def edit_task_26():
             self.task_26_blank.setEnabled(True)
             self.task_26_edit_button.setParent(None)
-            self.task_26_widget_clicked_grid.addWidget(self.task_26_save_button, 11, 0, 12, 0)
+            self.task_26_widget_clicked_grid.addWidget(self.task_26_save_button, 3, 0)
         self.task_26_save_button = QPushButton(Localization.SAVE)
         self.task_26_save_button.clicked.connect(save_task_26)
         self.task_26_edit_button = QPushButton(Localization.EDIT)
@@ -1093,10 +1102,11 @@ class UI_VarWindow(object):
         self.task_26_file_path = 'data/tasks_data/26/' + self.task_26_data['id'] + '.txt'
         self.task_26_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(26))
         
-        self.task_26_widget_clicked_grid.addWidget(self.task_26_text, 1, 0, 7, 0)
-        self.task_26_widget_clicked_grid.addWidget(self.task_26_get_file_btn, 8, 0, 10, 0)
-        self.task_26_widget_clicked_grid.addWidget(self.task_26_blank, 9, 0, 11, 0)
-        self.task_26_widget_clicked_grid.addWidget(self.task_26_save_button, 11, 0, 12, 0)
+        self.task_26_widget_clicked_grid.addWidget(self.task_26_text, 0, 0)
+        self.task_26_widget_clicked_grid.addWidget(self.task_26_get_file_btn, 1, 0)
+        self.task_26_widget_clicked_grid.addWidget(self.task_26_blank, 2, 0)
+        self.task_26_widget_clicked_grid.addWidget(self.task_26_save_button, 3, 0)
+        self.task_26_widget_clicked_grid.setRowStretch(4, 1)
         self.task_26_widget.setLayout(self.task_26_widget_clicked_grid)
 
 
@@ -1115,11 +1125,11 @@ class UI_VarWindow(object):
             self.user_answers[27] = self.task_27_blank.text()
             self.task_27_blank.setEnabled(False)
             self.task_27_save_button.setParent(None)
-            self.task_27_widget_clicked_grid.addWidget(self.task_27_edit_button, 11, 0, 12, 0)
+            self.task_27_widget_clicked_grid.addWidget(self.task_27_edit_button, 3, 0, 1, 2)
         def edit_task_27():
             self.task_27_blank.setEnabled(True)
             self.task_27_edit_button.setParent(None)
-            self.task_27_widget_clicked_grid.addWidget(self.task_27_save_button, 11, 0, 12, 0)
+            self.task_27_widget_clicked_grid.addWidget(self.task_27_save_button, 3, 0, 1, 2)
         self.task_27_save_button = QPushButton(Localization.SAVE)
         self.task_27_save_button.clicked.connect(save_task_27)
         self.task_27_edit_button = QPushButton(Localization.EDIT)
@@ -1133,8 +1143,8 @@ class UI_VarWindow(object):
         def task_27_get_file_a_button_clicked():
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
-                shutil.copy(self.task_27_file_a_path, destination_path)
-                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_A.txt'), QMessageBox.Ok)
+                shutil.copy(self.task_27_file_a_path, destination_path + "/27_A.txt")
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % ('27_A.txt'), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
             except FileNotFoundError:
@@ -1147,8 +1157,8 @@ class UI_VarWindow(object):
         def task_27_get_file_b_button_clicked():
             destination_path = QFileDialog.getExistingDirectory(self,Localization.FILE_DIALOG_SAVE,'.')
             try:
-                shutil.copy(self.task_27_file_b_path, destination_path)
-                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (self.task_27_data['id']  + '_B.txt'), QMessageBox.Ok)
+                shutil.copy(self.task_27_file_b_path, destination_path + "/27_B.txt")
+                QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % ('27_B.txt'), QMessageBox.Ok)
             except PermissionError:
                 show_permission_error(self)
             except FileNotFoundError:
@@ -1158,11 +1168,12 @@ class UI_VarWindow(object):
                 show_unknown_file_getting_error(self)
         self.task_27_get_file_b_btn.clicked.connect(task_27_get_file_b_button_clicked)
         
-        self.task_27_widget_clicked_grid.addWidget(self.task_27_text, 1, 0, 7, 0)
-        self.task_27_widget_clicked_grid.addWidget(self.task_27_get_file_a_btn, 8, 0, 9, 0)
-        self.task_27_widget_clicked_grid.addWidget(self.task_27_get_file_b_btn, 9, 0, 10, 0)
-        self.task_27_widget_clicked_grid.addWidget(self.task_27_blank, 10, 0, 11, 0)
-        self.task_27_widget_clicked_grid.addWidget(self.task_27_save_button, 11, 0, 12, 0)
+        self.task_27_widget_clicked_grid.addWidget(self.task_27_text, 0, 0, 1, 2)
+        self.task_27_widget_clicked_grid.addWidget(self.task_27_get_file_a_btn, 1, 0, 1, 1)
+        self.task_27_widget_clicked_grid.addWidget(self.task_27_get_file_b_btn, 1, 1, 1, 1)
+        self.task_27_widget_clicked_grid.addWidget(self.task_27_blank, 2, 0, 1, 2)
+        self.task_27_widget_clicked_grid.addWidget(self.task_27_save_button, 3, 0, 1, 2)
+        self.task_27_widget_clicked_grid.setRowStretch(4, 1)
         self.task_27_widget.setLayout(self.task_27_widget_clicked_grid)
 
         #aft
@@ -1196,11 +1207,14 @@ class UI_VarWindow(object):
             26: self.task_26_widget,
             27: self.task_27_widget
         }
-        for key in self.widgets_list:
-            self.contents_tasks.addWidget(self.widgets_list[key])
 
         self.opened_nums = []
+        self.last_button_num = None
         def btn_clicked(button_num):
+            if self.last_button_num:
+                self.contents_tasks.removeWidget(self.widgets_list[self.last_button_num])
+            self.last_button_num = button_num
+            self.contents_tasks.addWidget(self.widgets_list[button_num])
             styles = Config.getButtonStyles()
             self.opened_nums.append(button_num)
             try:
@@ -1216,7 +1230,7 @@ class UI_VarWindow(object):
                     self.centralLayout.addWidget(self.finish_btn, 3, 80, 4, 100)
                 except:
                     pass
-                self.contents_tasks.setCurrentIndex(button_num)
+                self.contents_tasks.setCurrentWidget(self.widgets_list[button_num])
                 self.style_key = "exam_in_progress" if not self.user_finished else "exam_finished"
                 self.buttons_style_list[button_num] += styles[self.style_key]["current"]
                 for n in range(1, 28):
@@ -1326,10 +1340,16 @@ class UI_VarWindow(object):
         self.widgets_list[28] = self.results_contents
         self.contents_tasks.addWidget(self.widgets_list[28])
         self.results_grid_clicked = QGridLayout()
+        self.results_table = QTableWidget()
+        self.results_table.setColumnCount(5)
+        self.results_table.setRowCount(6)
+        self.results_table.setSpan(0, 4, 4, 1)
 
         task_num = 1
-        for column in range(1, 4):
-            for task in range(task_num, task_num + 9):
+        for column in range(5):
+            for task in range(task_num, task_num + 6):
+                if task > 27:
+                    break
                 if 19 <= task <= 21:
                     correct_text = Localization.CORRECT if self.user_answers[task] == self.task_19_21_data['%d_answer' % task] else Localization.INCORRECT
                 else:
@@ -1347,15 +1367,28 @@ class UI_VarWindow(object):
                     descr_text = correct_answer_text % self.task_19_21_data['%d_answer' % task]
                 else:
                     descr_text = correct_answer_text % self.tasks_data[task]['answer']
-                lbl = QLabel(header_text + '\n' + user_text + '\n' + descr_text)
-                row = task
-                if 10 <= row <= 18:
-                    row = row - 9
-                elif row >= 19:
-                    row = row - 18
-                row = row - 1
-                self.results_grid_clicked.addWidget(lbl, row, column)
-            task_num = task_num + 9
+                item = QTableWidgetItem(header_text + '\n' + user_text + '\n' + descr_text)
+                item.setFont(QFont("SF Pro Display", Config.multiplyNumberAccordingToSize(17, save_manager.getCurrentSettings()["size"])))
+                row = (task - 1) % 6
+                if column == 4:
+                    if task == 26:
+                        row = 4
+                    elif task == 27:
+                        row = 5
+                self.results_table.setItem(row, column, item)
+            task_num = task_num + 6
+        self.results_table.resizeColumnsToContents()
+        self.results_table.resizeRowsToContents()
+        self.results_table.verticalHeader().setVisible(False)
+        self.results_table.horizontalHeader().setVisible(False)
+        self.results_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.results_table.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.results_table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.results_table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.results_table.setFixedSize(self.results_table.horizontalHeader().length(),
+                                        self.results_table.verticalHeader().length())
+        self.results_table.resizeColumnsToContents()
+        self.results_table.resizeRowsToContents()
 
         self.user_results = [None]
         for task in range(1, 28):
@@ -1380,7 +1413,6 @@ class UI_VarWindow(object):
                 self.buttons_style_list[task] = "transition-duration: 0.1s; " + self.button_styles["exam_finished"]["wrong"]
             self.buttons_list[task].setStyleSheet(self.buttons_style_list[task])
         
-
         self.first_points = 0
         for ind in range(1, 28):
             if self.user_results[ind] and ind < 26:
@@ -1396,10 +1428,11 @@ class UI_VarWindow(object):
         save_manager.write_var_completed_to_save(self.user_answers, self.user_results, self.tasks_data, self.first_points)
 
         self.res_lbl = QLabel(self.result_text)
-        self.results_grid_clicked.addWidget(self.res_lbl, 9, 1, 10, 3, alignment=Qt.AlignCenter)
+        self.results_grid_clicked.addWidget(self.results_table, 0, 0)
+        self.results_grid_clicked.addWidget(self.res_lbl, 1, 0, alignment=Qt.AlignCenter)
         
         self.results_contents.setLayout(self.results_grid_clicked)
-        self.contents_tasks.setCurrentIndex(28)
+        self.contents_tasks.setCurrentWidget(self.widgets_list[28])
     
     def emailAction(self):
         self.ok = False
@@ -1468,6 +1501,10 @@ class EmailInputDialog(QDialog):
         if self.current_email:
             self.first.setText(self.current_email)
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        buttonY = buttonBox.button(QDialogButtonBox.Ok)
+        buttonY.setText(Localization.SEND)
+        buttonN = buttonBox.button(QDialogButtonBox.Cancel)
+        buttonN.setText(Localization.CANCEL)
 
         layout = QFormLayout(self)
         layout.addRow(Localization.EMAIL_ASK_TEXT, self.first)

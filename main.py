@@ -126,8 +126,8 @@ class CoreMain(QMainWindow):
     def setupUi(self):
         self.setWindowTitle(Localization.MAIN_WIN_TITLE)
         self.setWindowIcon(QIcon('icons/icon.png'))
-        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
-        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(450, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumWidth(Config.multiplyNumberAccordingToSize(800, save_manager.getCurrentSettings()["size"]))
+        self.setMinimumHeight(Config.multiplyNumberAccordingToSize(500, save_manager.getCurrentSettings()["size"]))
         self.showMaximized()
 
         self.w = QStackedWidget()
@@ -160,6 +160,24 @@ class CoreMain(QMainWindow):
     def translateToMain(self):
         self.w.setCurrentWidget(self.mainw)
 
+    def closeEvent(self, event):
+        if self.w.currentWidget() == self.varw and not self.varw.user_finished:
+            box = QMessageBox()
+            box.setIcon(QMessageBox.Warning)
+            box.setWindowTitle(Localization.QUIT_WARNING_HEADER)
+            box.setText(Localization.QUIT_WARNING_TEXT)
+            box.setStandardButtons(QMessageBox.Close|QMessageBox.Cancel)
+            buttonA = box.button(QMessageBox.Close)
+            buttonA.setText(Localization.QUIT_WARNING_LEAVE)
+            buttonB = box.button(QMessageBox.Cancel)
+            buttonB.setText(Localization.QUIT_WARNING_STAY)
+
+            box.exec_()
+            if box.clickedButton() == buttonA:
+                event.accept()
+            else:
+                event.ignore()
+                
 
 def load_fonts_from_dir(directory):
     families = set()
