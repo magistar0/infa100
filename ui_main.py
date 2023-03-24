@@ -250,13 +250,13 @@ class UI_Settings(object):
         current_settings = save_manager.getCurrentSettings()
         self.setMinimumSize(QSize(Config.multiplyNumberAccordingToSize(480, current_settings["size"]),
                                   Config.multiplyNumberAccordingToSize(240, current_settings["size"])))
+        self.setMaximumHeight(Config.multiplyNumberAccordingToSize(400, current_settings["size"]))
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
         self.setWindowIcon(QIcon('icons/icon.png'))
  
         self.grid_layout = QGridLayout()
         self.central_widget.setLayout(self.grid_layout)
-        self.grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
 
         self.available_sizes = ["tiny", "default", "big", "large"]
         if save_manager.checkIfEasterEggIsUnlocked():
@@ -281,14 +281,14 @@ class UI_Settings(object):
         self.cancel_btn.clicked.connect(lambda: self.close())
         self.ok_btn.clicked.connect(self.ok_btn_clicked)
 
-        self.grid_layout.addWidget(self.combo, 1, 0, 1, 2)
-        self.grid_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Expanding), 2, 0, 1, 2)
-        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_NAME_TEXT, self), 3, 0)
-        self.grid_layout.addWidget(self.name_blank, 4, 0, 1, 2)
-        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_EMAIL_TEXT, self), 5, 0)
-        self.grid_layout.addWidget(self.email_blank, 6, 0, 1, 2)
-        self.grid_layout.addWidget(self.ok_btn, 7, 0)
-        self.grid_layout.addWidget(self.cancel_btn, 7, 1)
+        self.grid_layout.addWidget(QLabel(Localization.SETTING_SIZE_TEXT, self), 0, 0)
+        self.grid_layout.addWidget(self.combo, 1, 0)
+        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_NAME_TEXT, self), 2, 0)
+        self.grid_layout.addWidget(self.name_blank, 3, 0, 1, 2)
+        self.grid_layout.addWidget(QLabel(Localization.SETTINGS_EMAIL_TEXT, self), 4, 0)
+        self.grid_layout.addWidget(self.email_blank, 5, 0, 1, 2)
+        self.grid_layout.addWidget(self.ok_btn, 6, 0)
+        self.grid_layout.addWidget(self.cancel_btn, 6, 1)
  
     def ok_btn_clicked(self):
         current_settings = save_manager.getCurrentSettings()
