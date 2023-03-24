@@ -143,6 +143,8 @@ class Config(object):
         return distance <= len(max(s1, s2, key=len)) / 4
 
     def checkIfNameNeedsToBeTriggered(name: str) -> bool:
+        if not name:
+            return False
         triggers = Config.getEasterEggTriggers()
         for trigger in triggers:
             if Config.stringsAreClose(trigger.lower(), name.lower()):
@@ -156,6 +158,8 @@ class Config(object):
         return old_settings["size"] != new_settings["size"]
     
     def emailIsValid(email: str) -> bool:
+        if not email:
+            return True
         pattern = r"[^@]+@[^@]+\.[^@]+"
         return not not re.match(pattern, email) or email is None
 
