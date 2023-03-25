@@ -164,6 +164,7 @@ class CoreMain(QMainWindow):
         if self.w.currentWidget() == self.varw and not self.varw.user_finished:
             box = QMessageBox()
             box.setIcon(QMessageBox.Warning)
+            box.setWindowIcon(QIcon('icons/icon.png'))
             box.setWindowTitle(Localization.QUIT_WARNING_HEADER)
             box.setText(Localization.QUIT_WARNING_TEXT)
             box.setStandardButtons(QMessageBox.Close|QMessageBox.Cancel)
