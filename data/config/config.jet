@@ -33,7 +33,7 @@
     },
     "TIMER_TIME_IN_SECONDS": 14101,
     "TIMER_FORMAT": "%s:%s:%s",
-    "build": "41",
+    "build": "42",
     "SIZE_PARAMETERS": {
         "tiny": {
             "multiplier": 0.7,
