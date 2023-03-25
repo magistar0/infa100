@@ -120,6 +120,7 @@ class UI_VarWindow(object):
         self.default_text = QLabel(Localization.VAR_DEFAULT_TEXT)
         self.tasks_widget_layout_default.addWidget(self.default_text)
         self.contents_default.setLayout(self.tasks_widget_layout_default)
+        self.contents_tasks.addWidget(self.contents_default)
 
         self.timer = QTimer()
         self.start = False
@@ -791,7 +792,7 @@ class UI_VarWindow(object):
         self.task_17_edit_button.clicked.connect(edit_task_17)
 
         self.task_17_get_file_btn = QPushButton(Localization.GET_FILE, self)
-        self.task_17_file_path = 'data/tasks_data/17/' + self.task_17_data['fileName']
+        self.task_17_file_path = 'data/tasks_data/17/' + self.task_17_data['id'] + '.txt'
         self.task_17_get_file_btn.clicked.connect(lambda: task_get_file_button_clicked(17))
         
         self.task_17_widget_clicked_grid.addWidget(self.task_17_text, 0, 0)
@@ -1260,6 +1261,7 @@ class UI_VarWindow(object):
 
         for num in range(1, 28):
             buttons_set(num)
+
 
         self.contents_tasks.setCurrentIndex(0)
         self.scrollArea_nums = QScrollArea()

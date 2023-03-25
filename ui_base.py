@@ -267,7 +267,7 @@ class UI_BaseWindow(object):
                 self.task_file_path = self.__dict__["task_%d_file_path" % t]
                 iddata = self.__dict__["task_%d_data" % t]
                 task_id = iddata["id"]
-                shutil.copy(self.task_file_path, destination_path + f"/{t}_{task_id}")
+                shutil.copy(self.task_file_path, destination_path + f"/{t}_{task_id}" + r[t])
                 repl = f"{t}_{task_id}" + r[t]
                 QMessageBox.information(self, Localization.EMAIL_SUCCESS_HEADER, Localization.EXAM_SUCCESS % (repl), QMessageBox.Ok)
             except PermissionError:
@@ -575,14 +575,13 @@ class UI_BaseWindow(object):
             self.task_12_show_descr_btn.setParent(None)
             self.task_12_widget_clicked_grid.addWidget(self.task_12_description_widget, 2, 0)
 
-        if self.task_12_data['hasPictures'] == False:
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 0, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_show_ans_btn, 1, 0)
-            self.task_12_widget_clicked_grid.addWidget(self.task_12_show_descr_btn, 2, 0)
-            self.task_12_widget_clicked_grid.setRowStretch(3, 1) 
-            self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
-            self.task_12_show_ans_btn.clicked.connect(task_12_ans_button_clicked)
-            self.task_12_show_descr_btn.clicked.connect(task_12_descr_button_clicked)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_text, 0, 0)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_show_ans_btn, 1, 0)
+        self.task_12_widget_clicked_grid.addWidget(self.task_12_show_descr_btn, 2, 0)
+        self.task_12_widget_clicked_grid.setRowStretch(3, 1) 
+        self.task_12_widget.setLayout(self.task_12_widget_clicked_grid)
+        self.task_12_show_ans_btn.clicked.connect(task_12_ans_button_clicked)
+        self.task_12_show_descr_btn.clicked.connect(task_12_descr_button_clicked)
 
 
         # 13131313131313131313
@@ -754,7 +753,7 @@ class UI_BaseWindow(object):
         self.task_17_widget_clicked_grid = QGridLayout()
 
         self.task_17_get_file_btn = QPushButton(Localization.GET_FILE, self)
-        self.task_17_file_path = 'data/tasks_data/17/' + self.task_17_data['fileName']
+        self.task_17_file_path = 'data/tasks_data/17/' + self.task_17_data['id'] + '.txt'
         
         self.task_17_widget_clicked_grid.addWidget(self.task_17_text, 0, 0)
         self.task_17_widget_clicked_grid.addWidget(self.task_17_get_file_btn, 1, 0)
