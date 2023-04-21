@@ -162,6 +162,19 @@ class Config(object):
             return True
         pattern = r"[^@]+@[^@]+\.[^@]+"
         return not not re.match(pattern, email) or email is None
+    
+    def generateRunningFile():
+        pth = '%s/INFA100/running.txt' %  Config.APPDATA
+        with open(pth, "w", encoding="utf-8") as f:
+            f.write("running")
+
+    def deleteRunningFule():
+        pth = '%s/INFA100/running.txt' %  Config.APPDATA
+        os.remove(pth)
+
+    def checkIfProgramIsCurrentlyRunning():
+        pth = '%s/INFA100/running.txt' %  Config.APPDATA
+        return os.path.exists(pth)
 
 
 class Email(object):
