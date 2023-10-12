@@ -57,7 +57,7 @@ class Config(object):
     TECH_SITE = "https://tech.sga235.ru/"
     G_TKN, E_TKN = None, None
     if checkInternetConnection():
-        tkns_dct = eval(requests.get(TECH_SITE + "i100tkns.json").content.decode())
+        tkns_dct = eval(requests.get(TECH_SITE + "i100tkns.json", headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'}).content.decode())
         G_TKN = base64.b64decode(tkns_dct["g"] + "==").decode("utf-8")
         E_TKN = base64.b64decode(tkns_dct["e"] + "==").decode("utf-8")
 
