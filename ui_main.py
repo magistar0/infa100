@@ -195,14 +195,21 @@ class UI_StatsWindow(object):
     def more_clicked(self):
         if not self.stats_already_generated:
             self.history = save_manager.getExamHistory()
-            self.history_text = ""
-            k = 1
+            self.all_exams_asstr = []
             for exam in self.history:
                 self.points_form = Config.getCountEnding(exam[1])
                 self.points_form_text = Localization.__dict__["POINTS_" + self.points_form.upper()]
-                self.history_text += Localization.HISTORY_DATE_AND_TIME % (k, exam[0]) + "\n" + Localization.HISTORY_RESULT % (exam[1], self.points_form_text)
-                self.history_text += "\n\n"
-                k += 1
+                self.points_ege = int(Config.POINTS[str(exam[1])])
+                self.points_ege_form = Config.getCountEnding(self.points_ege)
+                self.points_ege_form_text = Localization.__dict__["STATS_AVERAGE_POINTS_" + self.points_ege_form.upper()]
+                self.temp_history_text = ""
+                self.temp_history_text += exam[0] + "\n" + \
+                                     Localization.HISTORY_RESULT % (exam[1], self.points_form_text, self.points_ege, self.points_ege_form_text)
+                self.temp_history_text += "\n\n"
+                self.all_exams_asstr.append(self.temp_history_text)
+            self.history_text = ""
+            for text in reversed(self.all_exams_asstr):
+                self.history_text += text
 
             self.stats_already_generated = True
             self.widget_2 = QWidget()

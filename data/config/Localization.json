@@ -140,7 +140,7 @@
 
 	"HISTORY_BUTTON": "История решения вариантов",
 	"HISTORY_DATE_AND_TIME": "%d. Дата и время: %s",
-	"HISTORY_RESULT": "Результат: %s %s.",
+	"HISTORY_RESULT": "Результат: %s %s, %s %s ЕГЭ.",
 
 	"T19_21_TEXT_TAB": "Условие",
 	"T19_21_TAB_1": "Задание 19",
