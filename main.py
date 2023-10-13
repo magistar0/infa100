@@ -188,51 +188,62 @@ def load_fonts_from_dir(directory):
 
 
 if __name__ == "__main__":
-    if not os.path.exists(save_manager.dir_path):
-        os.makedirs(save_manager.dir_path)
-    if not os.path.exists(save_manager.dir_path + 'user_save.save'):
-        save_manager.generate_empty_save()
-    if not os.path.exists(Logger.log_path):
-        Logger.generate_empty_log()
-    if not "settings" in save_manager.read_save():
-        save_manager.addSettingsParameter()
-    if not "easteregg_unlocked" in save_manager.read_save():
-        save_manager.addEasterEggParameter()
-    if not "name" in save_manager.read_save()["settings"]:
-        save_manager.addNameEmailParameters()
-    if not "19-21" in save_manager.read_save()["save_data"]:
-        save_manager.change19_21SaveFormat()
+    is_running = Config.checkIfProgramIsCurrentlyRunning()
+    if not is_running:
+        if not os.path.exists(save_manager.dir_path):
+            os.makedirs(save_manager.dir_path)
+        if not os.path.exists(save_manager.dir_path + 'user_save.save'):
+            save_manager.generate_empty_save()
+        if not os.path.exists(Logger.log_path):
+            Logger.generate_empty_log()
+        if not "settings" in save_manager.read_save():
+            save_manager.addSettingsParameter()
+        if not "easteregg_unlocked" in save_manager.read_save():
+            save_manager.addEasterEggParameter()
+        if not "name" in save_manager.read_save()["settings"]:
+            save_manager.addNameEmailParameters()
+        if not "19-21" in save_manager.read_save()["save_data"]:
+            save_manager.change19_21SaveFormat()
 
-    
-    currentExitCode = 1337
-    while currentExitCode == 1337:
+        
+        currentExitCode = 1337
+        while currentExitCode == 1337:
+            Config.generateRunningFile()
+            app = QApplication(sys.argv)
+
+            program_size = save_manager.getCurrentSettings()["size"]
+            families = load_fonts_from_dir(os.fspath("fonts/"))
+            db = QFontDatabase()
+            font_style = Config.getFontStyleFromSize(program_size)
+            font = db.font("SF Pro Display", font_style, 10)
+            font_size = Config.getFontSize(program_size)
+            font.setPointSize(font_size)
+            app.setFont(font)
+
+            win = CoreMain()
+            win.show()
+
+            if Config.checkInternetConnection():
+                if not Config.checkIfBuildIsLatest():
+                    update_box = QMessageBox()
+                    update_box.setIcon(QMessageBox.Information)
+                    update_box.setWindowIcon(QIcon('icons/icon.png'))
+                    update_box.setWindowTitle(Localization.UPDATE_HEADER)
+                    update_box.setText(Localization.UPDATE_TEXT)
+                    update_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+                    buttonY = update_box.button(QMessageBox.Yes)
+                    buttonY.setText(Localization.UPDATE_YES)
+                    buttonY.clicked.connect(lambda: webbrowser.open('https://sga235.ru/infa100'))
+                    buttonN = update_box.button(QMessageBox.No)
+                    buttonN.setText(Localization.UPDATE_NO)
+                    update_box.exec_()
+            currentExitCode = app.exec_()
+            app = None
+            Config.deleteRunningFule()
+    else:
         app = QApplication(sys.argv)
-
-        program_size = save_manager.getCurrentSettings()["size"]
-        families = load_fonts_from_dir(os.fspath("fonts/"))
-        db = QFontDatabase()
-        font_style = Config.getFontStyleFromSize(program_size)
-        font = db.font("SF Pro Display", font_style, 10)
-        font_size = Config.getFontSize(program_size)
-        font.setPointSize(font_size)
-        app.setFont(font)
-
-        win = CoreMain()
-        win.show()
-
-        if Config.checkInternetConnection():
-            if not Config.checkIfBuildIsLatest():
-                update_box = QMessageBox()
-                update_box.setIcon(QMessageBox.Information)
-                update_box.setWindowIcon(QIcon('icons/icon.png'))
-                update_box.setWindowTitle(Localization.UPDATE_HEADER)
-                update_box.setText(Localization.UPDATE_TEXT)
-                update_box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
-                buttonY = update_box.button(QMessageBox.Yes)
-                buttonY.setText(Localization.UPDATE_YES)
-                buttonY.clicked.connect(lambda: webbrowser.open('https://sga235.ru/infa100'))
-                buttonN = update_box.button(QMessageBox.No)
-                buttonN.setText(Localization.UPDATE_NO)
-                update_box.exec_()
-        currentExitCode = app.exec_()
-        app = None
+        msg = QMessageBox()
+        msg.setWindowIcon(QIcon('icons/icon.png'))
+        msg.setText(Localization.ALREADY_STARTED_WARNING)
+        msg.setWindowTitle(Localization.EMAIL_ERROR_HEADER)
+        msg.exec_()
