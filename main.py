@@ -1,9 +1,8 @@
 import sys
 import os
-from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QInputDialog, QStackedWidget
 from PyQt5.QtCore import Qt, QDir
-from PyQt5.QtGui import QIcon, QFont, QFontDatabase
+from PyQt5.QtGui import QIcon, QFontDatabase
 import webbrowser
 
 from data_manager import Localization, Config, ID_Vars, Logger
