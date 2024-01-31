@@ -10,7 +10,8 @@ import pathlib
 import Levenshtein
 import re
 import requests
-from github import Github
+import ftplib
+import threading
 from itertools import chain
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -55,11 +56,33 @@ class Config(object):
         return True
     
     TECH_SITE = "https://tech.sga235.ru/"
-    G_TKN, E_TKN = None, None
+    H, U, P = None, None, None
     if checkInternetConnection():
-        tkns_dct = eval(requests.get(TECH_SITE + "i100tkns.json", headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'}).content.decode())
-        G_TKN = base64.b64decode(tkns_dct["g"] + "==").decode("utf-8")
-        E_TKN = base64.b64decode(tkns_dct["e"] + "==").decode("utf-8")
+        tkns_dct = eval(requests.get(TECH_SITE + "monkey.json", headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'}).content.decode())
+        H = base64.b64decode(tkns_dct["h"] + "==").decode("utf-8")
+        U = base64.b64decode(tkns_dct["u"] + "==").decode("utf-8")
+        P = base64.b64decode(tkns_dct["p"] + "==").decode("utf-8")
+
+    def ftp_upload(filename, filepath):
+        ftp_server = ftplib.FTP(Config.H, Config.U, Config.P)
+        ftp_server.encoding = "utf-8"
+        with open(filepath, "rb") as file:
+            ftp_server.storbinary(f"STOR tech.sga235.ru/htdocs/infa100/{filename}", file)
+        ftp_server.quit()
+
+    def ftp_download(filename, filepath):
+        ftp_server = ftplib.FTP(Config.H, Config.U, Config.P)
+        ftp_server.encoding = "utf-8"
+        with open(filepath, "wb") as file:
+            ftp_server.retrbinary(f"RETR tech.sga235.ru/htdocs/infa100/{filename}", file.write)
+        ftp_server.quit()
+
+    def ftp_check(filename):
+        ftp_server = ftplib.FTP(Config.H, Config.U, Config.P)
+        ftp_server.encoding = "utf-8"
+        files_list = ftp_server.nlst("tech.sga235.ru/htdocs/infa100")
+        ftp_server.quit()
+        return filename in files_list
 
     def readTask22Example() -> str:
         with open("data/tasks_data/22/22_example.json", "r", encoding="utf-8") as f:
@@ -88,23 +111,27 @@ class Config(object):
     def getCurrentTimeAsStr() -> str:
         now = datetime.datetime.now()
         return Config.getTimeAsStr(now)
+    
+    def getServerLoggingTimeFormat() -> str:
+        now = datetime.datetime.now()
+        date = str(now)[:-7]
+        return date
 
     def getLatestBuild() -> str:
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
-        contents = repo.get_contents("current_build.json")
-        pre_decode = contents.decoded_content
-        data = json.loads(pre_decode)
+        filepath = '%s/INFA100/current_build.json' %  Config.APPDATA
+        Config.ftp_download("current_build.json", filepath)
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.loads(f.read())
+        os.remove(filepath)
         return data['current_build']
 
     def rewriteLatestBuild(build) -> None:
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
+        filepath = '%s/INFA100/current_build.json' %  Config.APPDATA
         writeable = {"current_build": str(build)}
-        contents = repo.get_contents("current_build.json")
-        repo.update_file(contents.path, "обновление current build", str(writeable).replace("'", '"'), contents.sha, branch='main')
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(json.dumps(writeable))
+        Config.ftp_upload("current_build.json", filepath)
+        os.remove(filepath)
 
     def checkIfBuildIsLatest() -> bool:
         latest_build = Config.getLatestBuild()
@@ -220,21 +247,20 @@ class Email(object):
 
 class ID_Vars(object):
     def get_last_id() -> int:
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
-        contents = repo.get_contents("last_id.json")
-        pre_decode = contents.decoded_content
-        data = json.loads(pre_decode)
+        filepath = '%s/INFA100/last_id.json' %  Config.APPDATA
+        Config.ftp_download("last_id.json", filepath)
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.loads(f.read())
+        os.remove(filepath)
         return data['last_id']
 
     def rewrite_last_id(num: int) -> None:
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
+        filepath = '%s/INFA100/last_id.json' %  Config.APPDATA
         writeable = {"last_id": num}
-        contents = repo.get_contents("last_id.json")
-        repo.update_file(contents.path, "обновление last id", str(writeable).replace("'", '"'), contents.sha, branch='main')
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(json.dumps(writeable))
+        Config.ftp_upload("last_id.json", filepath)
+        os.remove(filepath)
 
     def save_var(tasks_data: dict) -> int:
         var_dict = {}
@@ -243,36 +269,28 @@ class ID_Vars(object):
         
         var_id = ID_Vars.get_last_id() + 1
         ID_Vars.rewrite_last_id(var_id)
-
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
-        filename = "%d.json" % var_id
-        repo.create_file(filename, "new var (%d)" % var_id, json.dumps(var_dict), branch="main")
+    
+        filepath = '%s/INFA100/%d.json' % (Config.APPDATA, var_id)
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(json.dumps(var_dict))
+        Config.ftp_upload("%d.json" % var_id, filepath)
+        os.remove(filepath)
+        Logger.add_line_to_server_log("New var %d" % var_id)
         return var_id
 
     def check_if_id_is_valid(id: str) -> bool:
         id = str(id)
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
-        contents = repo.get_contents("")
         filename = "%s.json" % id
-        for elem in contents:
-            str_elem = str(elem)
-            if "ContentFile(path=\"%s\")" % filename in str_elem:
-                return True
-        return False
+        return Config.ftp_check(filename)
 
     def get_data_by_id(id: str) -> dict:
         id = str(id)
-        g = Github(Config.G_TKN)
-        user = g.get_user()
-        repo = user.get_repos()[0]
         filename = "%s.json" % id
-        contents = repo.get_contents(filename)
-        pre_decode = contents.decoded_content
-        tasks_data = json.loads(pre_decode)
+        filepath = '%s/INFA100/%s.json' % (Config.APPDATA, id)
+        Config.ftp_download(filename, filepath)
+        with open(filepath, "r", encoding="utf-8") as f:
+            tasks_data = json.loads(f.read())
+        os.remove(filepath)
         return tasks_data
 
 
@@ -290,3 +308,26 @@ class Logger(object):
         file_content = file_content + new_line
         with open(Logger.log_path, 'w', encoding='utf-8') as logf:
             logf.write(file_content)
+
+    def generate_empty_server_log() -> None:
+        filepath = '%s/INFA100/server_log' % Config.APPDATA
+        with open(filepath, 'w', encoding='utf-8') as logf:
+            logf.write(f"This is the server log which is created at {Config.getServerLoggingTimeFormat()}.\n\n")
+        Config.ftp_upload("server_log", filepath)
+        os.remove(filepath)
+
+    def add_line_to_server_log(line:str) -> None:
+        lineadd = threading.Thread(target=lambda: Logger.__add_line_to_server_log(line))
+        lineadd.start()
+    
+    def __add_line_to_server_log(line: str) -> None:
+        filepath = '%s/INFA100/server_log' % Config.APPDATA
+        Config.ftp_download("server_log", filepath)
+        with open(filepath, "r", encoding="utf-8") as logf:
+            file_content = logf.read()
+        new_line = '\n' + Config.getServerLoggingTimeFormat() + ' - ' + line
+        file_content = file_content + new_line
+        with open(filepath, 'w', encoding='utf-8') as logf:
+            logf.write(file_content)
+        Config.ftp_upload("server_log", filepath)
+        os.remove(filepath)
