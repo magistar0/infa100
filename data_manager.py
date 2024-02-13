@@ -56,12 +56,13 @@ class Config(object):
         return True
     
     TECH_SITE = "https://tech.sga235.ru/"
-    H, U, P = None, None, None
+    H, U, P, E_TKN = None, None, None, None
     if checkInternetConnection():
         tkns_dct = eval(requests.get(TECH_SITE + "monkey.json", headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'}).content.decode())
         H = base64.b64decode(tkns_dct["h"] + "==").decode("utf-8")
         U = base64.b64decode(tkns_dct["u"] + "==").decode("utf-8")
         P = base64.b64decode(tkns_dct["p"] + "==").decode("utf-8")
+        E_TKN = base64.b64decode(tkns_dct["e"] + "==").decode("utf-8")
 
     def ftp_upload(filename, filepath):
         ftp_server = ftplib.FTP(Config.H, Config.U, Config.P)
