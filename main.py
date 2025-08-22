@@ -193,6 +193,14 @@ def load_fonts_from_dir(directory):
     return families
 
 
+def excepthookFunction(type, value, tb):
+    import traceback
+    exception_text = ''.join(traceback.format_exception(type, value, tb))
+    Logger.add_line_to_log("A crash detected. Exception: \n\n-----\n%s\n-----\n\n." % exception_text)
+    Config.deleteRunningFule()
+
+sys.excepthook = excepthookFunction
+
 if __name__ == "__main__":
     is_running = Config.checkIfProgramIsCurrentlyRunning()
     if not is_running:
