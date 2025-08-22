@@ -103,15 +103,21 @@ class Main(QMainWindow, UI_MainWindow):
                 self.to_pass_var_id, self.ok = QInputDialog.getText(self, Localization.BYID_ASK_HEADER,
                     Localization.BYID_ASK_TEXT, flags=Qt.WindowCloseButtonHint)
                 VarWindow.setVarIdClass(self.to_pass_var_id)
-                self.id_is_valid = ID_Vars.check_if_id_is_valid(VarWindow.var_id)
-                if self.ok and self.id_is_valid:
-                    self.show_window_3()
-                elif not self.ok:
-                    pass
-                elif not self.id_is_valid:
-                    QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.BYID_ERROR_0, QMessageBox.Ok)
-                else: 
-                    pass
+                server_available = True
+                if not Config.checkServerAviliability():
+                    server_available = False
+                if not server_available:
+                    QMessageBox.critical(self, Localization.SERVER_ERROR_HEADER, Localization.BYID_ERROR_2, QMessageBox.Ok)
+                else:
+                    self.id_is_valid = ID_Vars.check_if_id_is_valid(VarWindow.var_id)
+                    if self.ok and self.id_is_valid:
+                        self.show_window_3()
+                    elif not self.ok:
+                        pass
+                    elif not self.id_is_valid:
+                        QMessageBox.critical(self, Localization.EMAIL_ERROR_HEADER, Localization.BYID_ERROR_0, QMessageBox.Ok)
+                    else: 
+                        pass
 
 
 class CoreMain(QMainWindow):
@@ -223,7 +229,7 @@ if __name__ == "__main__":
             win = CoreMain()
             win.show()
 
-            if Config.checkInternetConnection():
+            if Config.checkInternetConnection() and Config.checkServerAviliability():
                 if not Config.checkIfBuildIsLatest():
                     update_box = QMessageBox()
                     update_box.setIcon(QMessageBox.Information)

@@ -55,9 +55,16 @@ class Config(object):
             return False
         return True
     
+    def checkServerAviliability() -> bool:
+        try:
+            requests.get("https://tech.sga235.ru/" + "monkey.json")
+        except requests.exceptions.ConnectionError:
+            return False
+        return True
+    
     TECH_SITE = "https://tech.sga235.ru/"
     H, U, P, E_TKN = None, None, None, None
-    if checkInternetConnection():
+    if checkInternetConnection() and checkServerAviliability():
         tkns_dct = eval(requests.get(TECH_SITE + "monkey.json", headers={'User-Agent': 'Mozilla/5.0 (Platform; Security; OS-or-CPU; Localization; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)'}).content.decode())
         H = base64.b64decode(tkns_dct["h"] + "==").decode("utf-8")
         U = base64.b64decode(tkns_dct["u"] + "==").decode("utf-8")
